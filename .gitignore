@@ -112,3 +112,8 @@ server/requirements.txt
 
 # mypy cache
 .mypy_cache/
+
+
+# Rollup JS Build
+dist/
+stories/
