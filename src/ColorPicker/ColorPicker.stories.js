@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ColorPicker } from './ColorPicker'
-import { colors, colorsLight } from '../../styles/colors'
+import { colors, colorsLight } from '../colors'
 
 export default {
   title: 'Components/ColorPicker',

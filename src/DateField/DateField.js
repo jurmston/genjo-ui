@@ -13,12 +13,10 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
 import StaticDatePicker from '@material-ui/lab/StaticDatePicker'
 import DayPicker from '@material-ui/lab/DayPicker'
-
-import { useDimensions } from '../../hooks/useDimensions/useDimensions'
-
 import { DateTime } from 'luxon'
-
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
+
+import { useDimensions } from '../useDimensions'
 
 
 const monthFirstFormats = [

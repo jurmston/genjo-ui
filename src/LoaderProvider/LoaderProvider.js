@@ -8,7 +8,7 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 
 // App
-import { CircleLoader } from '../../components/CircleLoader/CircleLoader'
+import { CircleLoader } from '../CircleLoader'
 
 
 const LoaderContext = React.createContext()

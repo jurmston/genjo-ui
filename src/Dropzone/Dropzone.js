@@ -9,9 +9,9 @@ import WarningIcon from '@material-ui/icons/Warning'
 import DescriptionIcon from '@material-ui/icons/Description'
 import PhotoIcon from '@material-ui/icons/Photo'
 
-import { getFileExtension, sizeToBytes } from '../../utils/files'
-import { CircleLoader } from '../CircleLoader/CircleLoader'
-import { Spacer } from '../Spacer/Spacer'
+import { getFileExtension, sizeToBytes } from '../utils/files'
+import { CircleLoader } from '../CircleLoader'
+import { Spacer } from '../Spacer'
 
 const IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif', 'svg']
 

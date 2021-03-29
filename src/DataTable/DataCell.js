@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { areEqual } from 'react-window'
 import { makeStyles } from '@material-ui/core/styles'
-import { colors } from 'src/styles/colors'
+import { colors } from '../colors'
 import clsx from 'clsx'
 import { useTable } from './context'
 

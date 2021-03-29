@@ -8,7 +8,7 @@ import Popover from '@material-ui/core/Popover'
 
 import CheckIcon from '@material-ui/icons/Check'
 
-import { colorsMain } from '../../styles/colors'
+import { colorsMain } from '../colors'
 
 
 

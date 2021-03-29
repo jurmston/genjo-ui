@@ -16,13 +16,13 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "npm": "^7.7.5",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^10.0.27",
     "@material-ui/core": "^5.0.0-alpha.28",
     "@material-ui/icons": "^5.0.0-alpha.28",
     "@material-ui/lab": "^5.0.0-alpha.28",
     "luxon": "^1.26.0",
+    "npm": "^7.7.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
@@ -41,11 +41,12 @@
     "@storybook/react": "^6.1.21",
     "babel-loader": "^8.2.2",
     "chromatic": "^5.7.0",
+    "install": "^0.13.0",
     "npm-run-all": "^4.1.5",
+    "random-words": "^1.1.1",
     "rollup": "^2.42.4",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "install": "^0.13.0",
     "storybook-dark-mode": "^1.0.7"
   },
   "browserslist": {
@@ -64,6 +65,7 @@
     "file-selector": "^0.2.4",
     "react-number-format": "^4.5.1",
     "react-text-mask": "^5.4.3",
+    "react-window": "^1.8.6",
     "zxcvbn": "^4.4.2"
   }
 }

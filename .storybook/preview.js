@@ -2,7 +2,7 @@ import React from 'react'
 import { useDarkMode } from 'storybook-dark-mode'
 import AdapterLuxon from '@material-ui/lab/AdapterLuxon'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
-import { ThemeProvider } from '../src/providers/ThemeProvider'
+import { ThemeProvider } from '../src/ThemeProvider'
 import { themeColors, lightTheme, darkTheme } from './theme'
 
 

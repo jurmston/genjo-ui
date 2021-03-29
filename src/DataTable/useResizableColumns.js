@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { minMax } from 'src/utils/minMax'
+import { minMax } from '../utils/math'
 
 
 

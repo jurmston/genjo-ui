@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Slide from '@material-ui/core/Slide'
 import Button from '@material-ui/core/Button'
 
-import { useDimensions } from '../../hooks/useDimensions/useDimensions'
+import { useDimensions } from '../useDimensions'
 
 
 const useStyles = makeStyles(theme => ({

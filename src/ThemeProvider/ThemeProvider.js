@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { createTheme, defaultTheme } from '../styles/theme'
+import { createTheme, defaultTheme } from '../theme'
 
 // Material-UI needs to specify inject order to allow customization
 // See: https://next.material-ui.com/guides/migration-v4/#styled-engine

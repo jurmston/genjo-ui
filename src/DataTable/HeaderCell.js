@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TableCell from '@material-ui/core/TableCell'
 
 import { SortableHeader } from './SortableHeader'
-import { colors } from 'src/styles/colors'
+import { colors } from '../colors'
 
 import Draggable from 'react-draggable'
 
