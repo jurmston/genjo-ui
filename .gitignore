@@ -116,4 +116,4 @@ server/requirements.txt
 
 # Rollup JS Build
 dist/
-stories/
+storybook-static/

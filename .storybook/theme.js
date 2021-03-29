@@ -40,8 +40,8 @@ const createThemeFromMUITheme = (name, theme) => {
 }
 
 export const themeColors = {
-  primary: colors.blue,
-  secondary: colors.amber,
+  primary: colors.indigo,
+  secondary: colors.teal,
 }
 
 export const lightTheme = createThemeFromMUITheme('light', createMuiTheme({

@@ -27,15 +27,3 @@ export const Primary = () => {
     </div>
   )
 }
-
-export const Secondary = () => {
-  const [color, setColor] = React.useState(colors.blue[200])
-
-  return (
-    <SaveButtonsDialog
-      value={color}
-      onChange={setColor}
-      colors={colorsLight}
-    />
-  )
-}

@@ -1,22 +1,32 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve'
-import babel from '@rollup/plugin-babel';
-import external from 'rollup-plugin-peer-deps-external';
-import del from 'rollup-plugin-delete';
-import pkg from './package.json';
+import resolve from '@rollup/plugin-node-resolve'
+import babel from '@rollup/plugin-babel'
+import commonjs from '@rollup/plugin-commonjs'
+import external from 'rollup-plugin-peer-deps-external'
+import deletePlugin from 'rollup-plugin-delete'
+import packageJson from './package.json'
 
 export default {
-    input: pkg.source,
+    input: packageJson.source,
     output: [
-        { file: pkg.main, format: 'cjs' },
-        { file: pkg.module, format: 'esm' }
+        {
+            file: packageJson.main,
+            format: 'cjs',
+            sourcemap: true,
+        },
+        {
+            file: packageJson.module,
+            format: 'esm',
+            sourcemap: true,
+        }
     ],
     plugins: [
-        nodeResolve(),
         external(),
+        resolve(),
         babel({
             exclude: 'node_modules/**'
         }),
-        del({ targets: ['dist/*'] }),
+        commonjs(),
+        // deletePlugin({ targets: ['dist/*'] }),
     ],
-    external: Object.keys(pkg.peerDependencies || {}),
+    external: Object.keys(packageJson.peerDependencies || {}),
 };

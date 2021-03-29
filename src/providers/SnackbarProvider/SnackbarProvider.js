@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Slide from '@material-ui/core/Slide'
 import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/core/Alert'
+import Alert from '@material-ui/lab/Alert'
 
 
 const AUTO_HIDE_DURATION = 3000
@@ -35,8 +35,6 @@ class SnackbarProvider extends React.Component {
         messages: this.state.messages.slice(1),
         status: 'live',
       })
-    } else if (this.state.status === 'dead') {
-      this.setState({ status: 'ready', currentMessage: null })
     }
   }
 
@@ -72,14 +70,11 @@ class SnackbarProvider extends React.Component {
           onClose={this.clearMessage}
           onExited={() => this.setState({ status: 'ready' })}
           TransitionComponent={Slide}
-          TransitionProps={{
-            direction: 'right',
-          }}
         >
           <Alert
             onClose={this.clearMessage}
             severity={currentMessage?.type || 'info'}
-            action={currentMessage?.action || ''}
+            action={currentMessage?.action}
           >
             {currentMessage?.value}
           </Alert>
