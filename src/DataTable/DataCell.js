@@ -69,10 +69,10 @@ const useStyles = makeStyles(theme => ({
 
 
 const DataCell = React.memo(
-  ({ columnIndex, rowIndex, style }) => {
+  ({ columnIndex, rowIndex, style, isFixed }) => {
 
     const classes = useStyles()
-    const { getCellData, onHover, hoveredState } = useTable()
+    const { getCellData, onHover, hoveredState, fixedColumnCount, dragInfo } = useTable()
 
     return (
       <div
@@ -87,7 +87,7 @@ const DataCell = React.memo(
         onMouseOver={() => onHover(rowIndex, columnIndex)}
       >
         <div>
-          {getCellData(rowIndex - 1, columnIndex)}
+          {getCellData(rowIndex, columnIndex)}
         </div>
       </div>
     )
@@ -101,4 +101,6 @@ DataCell.propTypes = {
 
 }
 
-export { DataCell }
+const FixedDataCell = props => <DataCell {...props} isFixed />
+
+export { DataCell, FixedDataCell }

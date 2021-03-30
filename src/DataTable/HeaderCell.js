@@ -68,36 +68,59 @@ const HeaderCell = ({
   style,
   rowIndex,
   columnIndex,
+  isFixed = false,
 }) => {
 
   const classes = useStyles()
 
-  const { columns, handleResizeColumn } = useTable()
+  const {
+    columns,
+    handleResizeColumn,
+    fixedColumnCount,
+    height,
+    getColumnWidth,
+    minWidth,
+    maxWidth,
+    dragInfo,
+    handleDragEnd,
+    handleDragStart,
+    handleDrag,
+  } = useTable()
   // There is an= known issue with Draggable not being complient with
   // strict mode. Here's a recommended fix.
   // https://stackoverflow.com/questions/63603902/finddomnode-is-deprecated-in-strictmode-finddomnode-was-passed-an-instance-of-d
   const nodeRef = React.useRef()
 
+  const { title } = columns[columnIndex] ?? {}
+
+
+
   return (
     <div
-      style={style}
+      style={{
+        ...style,
+        pointerEvents: dragInfo ? 'none' : 'unset',
+      }}
       className={clsx(
         classes.cell,
         classes.headerCell,
       )}
       /*onMouseOver={() => handleHoverCell(rowIndex, columnIndex)}*/
     >
-      <div>
-        <SortableHeader>{columns[columnIndex].title}</SortableHeader>
+      <div style={{ position: 'relative' }}>
+        <SortableHeader>{title}</SortableHeader>
         <Draggable
           axis="x"
-          onDrag={(event, { deltaX }) => handleResizeColumn({ columnIndex, deltaX })}
           aria-label="Resize Column"
           position={{ x: 0 }}
           nodeRef={nodeRef}
+          onStart={event => handleDragStart(event, columnIndex)}
+          onStop={handleDragEnd}
+          onDrag={handleDrag}
         >
           <div ref={nodeRef} className={classes.resizeHeaderButton} />
         </Draggable>
+
       </div>
     </div>
   )
@@ -107,4 +130,10 @@ HeaderCell.propTypes = {
 
 }
 
-export { HeaderCell }
+
+const FixedHeaderCell = props => (
+  <HeaderCell {...props} isFixed />
+)
+
+
+export { HeaderCell, FixedHeaderCell }

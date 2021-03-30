@@ -94,18 +94,21 @@ export const companiesDefaultColumnSet = {
       field_name: 'name',
       field_type: 'string',
       title: 'Name',
+      width: 200,
     },
     {
       uuid: 'companies-default-1',
       field_name: 'discipline',
       field_type: 'string',
       title: 'Discipline',
+      width: 150,
     },
     {
       uuid: 'companies-default-2',
       field_name: 'phone_number',
       field_type: 'string',
       title: 'Phone Number',
+      width: 75,
     },
     {
       uuid: 'companies-default-3',

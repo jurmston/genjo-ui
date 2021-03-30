@@ -1,57 +1,68 @@
 import * as React from 'react'
 
-import { minMax } from '../utils/math'
-
+import { minMax, safeDivide } from '../utils/math'
+import scrollbarSize from 'dom-helpers/scrollbarSize'
 
 
 export function useResizableColumns({
   columns = [],
-  minWidth = 1,
-  maxWidth = 100,
-  defaultWidth = 75,
-  fixedColumnCount = 0,
+  minWidth: desiredMinWidth,
+  maxWidth,
+  defaultWidth,
   containerWidth = 0,
 }) {
   const [widths, setWidths] = React.useState([])
-  // const [originalWidths, setOriginalWidths] = React.useState([])
+  const [originalWidths, setOriginalWidths] = React.useState([])
+
+  function getColumnWidth(index) {
+    return widths[index] ?? 0
+  }
+
+  const calculateWidths = React.useCallback(
+    () => {
+      // Divide the containerWidth into equal parts.
+      const netContainerWidth = containerWidth - scrollbarSize()
+      const partitionWidth = safeDivide(netContainerWidth, columns.length)
+
+      const minWidth = Math.min(desiredMinWidth, partitionWidth)
+
+      let slack = netContainerWidth - columns.length * minWidth
+
+      const newWidths = columns.map((column, index) => {
+        const targetWidth = minMax(
+          minWidth,
+          column?.width ?? defaultWidth,
+          maxWidth,
+        )
+
+        const slackNeeded = targetWidth - minWidth
+        const slackAvailable = Math.min(slackNeeded, slack)
+
+        slack -= slackAvailable
+
+        const remainder = index === columns.length - 1 ? slack : 0
+
+        return minWidth + slackAvailable + remainder
+
+      })
+
+      return newWidths
+    },
+    [columns, defaultWidth, desiredMinWidth, maxWidth, containerWidth]
+  )
 
   // Syncronize widths to changes in the column set.
   React.useEffect(
     () => {
-      const newWidths = columns.map(column => column?.width ?? defaultWidth)
+      const newWidths = calculateWidths()
       setWidths([ ...newWidths ])
-      // setOriginalWidths([ ...newWidths ])
+      setOriginalWidths([ ...newWidths ])
     },
-    [columns, defaultWidth]
+    [columns, defaultWidth, containerWidth]
   )
-
-  const handleResizeColumn = React.useCallback(
-    ({ columnIndex, deltaX }) => {
-      setWidths([
-        ...widths.slice(0, columnIndex),
-        minMax(minWidth, maxWidth, widths[columnIndex] + deltaX),
-        ...widths.slice(columnIndex + 1),
-      ])
-    },
-    // Listening to the widths value will cause a performance hit.
-    // eslint-disable-next-line
-    [widths, minWidth, maxWidth]
-  )
-
-  let totalWidth = 0
-  let fixedColumnWidth = 0
-  widths.forEach((width, index) => {
-    totalWidth += width
-
-    if (index < fixedColumnCount) {
-      fixedColumnWidth += width
-    }
-  })
 
   return {
     widths,
-    handleResizeColumn,
-    fixedColumnWidth,
-    totalWidth,
+    getColumnWidth,
   }
 }
