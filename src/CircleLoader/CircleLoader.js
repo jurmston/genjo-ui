@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   bottom: {
-    color: theme.palette.grey[theme.palette.type === 'light' ? 300 : 700],
+    color: theme.palette.grey[theme.palette.mode === 'light' ? 300 : 700],
   },
   top: {
     color: theme.palette.primary.main,

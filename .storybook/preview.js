@@ -16,7 +16,8 @@ export const parameters = {
 
 
 export const decorators = [
-  (story) => {
+  // MUI Theme Provider
+  story => {
     const mode = useDarkMode() ? 'dark' : 'light'
     const muiThemeOptions = {
       ...themeColors,

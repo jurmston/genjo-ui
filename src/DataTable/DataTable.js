@@ -1,68 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import { makeStyles, alpha } from '@material-ui/core/styles'
 import TableCell from '@material-ui/core/TableCell'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 import { FixedSizeGrid, VariableSizeGrid } from 'react-window'
 import { minMax, safeDivide } from '../utils/math'
 import { useResizableColumns } from './useResizableColumns'
 import { TableContext } from './context'
-import { DataCell } from './DataCell'
-import { HeaderCell } from './HeaderCell'
+import { DataCell } from './components/DataCell'
+import { HeaderCell } from './components/HeaderCell'
+import { ResultsLoader } from './components/ResultsLoader'
 
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'relative',
-    width: '100%',
-  },
-
-  headerGrid: {
-    width: '100%',
-  },
-
-  dataGrid: {
-    width: '100%',
-  },
-
-  cell: {
-
-  },
-
-  noScrollbars: {
-    scrollbarWidth: 'thin',
-    scrollbarColor: 'transparent transparent',
-
-    '&::-webkit-scrollbar': {
-      width: 1,
-    },
-
-    '&::-webkit-scrollbar-track': {
-      background: 'transparent',
-    },
-
-    '&::-webkit-scrollbar-thumb': {
-      backgroundColor: 'transparent',
-    },
-
-    '&$noScrollbars::-webkit-scrollbar': {
-      display: 'none',  /* Safari and Chrome */
-    },
-  },
-
-  dragBoundry: {
-    position: 'absolute',
-    borderTopLeftRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.secondary[100], 0.25),
-    borderRight: `2px solid ${theme.palette.secondary.main}`,
-    top: 0,
-    bottom: 0,
-  },
-}))
-
+import { useStyles } from './styles'
 
 const ROW_HEIGHT = 36
 const COL_MIN_WIDTH = 50
@@ -74,8 +24,7 @@ export const DataTable = ({
   fixedColumnCount = 0,
   height = 0,
   width = 0,
-  overscanColumnCount,
-  overscanRowCount,
+  overscanRowCount = 10,
   rowHeight = ROW_HEIGHT,
   defaultColumnWidth = COL_DEFAULT_WIDTH,
   rowCount,
@@ -84,8 +33,15 @@ export const DataTable = ({
   selectedCells,
   toggleSelectAll,
   toggleSelectRow,
+  isLoading = false,
+  isFetching = false,
+  onItemsRendered,
+  sortBy,
+  setSortBy,
 }) => {
   const [columns, setColumns] = React.useState([])
+
+  const hasScrollbar = (height - 2 * rowHeight) / rowHeight < rowCount
 
   React.useEffect(
     () => {
@@ -94,7 +50,7 @@ export const DataTable = ({
     [columnsFromProps]
   )
 
-  const classes = useStyles()
+  const classes = useStyles({ hasScrollbar })
 
   const dataGridRef = React.useRef()
   const headerGridRef = React.useRef()
@@ -113,6 +69,7 @@ export const DataTable = ({
     minWidth: COL_MIN_WIDTH,
     maxWidth: COL_MAX_WIDTH,
     defaultWidth: COL_DEFAULT_WIDTH,
+    hasScrollbar,
   })
 
   React.useEffect(
@@ -137,7 +94,7 @@ export const DataTable = ({
 
     setDragInfo({
       columnIndex,
-      left: cumulativeWidth,
+      left: cumulativeWidth + 36,
       currentWidth: getColumnWidth(columnIndex),
     })
   }
@@ -163,6 +120,7 @@ export const DataTable = ({
   return (
     <TableContext.Provider
       value={{
+        classes,
         getCellData,
         columns,
         onHover,
@@ -175,6 +133,12 @@ export const DataTable = ({
         handleDrag,
         handleDragEnd,
         handleDragStart,
+        selectedCells,
+        toggleSelectAll,
+        toggleSelectRow,
+        rowCount,
+        sortBy,
+        setSortBy,
       }}
     >
       <div className={classes.root}>
@@ -182,7 +146,7 @@ export const DataTable = ({
         <div className={classes.headerGrid}>
           <VariableSizeGrid
             className={clsx(classes.noScrollbars)}
-            columnCount={columns.length}
+            columnCount={columns.length + 1}
             columnWidth={getColumnWidth}
             height={ROW_HEIGHT}
             rowCount={1}
@@ -194,15 +158,23 @@ export const DataTable = ({
           </VariableSizeGrid>
         </div>
 
+        <ResultsLoader
+          isLoading={isLoading}
+          isFetching={isFetching}
+          count={rowCount}
+        />
+
         <div className={classes.dataGrid}>
           <VariableSizeGrid
-            columnCount={columns.length}
+            columnCount={columns.length + 1}
             columnWidth={getColumnWidth}
-            height={height}
+            height={height - ROW_HEIGHT}
             rowCount={rowCount}
             rowHeight={() => ROW_HEIGHT}
             width={width}
             ref={dataGridRef}
+            onItemsRendered={onItemsRendered}
+            overscanRowCount={overscanRowCount}
           >
             {DataCell}
           </VariableSizeGrid>
@@ -217,6 +189,13 @@ export const DataTable = ({
               width: dragInfo?.currentWidth,
               zIndex: 9999,
             }}
+          />
+        )}
+
+        {hasScrollbar && (
+          <div
+            className={classes.scrollbarCap}
+            style={{ height: rowHeight }}
           />
         )}
 

@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { minMax, safeDivide } from '../utils/math'
 import scrollbarSize from 'dom-helpers/scrollbarSize'
+import { fabClasses } from '@material-ui/core'
 
 
 export function useResizableColumns({
@@ -10,18 +11,24 @@ export function useResizableColumns({
   maxWidth,
   defaultWidth,
   containerWidth = 0,
+  hasScrollbar = false,
 }) {
   const [widths, setWidths] = React.useState([])
   const [originalWidths, setOriginalWidths] = React.useState([])
 
   function getColumnWidth(index) {
-    return widths[index] ?? 0
+    if (index === 0) {
+      return 36
+    }
+
+    return widths[index - 1] ?? 0
   }
 
   const calculateWidths = React.useCallback(
     () => {
+      const scrollbarWidth = hasScrollbar ? scrollbarSize() : 0
       // Divide the containerWidth into equal parts.
-      const netContainerWidth = containerWidth - scrollbarSize()
+      const netContainerWidth = containerWidth - scrollbarWidth - 36
       const partitionWidth = safeDivide(netContainerWidth, columns.length)
 
       const minWidth = Math.min(desiredMinWidth, partitionWidth)

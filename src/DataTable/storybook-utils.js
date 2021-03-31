@@ -8,6 +8,17 @@ function getRandomIntInclusive(min, max) {
 }
 
 
+const TEST_DISCIPLINES = [
+  'Engineering',
+  'Local Government',
+  'Homeowner',
+  'Architect',
+  'Developer',
+  'Interiors',
+]
+
+
+
 export const testDataColumnSet = [
   {
     field: 'checkbox',
@@ -69,7 +80,7 @@ export function createDataTableTestData(count = 1000) {
     result.push({
       id: i + 1,
       name: names[i],
-      discipline: 'Engineering',
+      discipline: TEST_DISCIPLINES[getRandomIntInclusive(0, 7)] ?? '',
       website: 'https://www.exmaple.com',
       phone_number: '+1 (775) 240-9128',
       primary_contact: null,
@@ -77,7 +88,7 @@ export function createDataTableTestData(count = 1000) {
       count: getRandomIntInclusive(0, 10000),
       size: Math.random() * 100 - 50,
       modified: `2020-${getRandomIntInclusive(1,12)}-${getRandomIntInclusive(1,28)}`,
-      is_active: getRandomIntInclusive(0, 1) ? true : false,
+      is_active: Math.random() < 0.5 ? true : false,
     })
   }
 
@@ -94,6 +105,7 @@ export const companiesDefaultColumnSet = {
       field_name: 'name',
       field_type: 'string',
       title: 'Name',
+      sort_type: 'alpha',
       width: 200,
     },
     {
@@ -101,6 +113,7 @@ export const companiesDefaultColumnSet = {
       field_name: 'discipline',
       field_type: 'string',
       title: 'Discipline',
+      sort_type: 'alpha',
       width: 150,
     },
     {
@@ -108,24 +121,28 @@ export const companiesDefaultColumnSet = {
       field_name: 'phone_number',
       field_type: 'string',
       title: 'Phone Number',
+      sort_type: 'alpha',
       width: 75,
     },
     {
       uuid: 'companies-default-3',
       field_name: 'primary_contact',
       field_type: 'related',
+      sort_type: 'alpha',
       title: 'Primary Contact',
     },
     {
       uuid: 'companies-default-4',
       field_name: 'website',
       field_type: 'string',
+      sort_type: 'alpha',
       title: 'Website',
     },
     {
       uuid: 'companies-default-5',
       field_name: 'is_active',
       field_type: 'bool',
+      sort_type: 'generic',
       title: 'Active',
     },
     {
@@ -133,6 +150,7 @@ export const companiesDefaultColumnSet = {
       field_name: 'amount',
       field_type: 'currency',
       title: 'Amount',
+      sort_type: 'number',
       total: 'sum',
     },
     {
@@ -140,6 +158,7 @@ export const companiesDefaultColumnSet = {
       field_name: 'count',
       field_type: 'number',
       title: 'Count',
+      sort_type: 'number',
       total: 'average',
     },
     {
@@ -153,6 +172,7 @@ export const companiesDefaultColumnSet = {
       field_name: 'modified',
       field_type: 'datetime',
       title: 'Modified',
+      sort_type: 'generic',
       total: 'latest',
     },
   ]
