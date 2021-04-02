@@ -92,6 +92,8 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    paddingRight: 8,
+    paddingLeft: 8,
     // overflow: 'hidden',
     '& > p': {
       // position: 'relative',
@@ -152,8 +154,13 @@ export const useStyles = makeStyles(theme => ({
     borderTopLeftRadius: theme.shape.borderRadius,
     borderTopRightRadius: theme.shape.borderRadius,
     transition: theme.transitions.create('background-color'),
+    fontWeight: 700,
+    color: colors.blueGrey[500],
+
     '&:hover': {
-      backgroundColor: colors.blueGrey[50],
+      '& $sortIcon': {
+        opacity: 1,
+      },
     },
 
     '&$isSortable': {
@@ -162,7 +169,21 @@ export const useStyles = makeStyles(theme => ({
 
     '&$isSelected': {
       backgroundColor: theme.palette.primary[50],
-    }
+    },
+
+    '&$hoveredColumnCell': {
+      backgroundColor: theme.palette.primary[50],
+      color: theme.palette.primary[500],
+    },
+  },
+
+  hasContent: {},
+  totalCell: {
+    '&$hoveredColumnCell': {
+      '&$hasContent': {
+        backgroundColor: colors.blueGrey[100],
+      },
+    },
   },
 
   resizeHeaderButton: {
@@ -184,12 +205,21 @@ export const useStyles = makeStyles(theme => ({
 
   },
 
-  sortIcon: {
-    color: theme.palette.grey[500],
+  titleContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'nowrap',
 
-    '&$isSelected': {
-      color: theme.palette.primary.main,
+    '& > span': {
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
     },
+  },
+
+  sortIcon: {
+    color: theme.palette.primary.main,
+    marginLeft: 4,
   },
 
   loadingBar: {

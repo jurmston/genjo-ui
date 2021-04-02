@@ -273,8 +273,6 @@ const PrimaryInner = () => {
       onSuccess: result => {
         const newRows = {}
 
-        console.log({ result })
-
         result.pages.forEach(page => {
           const { offset } = page
 
@@ -327,6 +325,22 @@ const PrimaryInner = () => {
     return renderCellData(field_type, item?.[field_name])
   }
 
+  function getHeaderData(columnIndex) {
+    const { title = '', sort_type = '', align = 'left', field_name = '' } = columns?.[columnIndex] ?? {}
+    return { title, sortType: sort_type, align, fieldName: field_name }
+  }
+
+  function getTotalData(columnIndex) {
+    const { field_name: fieldName = '' } = columns?.[columnIndex] ?? {}
+
+    const { value = '', label = '', type = '' } = totals?.[fieldName] ?? {}
+
+    return {
+      ...renderCellData(type, value),
+      label,
+    }
+  }
+
   function onItemsRendered({
     overscanRowStartIndex,
     overscanRowStopIndex,
@@ -371,6 +385,7 @@ const PrimaryInner = () => {
         columns={columns}
         totals={totals}
         getCellData={getCellData}
+        getHeaderData={getHeaderData}
         rowCount={rowCount}
         selectedCells={selected}
         onItemsRendered={debouncedOnItemsRendered}
@@ -383,6 +398,7 @@ const PrimaryInner = () => {
         setSortBy={setSortBy}
         subtotalField={subtotalField}
         setSubtotalField={setSubtotalField}
+        getTotalData={getTotalData}
       />
     </div>
   )

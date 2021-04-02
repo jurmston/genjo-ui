@@ -36,8 +36,8 @@ export const DataTable = ({
   defaultColumnWidth = COL_DEFAULT_WIDTH,
   rowCount,
   columns: columnsFromProps,
-  totals,
   getCellData,
+  getHeaderData,
   getTotalData,
   selectedCells,
   toggleSelectAll,
@@ -138,33 +138,37 @@ export const DataTable = ({
     <TableContext.Provider
       value={{
         classes,
-        getCellData,
         columns,
-        onHover,
-        hoveredState,
-        height,
-        minWidth: COL_MIN_WIDTH,
-        maxWidth: COL_MAX_WIDTH,
-        getColumnWidth,
         dragInfo,
+        getCellData,
+        getHeaderData,
+        getColumnWidth,
+        getTotalData,
         handleDrag,
         handleDragEnd,
         handleDragStart,
+        height,
+        hoveredState,
+        maxWidth: COL_MAX_WIDTH,
+        minWidth: COL_MIN_WIDTH,
+        onHover,
+        rowCount,
         selectedCells,
+        setSortBy,
+        setSubtotalField,
+        sortBy,
+        subtotalField,
+        subtotals,
         toggleSelectAll,
         toggleSelectRow,
-        rowCount,
-        sortBy,
-        setSortBy,
-        subtotalField,
-        setSubtotalField,
-        totals,
-        subtotals,
       }}
     >
       <div className={classes.root}>
 
-        <div className={classes.headerGridContainer}>
+        <div
+          className={classes.headerGridContainer}
+          onMouseLeave={() => setHoveredState([-1, -1])}
+        >
           <VariableSizeGrid
             className={clsx(classes.noScrollbars)}
             columnCount={columns.length + 1}

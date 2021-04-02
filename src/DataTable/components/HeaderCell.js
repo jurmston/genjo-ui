@@ -84,12 +84,14 @@ const HeaderCell = ({
     selectedCells,
     toggleSelectAll,
     toggleSelectRow,
+    hoveredState,
     onHover,
     rowCount,
     sortBy,
     setSortBy,
     subtotalField,
     setSubtotalField,
+    getHeaderData,
   } = useTable()
   // There is an= known issue with Draggable not being complient with
   // strict mode. Here's a recommended fix.
@@ -118,35 +120,29 @@ const HeaderCell = ({
     )
   }
 
-  const adjustedColumnIndex = columnIndex - 1
-  const { title, field_name, field_type, sort_type, subtotal } = columns[adjustedColumnIndex] ?? {}
+  const { title, sortType, align, fieldName } = getHeaderData(columnIndex - 1)
 
-  const isSelected = sortBy.endsWith(field_name)
+  const isSelected = sortBy.endsWith(fieldName)
   const direction = sortBy.startsWith('-') ? 'DESC' : 'ASC'
 
   const IconComponent = React.useMemo(
-    () => getSortIcon(isSelected, sort_type, direction),
-    [isSelected, direction, sort_type]
-  )
-
-  const alignment = React.useMemo(
-    () => getAlignment(field_type),
-    [field_type],
+    () => getSortIcon(isSelected, sortType, direction),
+    [isSelected, direction, sortType]
   )
 
   const [isHovered, setIsHovered] = React.useState(false)
 
   const clickProps = {}
-  if (sort_type) {
-    clickProps.onClick = () => setSortBy(sortBy === field_name ? `-${field_name}` : field_name)
+  if (sortType) {
+    clickProps.onClick = () => setSortBy(sortBy === fieldName ? `-${fieldName}` : fieldName)
   }
 
-  if (subtotal) {
-    clickProps.onDoubleClick = () => {
-      setSortBy(field_name)
-      setSubtotalField(field_name)
-    }
-  }
+  // if (subtotal) {
+  //   clickProps.onDoubleClick = () => {
+  //     setSortBy(fieldName)
+  //     setSubtotalField(fieldName)
+  //   }
+  // }
 
   return (
     <>
@@ -155,12 +151,11 @@ const HeaderCell = ({
           ...style,
           pointerEvents: dragInfo ? 'none' : 'unset',
         }}
-        className={clsx(
-          classes.cell,
-          classes.headerCell,
-          Boolean(sort_type) && classes.isSortable,
-          isSelected && classes.isSelected,
-        )}
+        className={clsx(classes.cell, classes.headerCell, {
+          [classes.isSortable]: Boolean(sortType),
+          [classes.isSelected]: isSelected,
+          [classes.hoveredColumnCell]: hoveredState[1] === columnIndex,
+        })}
         onMouseOver={() => {
           setIsHovered(true)
           onHover(-1, columnIndex)
@@ -168,10 +163,11 @@ const HeaderCell = ({
         onMouseLeave={() => setIsHovered(false)}
         {...clickProps}
       >
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <span style={{ marginRight: 4 }}>{title}</span>
+        <div className={classes.titleContainer} style={{ width: style.width - 16 }}>
 
-          {Boolean(sort_type) && Boolean(IconComponent) && (
+          <span style={{ flex: 1, textAlign: align }}>{title}</span>
+
+          {isSelected && Boolean(IconComponent) && (
             <IconComponent
               className={clsx(classes.sortIcon, {
                 [classes.isSelected]: isSelected,
@@ -180,14 +176,14 @@ const HeaderCell = ({
           )}
 
         </div>
-    </div>
+      </div>
 
       <Draggable
         axis="x"
         aria-label="Resize Column"
         position={{ x: 0 }}
         nodeRef={nodeRef}
-        onStart={event => handleDragStart(event, adjustedColumnIndex)}
+        onStart={event => handleDragStart(event, columnIndex - 1)}
         onStop={handleDragEnd}
         onDrag={handleDrag}
       >

@@ -241,6 +241,7 @@ export const companiesDefaultColumnSet = {
       field_type: 'bool',
       sort_type: 'generic',
       title: 'Active',
+      align: 'center',
     },
     {
       uuid: 'companies-default-6',
@@ -249,6 +250,7 @@ export const companiesDefaultColumnSet = {
       title: 'Amount',
       sort_type: 'number',
       total: 'sum',
+      align: 'right',
     },
     {
       uuid: 'companies-default-7',
@@ -257,12 +259,14 @@ export const companiesDefaultColumnSet = {
       title: 'Count',
       sort_type: 'number',
       total: 'average',
+      align: 'right',
     },
     {
       uuid: 'companies-default-8',
       field_name: 'size',
       field_type: 'number',
       title: 'Size',
+      align: 'right',
     },
     {
       uuid: 'companies-default-8',
@@ -271,6 +275,7 @@ export const companiesDefaultColumnSet = {
       title: 'Modified',
       sort_type: 'generic',
       total: 'latest',
+      align: 'right',
     },
   ]
 }

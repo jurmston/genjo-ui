@@ -17,60 +17,6 @@ import { useTable } from '../context'
 import { colors } from '../../colors'
 
 
-function renderTotalCell(field_type, value, label, labelClass) {
-  if (!label) {
-    return ''
-  }
-
-  switch (field_type) {
-    case 'currency': {
-      return (
-        <div>
-          <div className={labelClass} style={{ textAlign: 'right' }}>{label}</div>
-          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
-            <span style={{ flex: 1 }}>$</span>
-            <span>{Number(value).toFixed(2)}</span>
-          </div>
-        </div>
-      )
-    }
-
-    case 'number': {
-      return (
-        <div style={{ textAlign: 'right' }}>
-          <div className={labelClass}>{label}</div>
-          <div>{Math.round((Number(value) + Number.EPSILON) * 100) / 100}</div>
-        </div>
-      )
-    }
-
-    case 'datetime': {
-      return (
-        <div style={{ textAlign: 'right' }}>
-          <div className={labelClass}>{label}</div>
-          <div>{DateTime.fromISO(value).toLocaleString(DateTime.DATETIME_SHORT)}</div>
-        </div>
-      )
-    }
-
-    case 'date': {
-      return (
-        <div style={{ textAlign: 'right' }}>
-          <div className={labelClass}>{label}</div>
-          <div>{DateTime.fromISO(value).toLocaleString(DateTime.DATE_SHORT)}</div>
-        </div>
-      )
-    }
-
-    default: {
-      return (
-        ''
-      )
-    }
-  }
-}
-
-
 
 export const TotalCell = React.memo(
   ({ columnIndex, rowIndex, style }) => {
@@ -78,15 +24,9 @@ export const TotalCell = React.memo(
     const {
       classes,
       columns,
-      getCellData,
       onHover,
+      getTotalData,
       hoveredState,
-      fixedColumnCount,
-      dragInfo,
-      selectedCells,
-      toggleSelectAll,
-      toggleSelectRow,
-      totals,
     } = useTable()
 
     if (columnIndex === 0) {
@@ -99,33 +39,23 @@ export const TotalCell = React.memo(
       )
     }
 
-    const column = columns[columnIndex - 1]
-
-
-    const { field_name } = column
-    const { value = '', label = '', type = '' } = totals?.[field_name] ?? {}
-
-    // Reminder: the column set length is 1 less than the grid column count.
+    const { value, label, align } = getTotalData(columnIndex - 1)
     const isLast = columnIndex === columns.length
-
-    const renderedCell = React.useMemo(
-      () => renderTotalCell(type, value, label, classes.totalLabel),
-      [type, value, label, classes.totalLabel]
-    )
-
 
     return (
       <div
-        className={clsx(
-          classes.cell,
-          classes.totalCell,
-          Boolean(label) && classes.hasContent,
-          isLast && classes.isLast,
-        )}
+        className={clsx(classes.cell, classes.totalCell, {
+          [classes.isLast]: isLast,
+          [classes.hoveredColumnCell]: hoveredState[1] === columnIndex,
+          [classes.hasContent]: Boolean(label),
+        })}
         style={style}
         onMouseOver={() => onHover(-1, columnIndex)}
       >
-        {renderedCell}
+        <div style={{ textAlign: align }}>
+          <div className={classes.totalLabel}>{label}</div>
+          <div>{value}</div>
+        </div>
       </div>
     )
   },
