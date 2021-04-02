@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useInfiniteQuery, QueryClient, QueryClientProvider } from 'react-query'
+import { useQuery, useInfiniteQuery, QueryClient, QueryClientProvider } from 'react-query'
 
 import { DataTable } from './DataTable'
 import { useDimensions } from '../useDimensions'
@@ -19,7 +19,7 @@ import {
   companiesDefaultColumnSet,
 } from './storybook-utils'
 
-const TEST_DATA = createDataTableTestData(10000)
+const TEST_DATA = createDataTableTestData(100)
 
 export default {
   title: 'Components/DataTable',
@@ -32,18 +32,13 @@ function debounce(fn, delay = 250) {
   let lastArgs
   let lastThis
 
-  console.log('Setup')
-
   function debounced(...args) {
     clearTimeout(interval)
     lastArgs = args
     lastThis = this
 
-    console.log(`Called: ${args}`)
-
     interval = setTimeout(
       () => {
-        console.log(`Executed`)
         fn.apply(lastThis, lastArgs)
       },
       delay,
@@ -53,23 +48,72 @@ function debounce(fn, delay = 250) {
   return debounced
 }
 
+function findSubtotal(subtotals, rowIndex) {
+  let left = 0
+  let right = subtotals.length - 1
+
+  while (left <= right) {
+    const mid = (right + left) >> 1
+
+    const first = subtotals[mid].first + subtotals[mid].index * 2
+    const last = first + subtotals[mid].last - subtotals[mid].first
+
+    if (rowIndex > last) {
+        left = mid + 1
+    } else if (rowIndex < first) {
+        right = mid - 1
+    } else {
+        return {
+          ...subtotals[mid],
+          rowIndex: rowIndex - subtotals[mid].index + 1,
+        }
+    }
+  }
+
+  return null;
+}
+
+
 
 async function stall(stallTime = 3000) {
   await new Promise(resolve => setTimeout(resolve, stallTime))
 }
 
-async function testApi({ limit = 25, offset = 0, sortBy = '' }) {
-  console.log(`API CALLED: ${limit}, ${offset}, ${sortBy}`)
+async function testTotalsApi() {
+  await stall(Math.random() * 1000)
+
+  return {
+    data: TEST_DATA.metaData,
+    status: 200,
+    statusText: 'OK',
+    headers: {},
+  }
+}
+
+
+async function testSubtotalsApi(field) {
+  await stall(Math.random() * 1000)
+
+  return {
+    data: TEST_DATA.subtotals[field],
+    status: 200,
+    statusText: 'OK',
+    headers: {},
+  }
+}
+
+
+async function testRecordsApi({ limit = 25, offset = 0, sortBy = '' }) {
   await stall(250)
+
+  const records = [...TEST_DATA.records]
 
   if (sortBy) {
     const direction = sortBy.startsWith('-') ? 'DESC' : 'ASC'
 
     const sortParam = sortBy.replace('-', '')
 
-    console.log({ direction })
-
-    TEST_DATA.sort((a, b) => {
+    records.sort((a, b) => {
       const aParam = a?.[sortParam]
       const bParam = b?.[sortParam]
 
@@ -85,14 +129,12 @@ async function testApi({ limit = 25, offset = 0, sortBy = '' }) {
     })
   }
 
-  const remaining = Math.max(Math.min(10000 - offset, limit), 0)
-
   return {
     data: {
-      count: 10000,
+      count: records.length,
       limit,
       offset,
-      results: TEST_DATA.slice(offset, offset + limit)
+      results: records.slice(offset, offset + limit)
     },
     status: 200,
     statusText: 'OK',
@@ -109,19 +151,39 @@ const PrimaryInner = () => {
     items: {},
   })
 
+  const [metaData, setMetaData] = React.useState({
+    count: 0,
+    totals: {},
+  })
+
   const [sortBy, setSortBy] = React.useState('')
+
+  const [subtotalField, setSubtotalField] = React.useState('')
+  const [subtotalData, setSubtotalData] = React.useState({})
 
   // const [queryQueue, setQueryQueue] = React.useState([])
   // const debouncedQueryQueue = useDebounce(queryQueue)
 
   // console.log(debouncedQueryQueue)
 
-  const mockApi = async ({ pageParam = {} }) => {
+  const mockTotalsApi = async () => {
+    const results = await testTotalsApi()
+
+    return results?.data
+  }
+
+  const mockSubtotalsApi = async () => {
+    const results = await testSubtotalsApi(subtotalField)
+
+    return results?.data
+  }
+
+  const mockRecordsApi = async ({ pageParam = {} }) => {
     const { limit = 50, offset = 0 } = pageParam
 
     const adjustedLimit = Math.max(limit, 25)
 
-    const results = await testApi({
+    const results = await testRecordsApi({
       limit: adjustedLimit,
       offset,
       sortBy,
@@ -139,13 +201,28 @@ const PrimaryInner = () => {
     hasNextPage,
   } = useInfiniteQuery(
     ['items', sortBy],
-    mockApi,
+    mockRecordsApi,
     {
       // enabled: false,
     },
   )
 
-  console.log({ data })
+  const { isLoading: isLoadingTotal } = useQuery(
+    ['item-totals', sortBy],
+    mockTotalsApi,
+    {
+      onSuccess: result => setMetaData(result),
+    }
+  )
+
+  const { isLoading: isLoadingSubtotal } = useQuery(
+    ['item-subtotals', subtotalField],
+    mockSubtotalsApi,
+    {
+      enabled: Boolean(subtotalField),
+      onSuccess: result => setSubtotalData(result),
+    }
+  )
 
   React.useEffect(
     () => {
@@ -189,7 +266,35 @@ const PrimaryInner = () => {
     - tableContainerDimensions.top
     - 16
 
-  function getCellData(rowIndex, columnIndex) {
+  function getCellData(gridRowIndex, columnIndex) {
+    let rowIndex = gridRowIndex
+
+    if (subtotalField && subtotalData) {
+      const subtotalResult = findSubtotal(Object.values(subtotalData), rowIndex)
+
+      if (subtotalResult) {
+        if (rowIndex === subtotalResult.first) {
+          return {
+            subtotal: 'title',
+            value: columnIndex === 0 ? subtotalResult.title : ''
+          }
+        }
+
+        if (rowIndex === subtotalResult.last) {
+          const field_name = columns?.[columnIndex]?.field_name
+          const totalValue = subtotalData?.[subtotalResult?.title || '']?.subtotals?.[field_name] ?? ''
+          console.log({ field_name, subtotalData })
+
+          return {
+            subtotal: 'total',
+            value: totalValue,
+          }
+        }
+
+        rowIndex = subtotalResult.rowIndex
+      }
+    }
+
     const item = tableData.items[rowIndex]
 
     if (item === undefined) {
@@ -242,17 +347,20 @@ const PrimaryInner = () => {
         height={tableContainerHeight}
         width={tableContainerDimensions.width}
         columns={columns}
+        totals={metaData.totals}
         getCellData={getCellData}
-        rowCount={tableData.count}
+        rowCount={metaData.count}
         selectedCells={selected}
         onItemsRendered={debouncedOnItemsRendered}
         toggleSelectRow={toggleSelectItem}
         toggleSelectAll={toggleSelectAll}
-        isLoading={isLoading}
+        isLoading={isLoading || isLoadingTotal || isLoadingSubtotal}
         isFetching={isFetching}
         overscanRowCount={10}
         sortBy={sortBy}
         setSortBy={setSortBy}
+        subtotalField={subtotalField}
+        setSubtotalField={setSubtotalField}
       />
     </div>
   )

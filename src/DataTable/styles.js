@@ -11,15 +11,15 @@ export const useStyles = makeStyles(theme => ({
     width: '100%',
   },
 
-  headerGrid: {
+  headerGridContainer: {
     width: '100%',
     position: 'relative',
-
-
+    borderBottom: `2px solid ${colors.blueGrey[300]}`,
   },
 
   dataGrid: {
     width: '100%',
+    overflowY: 'hidden',
   },
 
   /** Removes scrollbars from grid containers. */
@@ -69,6 +69,8 @@ export const useStyles = makeStyles(theme => ({
   hoveredColumnCell: {},
   hoveredRowCell: {},
   isSelected: {},
+  isSubtotalTitle: {},
+  isSubtotalTotal: {},
   cell: {
     display: 'flex',
     flexDirection: 'column',
@@ -83,7 +85,6 @@ export const useStyles = makeStyles(theme => ({
       whiteSpace: 'nowrap',
     },
 
-    borderBottom: 'none',
     padding: 4,
     textAlign: 'left',
     ...theme.typography.body2,
@@ -118,20 +119,26 @@ export const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.secondary[50],
     },
 
+    '&$isSubtotalTitle': {
+      backgroundColor: theme.palette.primary[50],
+      fontWeight: 700,
+    },
+
+    '&$isSubtotalTotal': {
+      backgroundColor: theme.palette.primary[50],
+      fontWeight: 700,
+    },
   },
 
   // --- HEADER
   isSortable: {},
+  isHovered: {},
   headerCell: {
-    borderBottom: `2px solid ${colors.blueGrey[300]}`,
     borderTopLeftRadius: theme.shape.borderRadius,
     borderTopRightRadius: theme.shape.borderRadius,
     transition: theme.transitions.create('background-color'),
     '&:hover': {
       backgroundColor: colors.blueGrey[50],
-      '& $resizeHeaderButton': {
-        opacity: 1,
-      },
     },
 
     '&$isSortable': {
@@ -145,15 +152,21 @@ export const useStyles = makeStyles(theme => ({
 
   resizeHeaderButton: {
     transition: theme.transitions.create('opacity'),
-    opacity: 0,
     position: 'absolute',
-    right: 4,
-    top: 2,
-    width: 6,
-    bottom: 2,
-    borderRadius: theme.shape.borderRadius,
+    opacity: 0,
+    width: 4,
+    borderTopRightRadius: theme.shape.borderRadius,
     backgroundColor: colors.blueGrey[700],
     cursor: 'col-resize',
+
+    '&:hover': {
+      opacity: 1,
+    },
+
+    '&$isHovered': {
+      opacity: 1,
+    },
+
   },
 
   sortIcon: {
@@ -168,5 +181,19 @@ export const useStyles = makeStyles(theme => ({
     height: 4,
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
+  },
+
+  // --- TOTAL ROW
+  totalLabel: {
+    color: colors.blueGrey[700],
+    fontWeight: 700,
+    fontSize: theme.typography.caption.fontSize,
+  },
+
+  totalGridContainer: {
+    borderTop: `2px solid ${colors.blueGrey[300]}`,
+    backgroundColor: colors.blueGrey[50],
+    borderBottomRightRadius: theme.shape.borderRadius,
+    borderBottomLeftRadius: theme.shape.borderRadius,
   },
 }))

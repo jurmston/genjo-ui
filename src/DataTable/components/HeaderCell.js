@@ -87,6 +87,8 @@ const HeaderCell = ({
     rowCount,
     sortBy,
     setSortBy,
+    subtotalField,
+    setSubtotalField,
   } = useTable()
   // There is an= known issue with Draggable not being complient with
   // strict mode. Here's a recommended fix.
@@ -116,7 +118,7 @@ const HeaderCell = ({
   }
 
   const adjustedColumnIndex = columnIndex - 1
-  const { title, field_name, field_type, sort_type } = columns[adjustedColumnIndex] ?? {}
+  const { title, field_name, field_type, sort_type, subtotal } = columns[adjustedColumnIndex] ?? {}
 
   const isSelected = sortBy.endsWith(field_name)
   const direction = sortBy.startsWith('-') ? 'DESC' : 'ASC'
@@ -131,50 +133,71 @@ const HeaderCell = ({
     [field_type],
   )
 
+  const [isHovered, setIsHovered] = React.useState(false)
+
+  const clickProps = {}
+  if (sort_type) {
+    clickProps.onClick = () => setSortBy(sortBy === field_name ? `-${field_name}` : field_name)
+  }
+
+  if (subtotal) {
+    clickProps.onDoubleClick = () => {
+      setSortBy(field_name)
+      setSubtotalField(field_name)
+    }
+  }
 
   return (
-    <div
-      style={{
-        ...style,
-        pointerEvents: dragInfo ? 'none' : 'unset',
-      }}
-      className={clsx(
-        classes.cell,
-        classes.headerCell,
-        Boolean(sort_type) && classes.isSortable,
-        isSelected && classes.isSelected,
-      )}
-      onClick={sort_type
-        ? () => setSortBy(sortBy === field_name ? `-${field_name}` : field_name)
-        : null
-      }
-      /*onMouseOver={() => handleHoverCell(rowIndex, adjustedColumnIndex)}*/
-    >
-      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-        <span style={{ marginRight: 4 }}>{title}</span>
-
-        {Boolean(sort_type) && Boolean(IconComponent) && (
-          <IconComponent
-            className={clsx(classes.sortIcon, {
-              [classes.isSelected]: isSelected,
-            })}
-          />
+    <>
+      <div
+        style={{
+          ...style,
+          pointerEvents: dragInfo ? 'none' : 'unset',
+        }}
+        className={clsx(
+          classes.cell,
+          classes.headerCell,
+          Boolean(sort_type) && classes.isSortable,
+          isSelected && classes.isSelected,
         )}
+        onMouseOver={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        {...clickProps}
+      >
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <span style={{ marginRight: 4 }}>{title}</span>
 
-        <Draggable
-          axis="x"
-          aria-label="Resize Column"
-          position={{ x: 0 }}
-          nodeRef={nodeRef}
-          onStart={event => handleDragStart(event, adjustedColumnIndex)}
-          onStop={handleDragEnd}
-          onDrag={handleDrag}
-        >
-          <div ref={nodeRef} className={classes.resizeHeaderButton} />
-        </Draggable>
-      </div>
+          {Boolean(sort_type) && Boolean(IconComponent) && (
+            <IconComponent
+              className={clsx(classes.sortIcon, {
+                [classes.isSelected]: isSelected,
+              })}
+            />
+          )}
 
+        </div>
     </div>
+
+      <Draggable
+        axis="x"
+        aria-label="Resize Column"
+        position={{ x: 0 }}
+        nodeRef={nodeRef}
+        onStart={event => handleDragStart(event, adjustedColumnIndex)}
+        onStop={handleDragEnd}
+        onDrag={handleDrag}
+      >
+        <div
+          ref={nodeRef}
+          className={clsx(classes.resizeHeaderButton, isHovered && classes.isHovered)}
+          style={{
+            top: style.top,
+            left: style.left + style.width - 4,
+            height: style.height,
+          }}
+        />
+      </Draggable>
+    </>
   )
 }
 

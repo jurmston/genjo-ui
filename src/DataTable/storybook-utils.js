@@ -1,4 +1,5 @@
 import randomWords from 'random-words'
+import { DateTime } from 'luxon'
 
 
 function getRandomIntInclusive(min, max) {
@@ -70,14 +71,32 @@ export const testDataColumnSet = [
 
 ]
 
+const BASE_TIMESTAMP = DateTime.fromISO('2018-02-01')
+const DIFF_MILLIS = -BASE_TIMESTAMP.diffNow('milliseconds')
+
 
 export function createDataTableTestData(count = 1000) {
   const names = randomWords(count)
 
-  const result = []
+  const records = []
+
+  const metaData = {
+    count,
+    totals: {
+      amount: { value: 0, label: 'Total', type: 'currency' },
+      count: { value: 0, label: 'Total', type: 'number' },
+      size: { value: 0, label: 'Average', type: 'number' },
+      modified: { value: null, label: 'Lastest', type: 'datetime' },
+      is_active: { value: 0, label: 'Active Count', type: 'number' },
+    }
+  }
 
   for (let i = 0; i < count; i += 1) {
-    result.push({
+    const newModified = BASE_TIMESTAMP.plus({
+      milliseconds: Math.random() * DIFF_MILLIS,
+    })
+
+    const record = {
       id: i + 1,
       name: names[i],
       discipline: TEST_DISCIPLINES[getRandomIntInclusive(0, 7)] ?? '',
@@ -87,12 +106,89 @@ export function createDataTableTestData(count = 1000) {
       amount: getRandomIntInclusive(10, 478) + getRandomIntInclusive(0, 99) / 100,
       count: getRandomIntInclusive(0, 10000),
       size: Math.random() * 100 - 50,
-      modified: `2020-${getRandomIntInclusive(1,12)}-${getRandomIntInclusive(1,28)}`,
+      modified: newModified.toISO(),
       is_active: Math.random() < 0.5 ? true : false,
-    })
+    }
+
+    records.push(record)
+
+    metaData.totals.amount.value += record.amount
+    metaData.totals.count.value += record.count
+    // Running average formula:
+    // https://math.stackexchange.com/questions/106700/incremental-averageing
+    metaData.totals.size.value += (record.size - metaData.totals.size.value) / (i + 1)
+    metaData.totals.is_active.value += +record.is_active
+
+    metaData.totals.modified.value = i === 0
+      ? newModified.toISO()
+      : newModified > DateTime.fromISO(metaData.totals.modified.value)
+      ? newModified.toISO()
+      : metaData.totals.modified.value
+
   }
 
-  return result
+  // Create discipline subtotal data
+  const orderedRecords = records.map(record => ({ ...record }))
+  orderedRecords.sort((a, b) => {
+    if (a.discipline > b.discipline) {
+      return 1
+    }
+
+    if (a.discipline < b.discipline) {
+      return -1
+    }
+
+    return 0
+  })
+
+  let disciplines = {}
+  let subtotalIndex = 0
+  for (let i = 0; i < orderedRecords.length; i += 1) {
+    const record = orderedRecords[i]
+    const key = record.discipline
+
+    if (!disciplines[key]) {
+      disciplines[key] = {
+        index: subtotalIndex,
+        first: i,
+        last: i,
+        title: key || '(uncategorized)',
+        subtotals: {
+          is_active: 0,
+          amount: 0,
+          count: 0,
+          size: 0,
+          modified: record.modified,
+        }
+      }
+
+      subtotalIndex += 1
+    }
+
+    disciplines[key].last = i
+
+    disciplines[key].subtotals.amount += record.amount
+    disciplines[key].subtotals.count += record.count
+    // Running average formula:
+    // https://math.stackexchange.com/questions/106700/incremental-averageing
+    disciplines[key].subtotals.size += (record.size - disciplines[key].subtotals.size) / (i + 1)
+    disciplines[key].subtotals.is_active += +record.is_active
+
+    const newModified = DateTime.fromISO(record.modified)
+    disciplines[key].subtotals.modified = i === 0
+      ? newModified.toISO()
+      : newModified > DateTime.fromISO(disciplines[key].subtotals.modified)
+      ? newModified.toISO()
+      : disciplines[key].subtotals.modified
+  }
+
+  return {
+    records,
+    metaData,
+    subtotals: {
+      discipline: disciplines,
+    }
+  }
 }
 
 
@@ -115,29 +211,30 @@ export const companiesDefaultColumnSet = {
       title: 'Discipline',
       sort_type: 'alpha',
       width: 150,
+      subtotal: true,
     },
-    {
-      uuid: 'companies-default-2',
-      field_name: 'phone_number',
-      field_type: 'string',
-      title: 'Phone Number',
-      sort_type: 'alpha',
-      width: 75,
-    },
-    {
-      uuid: 'companies-default-3',
-      field_name: 'primary_contact',
-      field_type: 'related',
-      sort_type: 'alpha',
-      title: 'Primary Contact',
-    },
-    {
-      uuid: 'companies-default-4',
-      field_name: 'website',
-      field_type: 'string',
-      sort_type: 'alpha',
-      title: 'Website',
-    },
+    // {
+    //   uuid: 'companies-default-2',
+    //   field_name: 'phone_number',
+    //   field_type: 'string',
+    //   title: 'Phone Number',
+    //   sort_type: 'alpha',
+    //   width: 75,
+    // },
+    // {
+    //   uuid: 'companies-default-3',
+    //   field_name: 'primary_contact',
+    //   field_type: 'related',
+    //   sort_type: 'alpha',
+    //   title: 'Primary Contact',
+    // },
+    // {
+    //   uuid: 'companies-default-4',
+    //   field_name: 'website',
+    //   field_type: 'string',
+    //   sort_type: 'alpha',
+    //   title: 'Website',
+    // },
     {
       uuid: 'companies-default-5',
       field_name: 'is_active',

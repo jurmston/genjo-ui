@@ -12,6 +12,11 @@ import { useTable } from '../context'
 const useStyles = makeStyles({
   root: {
     padding: 16,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
   },
   linearLoader: {
     height: 8,

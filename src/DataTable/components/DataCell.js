@@ -17,7 +17,7 @@ import { useTable } from '../context'
 import { colors } from '../../colors'
 
 
-function renderCell(column, cellData) {
+function renderCell(field_type, cellData) {
   if (cellData === '__loading__') {
     return (
       <div><Skeleton variant="text" /></div>
@@ -25,7 +25,7 @@ function renderCell(column, cellData) {
 
   }
 
-  switch (column.field_type) {
+  switch (field_type) {
     case 'currency': {
       return (
         <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
@@ -45,7 +45,7 @@ function renderCell(column, cellData) {
 
     case 'datetime': {
       return (
-        <div>
+        <div style={{ textAlign: 'right'}}>
           {DateTime.fromISO(cellData).toLocaleString(DateTime.DATETIME_SHORT)}
         </div>
       )
@@ -53,7 +53,7 @@ function renderCell(column, cellData) {
 
     case 'date': {
       return (
-        <div>
+        <div style={{ textAlign: 'right' }}>
           {DateTime.fromISO(cellData).toLocaleString(DateTime.DATE_SHORT)}
         </div>
       )
@@ -94,7 +94,20 @@ const DataCell = React.memo(
       selectedCells,
       toggleSelectAll,
       toggleSelectRow,
+      subtotalField,
     } = useTable()
+
+    let cellData = getCellData(rowIndex, columnIndex - 1)
+    let isSubtotalTitle = false
+    let isSubtotalTotal = false
+
+    if (typeof cellData === 'object') {
+      isSubtotalTitle = cellData.subtotal === 'title'
+      isSubtotalTotal = cellData.subtotal === 'total'
+      cellData = cellData.value
+      console.log({ cellData, isSubtotalTotal, isSubtotalTitle })
+
+    }
 
     if (columnIndex === 0) {
 
@@ -106,25 +119,37 @@ const DataCell = React.memo(
             selectedCells.has(rowIndex) && classes.isSelected,
             hoveredState[0] === rowIndex && classes.hoveredRowCell,
             hoveredState[1] === columnIndex && classes.hoveredColumnCell,
+            isSubtotalTitle && classes.isSubtotalTitle,
+            isSubtotalTotal && classes.isSubtotalTotal,
           )}
           style={style}
           onMouseOver={() => onHover(rowIndex, -1)}
         >
-          <Checkbox
-            checked={selectedCells.has(rowIndex)}
-            onChange={event => toggleSelectRow(rowIndex)}
-          />
+          {!isSubtotalTotal && (
+            <Checkbox
+              checked={selectedCells.has(rowIndex)}
+              onChange={event => toggleSelectRow(rowIndex)}
+            />
+          )}
         </div>
       )
     }
 
-    const cellData = getCellData(rowIndex, columnIndex - 1)
-
     const column = columns[columnIndex - 1]
 
+    const field_type = isSubtotalTotal
+      ? (column.total ?? '')
+      : isSubtotalTitle
+      ? 'string'
+      : column.field_type
+
+    if (isSubtotalTotal) {
+      console.log({ field_type, cellData })
+    }
+
     const renderedCell = React.useMemo(
-      () => renderCell(column, cellData),
-      [cellData, column.field_type]
+      () => renderCell(field_type, cellData),
+      [cellData, field_type]
     )
 
     return (
@@ -135,6 +160,8 @@ const DataCell = React.memo(
           selectedCells.has(rowIndex) && classes.isSelected,
           hoveredState[0] === rowIndex && classes.hoveredRowCell,
           hoveredState[1] === columnIndex && classes.hoveredColumnCell,
+          isSubtotalTitle && classes.isSubtotalTitle,
+          isSubtotalTotal && classes.isSubtotalTotal,
         )}
         style={style}
         onMouseOver={() => onHover(rowIndex, columnIndex)}

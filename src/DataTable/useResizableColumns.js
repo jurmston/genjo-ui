@@ -47,7 +47,9 @@ export function useResizableColumns({
 
         slack -= slackAvailable
 
-        const remainder = index === columns.length - 1 ? slack : 0
+        const remainder = index === columns.length - 1
+          ? slack - scrollbarSize()
+          : 0
 
         return minWidth + slackAvailable + remainder
 

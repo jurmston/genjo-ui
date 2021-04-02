@@ -10,14 +10,17 @@ import { useResizableColumns } from './useResizableColumns'
 import { TableContext } from './context'
 import { DataCell } from './components/DataCell'
 import { HeaderCell } from './components/HeaderCell'
+import { TotalCell } from './components/TotalCell'
 import { ResultsLoader } from './components/ResultsLoader'
 
 import { useStyles } from './styles'
 
 const ROW_HEIGHT = 36
+const TOTAL_HEIGHT = 56
 const COL_MIN_WIDTH = 50
 const COL_MAX_WIDTH = 500
 const COL_DEFAULT_WIDTH = 100
+const HEIGHT_BUFFER = 7
 
 
 export const DataTable = ({
@@ -26,10 +29,13 @@ export const DataTable = ({
   width = 0,
   overscanRowCount = 10,
   rowHeight = ROW_HEIGHT,
+  totalHeight = TOTAL_HEIGHT,
   defaultColumnWidth = COL_DEFAULT_WIDTH,
   rowCount,
   columns: columnsFromProps,
+  totals,
   getCellData,
+  getTotalData,
   selectedCells,
   toggleSelectAll,
   toggleSelectRow,
@@ -38,10 +44,11 @@ export const DataTable = ({
   onItemsRendered,
   sortBy,
   setSortBy,
+  subtotalField,
+  setSubtotalField,
+  subtotals,
 }) => {
   const [columns, setColumns] = React.useState([])
-
-  const hasScrollbar = (height - 2 * rowHeight) / rowHeight < rowCount
 
   React.useEffect(
     () => {
@@ -50,14 +57,21 @@ export const DataTable = ({
     [columnsFromProps]
   )
 
+  // Compute the basic dimensions for the grids.
+  const hasScrollbar = (height - 2 * rowHeight) / rowHeight < rowCount
+  const headerHeight = rowHeight
+  const dataGridHeight = height - headerHeight - totalHeight - HEIGHT_BUFFER
+
   const classes = useStyles({ hasScrollbar })
 
   const dataGridRef = React.useRef()
   const headerGridRef = React.useRef()
+  const totalGridRef = React.useRef()
 
   function updateGrid() {
     dataGridRef?.current?.resetAfterColumnIndex(0, true)
     headerGridRef?.current?.resetAfterColumnIndex(0, true)
+    totalGridRef?.current?.resetAfterColumnIndex(0, true)
   }
 
   const {
@@ -76,7 +90,7 @@ export const DataTable = ({
     () => {
       updateGrid()
     },
-    [width, widths, updateGrid]
+    [width, widths, updateGrid, subtotalField, sortBy]
   )
 
   const [hoveredState, setHoveredState] = React.useState([-1, -1])
@@ -139,18 +153,22 @@ export const DataTable = ({
         rowCount,
         sortBy,
         setSortBy,
+        subtotalField,
+        setSubtotalField,
+        totals,
+        subtotals,
       }}
     >
       <div className={classes.root}>
 
-        <div className={classes.headerGrid}>
+        <div className={classes.headerGridContainer}>
           <VariableSizeGrid
             className={clsx(classes.noScrollbars)}
             columnCount={columns.length + 1}
             columnWidth={getColumnWidth}
-            height={ROW_HEIGHT}
+            height={rowHeight}
             rowCount={1}
-            rowHeight={() => ROW_HEIGHT}
+            rowHeight={() => rowHeight}
             width={width}
             ref={headerGridRef}
           >
@@ -165,20 +183,36 @@ export const DataTable = ({
         />
 
         <div className={classes.dataGrid}>
+          {!isLoading && (
+            <VariableSizeGrid
+              columnCount={columns.length + 1}
+              columnWidth={getColumnWidth}
+              height={dataGridHeight}
+              rowCount={rowCount}
+              rowHeight={() => rowHeight}
+              width={width}
+              ref={dataGridRef}
+              onItemsRendered={onItemsRendered}
+              overscanRowCount={overscanRowCount}
+            >
+              {DataCell}
+            </VariableSizeGrid>
+          )}
+        </div>
+
+        <div className={classes.totalGridContainer}>
           <VariableSizeGrid
+            className={clsx(classes.noScrollbars)}
             columnCount={columns.length + 1}
             columnWidth={getColumnWidth}
-            height={height - ROW_HEIGHT}
-            rowCount={rowCount}
-            rowHeight={() => ROW_HEIGHT}
+            height={totalHeight}
+            rowCount={1}
+            rowHeight={() => totalHeight}
             width={width}
-            ref={dataGridRef}
-            onItemsRendered={onItemsRendered}
-            overscanRowCount={overscanRowCount}
+            ref={totalGridRef}
           >
-            {DataCell}
+            {TotalCell}
           </VariableSizeGrid>
-
         </div>
 
         {Boolean(dragInfo) && (
@@ -189,13 +223,6 @@ export const DataTable = ({
               width: dragInfo?.currentWidth,
               zIndex: 9999,
             }}
-          />
-        )}
-
-        {hasScrollbar && (
-          <div
-            className={classes.scrollbarCap}
-            style={{ height: rowHeight }}
           />
         )}
 
