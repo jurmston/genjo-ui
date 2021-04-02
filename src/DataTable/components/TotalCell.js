@@ -94,7 +94,7 @@ export const TotalCell = React.memo(
         <div
           className={clsx(classes.totalCell, classes.isFirst)}
           style={style}
-          onMouseOver={() => onHover(rowIndex, -1)}
+          onMouseOver={() => onHover(-1, columnIndex)}
         />
       )
     }
@@ -123,7 +123,7 @@ export const TotalCell = React.memo(
           isLast && classes.isLast,
         )}
         style={style}
-        onMouseOver={() => onHover(rowIndex, columnIndex)}
+        onMouseOver={() => onHover(-1, columnIndex)}
       >
         {renderedCell}
       </div>

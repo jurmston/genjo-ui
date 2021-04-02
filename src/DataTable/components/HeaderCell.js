@@ -84,6 +84,7 @@ const HeaderCell = ({
     selectedCells,
     toggleSelectAll,
     toggleSelectRow,
+    onHover,
     rowCount,
     sortBy,
     setSortBy,
@@ -106,7 +107,7 @@ const HeaderCell = ({
           classes.cell,
           classes.headerCell,
         )}
-        /*onMouseOver={() => handleHoverCell(rowIndex, columnIndex)}*/
+        onMouseOver={() => onHover(-1, columnIndex)}
       >
         <Checkbox
           checked={selectedCells.size === rowCount}
@@ -160,7 +161,10 @@ const HeaderCell = ({
           Boolean(sort_type) && classes.isSortable,
           isSelected && classes.isSelected,
         )}
-        onMouseOver={() => setIsHovered(true)}
+        onMouseOver={() => {
+          setIsHovered(true)
+          onHover(-1, columnIndex)
+        }}
         onMouseLeave={() => setIsHovered(false)}
         {...clickProps}
       >

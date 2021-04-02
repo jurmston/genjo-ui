@@ -2,13 +2,21 @@ import React from 'react'
 
 import { useQuery, useInfiniteQuery, QueryClient, QueryClientProvider } from 'react-query'
 
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import CancelIcon from '@material-ui/icons/Cancel'
+
+
 import { DataTable } from './DataTable'
 import { useDimensions } from '../useDimensions'
 import { useSelectionSet } from '../useSelectionSet'
 
+import { colors } from '../colors'
+
 import Button from '@material-ui/core/Button'
 
 import InfiniteLoader from 'react-window-infinite-loader'
+
+import { DateTime } from 'luxon'
 
 import { simpleRange } from '../utils/arrays'
 
@@ -24,6 +32,66 @@ const TEST_DATA = createDataTableTestData(100)
 export default {
   title: 'Components/DataTable',
   component: DataTable,
+}
+
+
+function renderCellData(field_type, cellData) {
+  if (cellData === undefined) {
+    return {
+      isLoading: true,
+    }
+  }
+
+  switch (field_type) {
+    case 'currency': {
+      return {
+        align: 'right',
+        value: `$${Number(cellData).toFixed(2)}`,
+      }
+    }
+
+    case 'number': {
+      return {
+        value: Math.round((Number(cellData) + Number.EPSILON) * 100) / 100,
+        align: 'right',
+      }
+    }
+
+    case 'datetime': {
+      return {
+        value: DateTime.fromISO(cellData).toLocaleString(DateTime.DATETIME_SHORT),
+        align: 'right',
+      }
+    }
+
+    case 'date': {
+      return {
+        value: DateTime.fromISO(cellData).toLocaleString(DateTime.DATE_SHORT),
+        align: 'right',
+      }
+    }
+
+    case 'bool': {
+      return {
+        value: (
+          <span>
+            {cellData
+              ? <CheckCircleIcon style={{ color: colors.green[500] }} />
+              : <CancelIcon style={{ color: colors.red[500] }} />
+            }
+          </span>
+        ),
+        align: 'center',
+      }
+    }
+
+    default: {
+      return {
+        value: cellData,
+        align: 'left',
+      }
+    }
+  }
 }
 
 
@@ -131,7 +199,6 @@ async function testRecordsApi({ limit = 25, offset = 0, sortBy = '' }) {
 
   return {
     data: {
-      count: records.length,
       limit,
       offset,
       results: records.slice(offset, offset + limit)
@@ -151,20 +218,19 @@ const PrimaryInner = () => {
     items: {},
   })
 
+  const [rowCount, setRowCount] = React.useState(0)
+  const [rows, setRows] = React.useState({})
+  const [totals, setTotals] = React.useState({})
+  const [subtotals, setSubtotals] = React.useState({})
+  const [sortBy, setSortBy] = React.useState('')
+  const [subtotalField, setSubtotalField] = React.useState('')
+
   const [metaData, setMetaData] = React.useState({
     count: 0,
     totals: {},
   })
 
-  const [sortBy, setSortBy] = React.useState('')
-
-  const [subtotalField, setSubtotalField] = React.useState('')
   const [subtotalData, setSubtotalData] = React.useState({})
-
-  // const [queryQueue, setQueryQueue] = React.useState([])
-  // const debouncedQueryQueue = useDebounce(queryQueue)
-
-  // console.log(debouncedQueryQueue)
 
   const mockTotalsApi = async () => {
     const results = await testTotalsApi()
@@ -200,58 +266,47 @@ const PrimaryInner = () => {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery(
-    ['items', sortBy],
+    ['rows', sortBy],
     mockRecordsApi,
     {
       // enabled: false,
+      onSuccess: result => {
+        const newRows = {}
+
+        console.log({ result })
+
+        result.pages.forEach(page => {
+          const { offset } = page
+
+          page.results.forEach((item, index) => {
+            const rowIndex = offset + index
+            newRows[rowIndex] = item
+          })
+        })
+
+        setRows(newRows)
+      }
     },
   )
 
   const { isLoading: isLoadingTotal } = useQuery(
-    ['item-totals', sortBy],
+    ['totals'],
     mockTotalsApi,
     {
-      onSuccess: result => setMetaData(result),
+      onSuccess: result => {
+        setRowCount(result.count)
+        setTotals(result.totals)
+      },
     }
   )
 
   const { isLoading: isLoadingSubtotal } = useQuery(
-    ['item-subtotals', subtotalField],
+    ['subtotals', subtotalField],
     mockSubtotalsApi,
     {
       enabled: Boolean(subtotalField),
       onSuccess: result => setSubtotalData(result),
     }
-  )
-
-  React.useEffect(
-    () => {
-      if (!data) {
-        setTableData({
-          count: 0,
-          items: {},
-        })
-      } else {
-        let newCount = 0
-        const newItems = {}
-
-        data.pages.forEach(page => {
-          const { count, offset } = page
-          newCount = count
-
-          page.results.forEach((item, index) => {
-            const rowIndex = offset + index
-            newItems[rowIndex] = item
-          })
-        })
-
-        setTableData({
-          count: newCount,
-          items: newItems,
-        })
-      }
-    },
-    [data]
   )
 
   const {
@@ -266,43 +321,10 @@ const PrimaryInner = () => {
     - tableContainerDimensions.top
     - 16
 
-  function getCellData(gridRowIndex, columnIndex) {
-    let rowIndex = gridRowIndex
-
-    if (subtotalField && subtotalData) {
-      const subtotalResult = findSubtotal(Object.values(subtotalData), rowIndex)
-
-      if (subtotalResult) {
-        if (rowIndex === subtotalResult.first) {
-          return {
-            subtotal: 'title',
-            value: columnIndex === 0 ? subtotalResult.title : ''
-          }
-        }
-
-        if (rowIndex === subtotalResult.last) {
-          const field_name = columns?.[columnIndex]?.field_name
-          const totalValue = subtotalData?.[subtotalResult?.title || '']?.subtotals?.[field_name] ?? ''
-          console.log({ field_name, subtotalData })
-
-          return {
-            subtotal: 'total',
-            value: totalValue,
-          }
-        }
-
-        rowIndex = subtotalResult.rowIndex
-      }
-    }
-
-    const item = tableData.items[rowIndex]
-
-    if (item === undefined) {
-      return '__loading__'
-    }
-
-    const field_name = columns?.[columnIndex]?.field_name
-    return item?.[field_name] ?? ''
+  function getCellData(rowIndex, columnIndex) {
+    const item = rows[rowIndex]
+    const { field_name, field_type } = columns?.[columnIndex] ?? {}
+    return renderCellData(field_type, item?.[field_name])
   }
 
   function onItemsRendered({
@@ -314,7 +336,7 @@ const PrimaryInner = () => {
     let hasUnloadedRecord = false
 
     for (let i = overscanRowStartIndex; i < overscanRowStopIndex; i += 1) {
-      if (tableData.items[i] === undefined) {
+      if (rows[i] === undefined) {
         hasUnloadedRecord = true
         minUnloadedRecord = Math.min(minUnloadedRecord, i)
         maxUnloadedRecord = Math.max(maxUnloadedRecord, i)
@@ -331,7 +353,7 @@ const PrimaryInner = () => {
 
   const debouncedOnItemsRendered = React.useCallback(
     debounce(onItemsRendered),
-    [tableData, fetchNextPage]
+    [rows, fetchNextPage]
   )
 
   return (
@@ -347,9 +369,9 @@ const PrimaryInner = () => {
         height={tableContainerHeight}
         width={tableContainerDimensions.width}
         columns={columns}
-        totals={metaData.totals}
+        totals={totals}
         getCellData={getCellData}
-        rowCount={metaData.count}
+        rowCount={rowCount}
         selectedCells={selected}
         onItemsRendered={debouncedOnItemsRendered}
         toggleSelectRow={toggleSelectItem}

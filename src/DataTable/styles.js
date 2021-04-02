@@ -5,8 +5,8 @@ import { colors } from '../colors'
 
 export const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    flexDirection: 'column',
+    // display: 'flex',
+    // flexDirection: 'column',
     position: 'relative',
     width: '100%',
   },
@@ -14,12 +14,29 @@ export const useStyles = makeStyles(theme => ({
   headerGridContainer: {
     width: '100%',
     position: 'relative',
-    borderBottom: `2px solid ${colors.blueGrey[300]}`,
   },
 
-  dataGrid: {
+  innerBorder: {
     width: '100%',
-    overflowY: 'hidden',
+    height: 2,
+    backgroundColor: colors.blueGrey[300],
+  },
+
+  dataGridContainer: {
+    width: '100%',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+
+  loadingContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    display: 'flex',
+    flexDirectin: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   /** Removes scrollbars from grid containers. */
@@ -45,13 +62,13 @@ export const useStyles = makeStyles(theme => ({
 
   },
 
-  scrollbarCap: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: scrollbarSize(),
-    borderBottom: `2px solid ${colors.blueGrey[300]}`,
-  },
+  // scrollbarCap: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   right: 0,
+  //   width: scrollbarSize(),
+  //   borderBottom: `2px solid ${colors.blueGrey[300]}`,
+  // },
 
   /** Draggable line that appears when resizing columns. */
   dragBoundry: {
@@ -74,19 +91,16 @@ export const useStyles = makeStyles(theme => ({
   cell: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
     justifyContent: 'center',
-    overflow: 'hidden',
-    '& > div': {
-      position: 'relative',
-      width: '100%',
+    // overflow: 'hidden',
+    '& > p': {
+      // position: 'relative',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
     },
 
     padding: 4,
-    textAlign: 'left',
     ...theme.typography.body2,
 
     '&$roundTop': {
@@ -101,8 +115,9 @@ export const useStyles = makeStyles(theme => ({
       backgroundColor: colors.blueGrey[50],
     },
 
-    // '&$hoveredColumnCell': {
-    //   backgroundColor: theme.palette.grey[100],
+    '&$hoveredColumnCell': {
+      backgroundColor: colors.blueGrey[50],
+    },
 
     //   '&$hoveredRowCell': {
     //     backgroundColor: colors.blueGrey[100],
@@ -191,7 +206,6 @@ export const useStyles = makeStyles(theme => ({
   },
 
   totalGridContainer: {
-    borderTop: `2px solid ${colors.blueGrey[300]}`,
     backgroundColor: colors.blueGrey[50],
     borderBottomRightRadius: theme.shape.borderRadius,
     borderBottomLeftRadius: theme.shape.borderRadius,

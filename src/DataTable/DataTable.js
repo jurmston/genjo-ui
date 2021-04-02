@@ -13,6 +13,8 @@ import { HeaderCell } from './components/HeaderCell'
 import { TotalCell } from './components/TotalCell'
 import { ResultsLoader } from './components/ResultsLoader'
 
+import { CircleLoader } from '../CircleLoader'
+
 import { useStyles } from './styles'
 
 const ROW_HEIGHT = 36
@@ -21,6 +23,7 @@ const COL_MIN_WIDTH = 50
 const COL_MAX_WIDTH = 500
 const COL_DEFAULT_WIDTH = 100
 const HEIGHT_BUFFER = 7
+const INNER_BORDER_WIDTH = 2
 
 
 export const DataTable = ({
@@ -60,7 +63,7 @@ export const DataTable = ({
   // Compute the basic dimensions for the grids.
   const hasScrollbar = (height - 2 * rowHeight) / rowHeight < rowCount
   const headerHeight = rowHeight
-  const dataGridHeight = height - headerHeight - totalHeight - HEIGHT_BUFFER
+  const dataGridHeight = height - headerHeight - totalHeight - HEIGHT_BUFFER - 2 * INNER_BORDER_WIDTH
 
   const classes = useStyles({ hasScrollbar })
 
@@ -176,14 +179,14 @@ export const DataTable = ({
           </VariableSizeGrid>
         </div>
 
-        <ResultsLoader
-          isLoading={isLoading}
-          isFetching={isFetching}
-          count={rowCount}
-        />
+        <div className={classes.innerBorder} />
 
-        <div className={classes.dataGrid}>
-          {!isLoading && (
+        <div
+          className={classes.dataGridContainer}
+          style={{ height: dataGridHeight }}
+          onMouseLeave={() => setHoveredState([-1, -1])}
+        >
+          {!isLoading ? (
             <VariableSizeGrid
               columnCount={columns.length + 1}
               columnWidth={getColumnWidth}
@@ -197,8 +200,17 @@ export const DataTable = ({
             >
               {DataCell}
             </VariableSizeGrid>
+          ) : (
+            <div
+              className={classes.loadingContainer}
+              style={{ height: dataGridHeight }}
+            >
+              <CircleLoader size={64} />
+            </div>
           )}
         </div>
+
+        <div className={classes.innerBorder} />
 
         <div className={classes.totalGridContainer}>
           <VariableSizeGrid
