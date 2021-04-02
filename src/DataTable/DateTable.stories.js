@@ -116,32 +116,6 @@ function debounce(fn, delay = 250) {
   return debounced
 }
 
-function findSubtotal(subtotals, rowIndex) {
-  let left = 0
-  let right = subtotals.length - 1
-
-  while (left <= right) {
-    const mid = (right + left) >> 1
-
-    const first = subtotals[mid].first + subtotals[mid].index * 2
-    const last = first + subtotals[mid].last - subtotals[mid].first
-
-    if (rowIndex > last) {
-        left = mid + 1
-    } else if (rowIndex < first) {
-        right = mid - 1
-    } else {
-        return {
-          ...subtotals[mid],
-          rowIndex: rowIndex - subtotals[mid].index + 1,
-        }
-    }
-  }
-
-  return null;
-}
-
-
 
 async function stall(stallTime = 3000) {
   await new Promise(resolve => setTimeout(resolve, stallTime))
@@ -303,7 +277,23 @@ const PrimaryInner = () => {
     mockSubtotalsApi,
     {
       enabled: Boolean(subtotalField),
-      onSuccess: result => setSubtotalData(result),
+      onSuccess: result => {
+        const subtotalRows = {}
+        Object.values(result).map(subtotalGroup => {
+          subtotalRows[subtotalGroup.first] = {
+            type: 'title',
+            value: subtotalGroup.title,
+            count: subtotalGroup.last - subtotalGroup.first + 1,
+          }
+
+          subtotalRows[subtotalGroup.last] = {
+            type: 'subtotals',
+            value: subtotalGroup.subtotals
+          }
+        })
+
+        setSubtotalData(subtotalRows)
+      },
     }
   )
 
@@ -325,9 +315,30 @@ const PrimaryInner = () => {
     return renderCellData(field_type, item?.[field_name])
   }
 
+  function getSubtotalData(rowIndex, columnIndex) {
+    const result = subtotalData?.[rowIndex] ?? null
+
+    if (!result) {
+      return null
+    }
+
+    const { type, title, value } = result
+
+    if (type === 'title') {
+      return result
+    }
+
+    const { field_name: fieldName = '' } = columns?.[columnIndex] ?? {}
+    const { type: totalType = '' } = totals?.[fieldName] ?? {}
+    return {
+      type: 'subtotals',
+      ...renderCellData(totalType, value?.[fieldName]),
+    }
+  }
+
   function getHeaderData(columnIndex) {
-    const { title = '', sort_type = '', align = 'left', field_name = '' } = columns?.[columnIndex] ?? {}
-    return { title, sortType: sort_type, align, fieldName: field_name }
+    const { title = '', sort_type = '', align = 'left', field_name = '', subtotal = false } = columns?.[columnIndex] ?? {}
+    return { title, sortType: sort_type, align, fieldName: field_name, hasSubtotal: subtotal }
   }
 
   function getTotalData(columnIndex) {
@@ -386,6 +397,7 @@ const PrimaryInner = () => {
         totals={totals}
         getCellData={getCellData}
         getHeaderData={getHeaderData}
+        getSubtotalData={getSubtotalData}
         rowCount={rowCount}
         selectedCells={selected}
         onItemsRendered={debouncedOnItemsRendered}

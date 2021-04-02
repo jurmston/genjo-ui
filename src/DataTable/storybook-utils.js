@@ -152,7 +152,7 @@ export function createDataTableTestData(count = 1000) {
         index: subtotalIndex,
         first: i,
         last: i,
-        title: key || '(uncategorized)',
+        title: key || 'Uncategorized',
         subtotals: {
           is_active: 0,
           amount: 0,

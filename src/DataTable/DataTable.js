@@ -38,6 +38,7 @@ export const DataTable = ({
   columns: columnsFromProps,
   getCellData,
   getHeaderData,
+  getSubtotalData,
   getTotalData,
   selectedCells,
   toggleSelectAll,
@@ -144,6 +145,7 @@ export const DataTable = ({
         getHeaderData,
         getColumnWidth,
         getTotalData,
+        getSubtotalData,
         handleDrag,
         handleDragEnd,
         handleDragStart,
@@ -153,6 +155,7 @@ export const DataTable = ({
         minWidth: COL_MIN_WIDTH,
         onHover,
         rowCount,
+        rowHeight,
         selectedCells,
         setSortBy,
         setSubtotalField,
@@ -161,6 +164,7 @@ export const DataTable = ({
         subtotals,
         toggleSelectAll,
         toggleSelectRow,
+        width,
       }}
     >
       <div className={classes.root}>
@@ -196,7 +200,11 @@ export const DataTable = ({
               columnWidth={getColumnWidth}
               height={dataGridHeight}
               rowCount={rowCount}
-              rowHeight={() => rowHeight}
+              rowHeight={index => {
+                return getSubtotalData(index)
+                  ? 3 * rowHeight
+                  : rowHeight
+              }}
               width={width}
               ref={dataGridRef}
               onItemsRendered={onItemsRendered}

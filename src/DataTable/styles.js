@@ -94,6 +94,7 @@ export const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     paddingRight: 8,
     paddingLeft: 8,
+    boxSizing: 'border-box',
     // overflow: 'hidden',
     '& > p': {
       // position: 'relative',
@@ -137,8 +138,7 @@ export const useStyles = makeStyles(theme => ({
     },
 
     '&$isSubtotalTitle': {
-      backgroundColor: theme.palette.primary[50],
-      fontWeight: 700,
+      borderTop: `3px solid ${theme.palette.primary[100]}`,
     },
 
     '&$isSubtotalTotal': {
@@ -239,5 +239,41 @@ export const useStyles = makeStyles(theme => ({
     backgroundColor: colors.blueGrey[50],
     borderBottomRightRadius: theme.shape.borderRadius,
     borderBottomLeftRadius: theme.shape.borderRadius,
+  },
+
+  subtotalTitle: {
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
+
+  subtotalTitleText: {
+    padding: 8,
+    backgroundColor: theme.palette.primary[100],
+    borderTopLeftRadius: theme.shape.borderRadius,
+    borderTopRightRadius: theme.shape.borderRadius,
+    ...theme.typography.h6,
+  },
+
+  countText: {
+    marginLeft: 16,
+    ...theme.typography.subtitle2,
+    color: theme.palette.grey[700],
+  },
+
+  isFirst: {},
+  isLast: {},
+  subtotalCell: {
+    borderTop: `2px solid ${theme.palette.primary[100]}`,
+    backgroundColor: colors.blueGrey[100],
+
+    '&$isFirst': {
+      borderBottomLeftRadius: theme.shape.borderRadius,
+    },
+
+    '&iLast': {
+      borderBottomRightRadius: theme.shape.borderRadius,
+    },
   },
 }))

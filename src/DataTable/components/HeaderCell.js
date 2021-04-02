@@ -120,7 +120,7 @@ const HeaderCell = ({
     )
   }
 
-  const { title, sortType, align, fieldName } = getHeaderData(columnIndex - 1)
+  const { title, sortType, align, fieldName, hasSubtotal } = getHeaderData(columnIndex - 1)
 
   const isSelected = sortBy.endsWith(fieldName)
   const direction = sortBy.startsWith('-') ? 'DESC' : 'ASC'
@@ -137,12 +137,12 @@ const HeaderCell = ({
     clickProps.onClick = () => setSortBy(sortBy === fieldName ? `-${fieldName}` : fieldName)
   }
 
-  // if (subtotal) {
-  //   clickProps.onDoubleClick = () => {
-  //     setSortBy(fieldName)
-  //     setSubtotalField(fieldName)
-  //   }
-  // }
+  if (hasSubtotal) {
+    clickProps.onDoubleClick = () => {
+      setSortBy(fieldName)
+      setSubtotalField(fieldName)
+    }
+  }
 
   return (
     <>
