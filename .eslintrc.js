@@ -3,7 +3,7 @@ module.exports = {
 
   parser: 'babel-eslint',
 
-  plugins: ['import', 'jsx-a11y', 'react', 'react-hooks'],
+  plugins: ['jsx-a11y', 'react', 'react-hooks'],
 
   env: {
     browser: true,
@@ -53,8 +53,6 @@ module.exports = {
 
   ignorePatterns: [
     'node_modules/',
-    '.next/',
-    'data-model/',
-    'server/',
+    'storybook-static',
   ]
 }

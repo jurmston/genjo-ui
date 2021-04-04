@@ -96,7 +96,8 @@ export const useStyles = makeStyles(theme => ({
     paddingLeft: 8,
     boxSizing: 'border-box',
     // overflow: 'hidden',
-    '& > p': {
+    overflow: 'hidden',
+    '& > span': {
       // position: 'relative',
       overflow: 'hidden',
       textOverflow: 'ellipsis',

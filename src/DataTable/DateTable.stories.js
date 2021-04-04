@@ -46,7 +46,7 @@ function renderCellData(field_type, cellData) {
     case 'currency': {
       return {
         align: 'right',
-        value: `$${Number(cellData).toFixed(2)}`,
+        value: <span>{`$${Number(cellData).toFixed(2)}`}</span>,
       }
     }
 
@@ -87,7 +87,7 @@ function renderCellData(field_type, cellData) {
 
     default: {
       return {
-        value: cellData,
+        value: <span>{cellData}</span>,
         align: 'left',
       }
     }

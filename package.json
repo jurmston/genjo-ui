@@ -72,9 +72,16 @@
   "dependencies": {
     "dom-helpers": "^5.2.0",
     "file-selector": "^0.2.4",
+    "is-hotkey": "^0.1.8",
+    "react-fast-compare": "^3.2.0",
     "react-number-format": "^4.5.1",
     "react-text-mask": "^5.4.3",
     "react-window": "^1.8.6",
+    "remark-parse": "^8.0.3",
+    "remark-slate": "^1.5.1",
+    "slate": "^0.62.0",
+    "slate-history": "^0.62.0",
+    "slate-react": "^0.62.0",
     "zxcvbn": "^4.4.2"
   }
 }
