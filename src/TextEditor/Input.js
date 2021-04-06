@@ -1,16 +1,18 @@
 import * as React from 'react'
 
 import isHotkey from 'is-hotkey'
-import { Editable, ReactEditor } from 'slate-react'
+import { Editable, ReactEditor, useSlate } from 'slate-react'
 
 import { useTextEditor } from './context'
+import { toggleMark } from './utils'
+import { Element } from './Element'
+import { Leaf } from './Leaf'
 
 
 const HOTKEYS = {
   'mod+b': 'bold',
   'mod+i': 'italic',
-  'mod+u': 'underline',
-  'mod+`': 'code',
+  'mod+shift+x': 'strikeThrough',
 }
 
 
@@ -18,13 +20,13 @@ export const Input = () => {
 
   const {
     classes,
-    editor,
     readOnly,
-    renderElement,
-    renderLeaf,
-    toggleMark,
     setIsFocused,
   } = useTextEditor()
+
+  const editor = useSlate()
+  const renderElement = React.useCallback(props => <Element {...props} />, [])
+  const renderLeaf = React.useCallback(props => <Leaf {...props} />, [])
 
   return (
     <div

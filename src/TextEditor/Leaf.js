@@ -11,8 +11,8 @@ export const Leaf = ({ attributes, children, leaf }) => {
     children = <em>{children}</em>
   }
 
-  if (leaf.underline) {
-    children = <u>{children}</u>
+  if (leaf.strikeThrough) {
+    children = <s>{children}</s>
   }
 
   return <span {...attributes}>{children}</span>

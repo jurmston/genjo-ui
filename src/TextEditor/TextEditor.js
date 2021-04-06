@@ -15,13 +15,13 @@ import { ButtonPanel } from './ButtonPanel'
 import { Input } from './Input'
 import { useStyles } from './styles'
 
+
 import {
   withDeleteBackwards,
   getEmptyValue,
-  serializeToMarkdown,
-  deserializeFromMarkdown,
 } from './utils'
 
+import { withLinks } from './plugins/links'
 
 
 const TextEditor = ({
@@ -38,42 +38,33 @@ const TextEditor = ({
 
   const [isFocused, setIsFocused] = React.useState(false)
 
-  const renderElement = React.useCallback(props => <Element {...props} />, [])
-
-  const renderLeaf = React.useCallback(props => <Leaf {...props} />, [])
-
   const editor = React.useMemo(
-    () => compose(
-      withDeleteBackwards,
-      withHistory,
-      withReact,
-      createEditor,
-    )(),
-    []
+    () => withLinks(withDeleteBackwards(withHistory(withReact(createEditor())))),
+    [],
   )
 
-  function handleSave() {
-    if (!onSave) {
-      return
+  function resetEditor() {
+    editor.selection = {
+      anchor: { path: [0, 0], offset: 0 },
+      focus: { path: [0, 0], offset: 0 },
     }
-
-    const markdown = serializeToMarkdown(value)
-    onSave(markdown)
   }
 
-  React.useEffect(() => {
-    if (!value) {
-      //  Transforms.deselect(editor)
-       // or set selection to neutral state:
-       editor.selection = { anchor: { path: [0,0], offset:0 }, focus: { path: [0,0], offset: 0 } }
-    }
-  }, [value])
+  function handleSave() {
+    onSave?.(value)
+  }
+  // React.useEffect(() => {
+  //   if (!value) {
+  //     resetEditor()
+  //   }
+  // }, [value])
 
   // Synchronize the value whenever the props value changes.
   React.useEffect(
     () => {
-      setValue(deserializeFromMarkdown(valueFromProps))
-      setOriginalValue(deserializeFromMarkdown(valueFromProps))
+      resetEditor()
+      setValue(valueFromProps || getEmptyValue())
+      setOriginalValue(valueFromProps || getEmptyValue())
     },
     [valueFromProps]
   )
@@ -82,12 +73,11 @@ const TextEditor = ({
     <TextEditorContext.Provider
       value={{
         classes,
-        renderElement,
-        renderLeaf,
         setIsFocused,
         isFocused,
         handleSave,
         isDirty,
+        value,
       }}
     >
       <Slate

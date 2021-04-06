@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import clsx from 'clsx'
 import { Editor, Transforms } from 'slate'
+import { useSlate } from 'slate-react'
 
 import Button from '@material-ui/core/Button'
 
@@ -13,18 +14,29 @@ import LooksTwoIcon from '@material-ui/icons/LooksTwo'
 import FormatQuoteIcon from '@material-ui/icons/FormatQuote'
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered'
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted'
+import FormatStrikethroughIcon from '@material-ui/icons/FormatStrikethrough'
 import ViewAgendaIcon from '@material-ui/icons/ViewAgenda'
+import LinkIcon from '@material-ui/icons/Link'
 
 import { useTextEditor } from './context'
 import { ActionButton } from './ActionButton'
+import {
+  toggleMark,
+  toggleBlock,
+  isBlockActive,
+  isMarkActive,
+  insertDivider,
+  insertLink,
+  isLinkActive,
+} from './utils'
+import { LinkDialog } from './LinkDialog'
 
 
-const LIST_TYPES = ['numbered-list', 'bulleted-list']
 
 const MARK_FORMATS = [
   { value: 'bold', icon: FormatBoldIcon, label: 'Bold' },
   { value: 'italic', icon: FormatItalicIcon, label: 'Italic' },
-  { value: 'underline', icon: FormatUnderlinedIcon, label: 'Underline' },
+  { value: 'strikethrough', icon: FormatStrikethroughIcon, label: 'Strikethrough' },
 ]
 
 const BLOCK_FORMATS = [
@@ -38,75 +50,17 @@ const BLOCK_FORMATS = [
 
 export const ButtonPanel = () => {
 
+  const [linkInfo, setLinkInfo] = React.useState(null)
+
   const {
     classes,
-    editor,
     isFocused,
-    handleSave,
+    onSave,
     isDirty,
+    handleSave,
   } = useTextEditor()
 
-  /** Returns `true` if the block is active. */
-  function isBlockActive(block) {
-    const [match] = Editor.nodes(editor, {
-      match: n => n.type === block,
-    })
-
-    return !!match
-  }
-
-  /** Returns `true` if the mark is active. */
-  function isMarkActive(mark) {
-    const marks = Editor.marks(editor)
-    return marks ? marks[mark] === true : false
-  }
-
-  /** Toggles an editor mark */
-  function toggleMark(mark) {
-    const isActive = isMarkActive(mark)
-
-    if (isActive) {
-      Editor.removeMark(editor, mark)
-    } else {
-      Editor.addMark(editor, mark, true)
-    }
-  }
-
-  /** Toggles an editor block */
-  function toggleBlock(block) {
-    const isActive = isBlockActive(block)
-    const isList = LIST_TYPES.includes(block)
-
-    Transforms.unwrapNodes(editor, {
-      match: n => LIST_TYPES.includes(n.type),
-      split: true,
-    })
-
-    Transforms.setNodes(editor, {
-      type: isActive ? 'paragraph' : isList ? 'list-item' : block,
-    })
-
-    if (!isActive && isList) {
-      const block = { type: block, children: [] }
-      Transforms.wrapNodes(editor, block)
-    }
-  }
-
-  /** Adds a new divider block into the editor content. */
-  function insertDivider() {
-    const divider = {
-      type: 'divider',
-      children: [{ text: '' }],
-    }
-
-    const paragraph = {
-      type: 'paragraph',
-      children: [{ text: '' }],
-    }
-
-    Transforms.insertNodes(editor, divider)
-    Transforms.insertNodes(editor, paragraph)
-  }
+  const editor = useSlate()
 
   return (
     <div
@@ -116,12 +70,13 @@ export const ButtonPanel = () => {
         {MARK_FORMATS.map(mark => (
           <ActionButton
             key={mark.value}
+            isActive={isMarkActive(editor, mark.value)}
             value={mark.value}
             label={mark.label}
             icon={mark.icon}
             onMouseDown={event => {
               event.preventDefault()
-              toggleMark(mark.value)
+              toggleMark(editor, mark.value)
             }}
           />
         ))}
@@ -130,15 +85,27 @@ export const ButtonPanel = () => {
         {BLOCK_FORMATS.map(block => (
           <ActionButton
             key={block.value}
+            isActive={isBlockActive(editor, block.value)}
             value={block.value}
             label={block.label}
             icon={block.icon}
             onMouseDown={event => {
               event.preventDefault()
-              toggleBlock(block.value)
+              toggleBlock(editor, block.value)
             }}
           />
         ))}
+
+        {/* Link Button */}
+        <ActionButton
+          icon={LinkIcon}
+          label="Add Link"
+          onMouseDown={event => {
+            event.preventDefault()
+            const { selection } = editor
+            setLinkInfo({ selection })
+          }}
+        />
 
         {/* Divider button */}
         <ActionButton
@@ -154,15 +121,29 @@ export const ButtonPanel = () => {
 
         {Boolean(isDirty) && (
           <Button
-            disabled={!isFocused || !isDirty}
             variant="contained"
             color="primary"
             className={classes.saveButton}
-            onClick={handleSave}
+            onMouseDown={event => {
+              event.preventDefault()
+              handleSave()
+
+            }}
           >
             Save
           </Button>
         )}
+
+        <LinkDialog
+          isOpen={Boolean(linkInfo)}
+          onSave={(url, text) => {
+            if (!linkInfo?.selection) return
+            insertLink(editor, linkInfo?.selection, url, text)
+            setLinkInfo(null)
+          }}
+          linkInfo={linkInfo}
+          onClose={() => setLinkInfo(null)}
+        />
     </div>
   )
 }

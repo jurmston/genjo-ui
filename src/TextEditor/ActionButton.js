@@ -28,6 +28,12 @@ export const ActionButton = ({
 
 ActionButton.propTypes = {
   isActive: PropTypes.bool,
-  icon: PropTypes.func,
+  icon: PropTypes.elementType,
   label: PropTypes.string,
+  /**
+   * Action callback when the button is pressed.
+   * `onMouseDown` is used so that focus isn't stolen from the editor on the
+   * click event.
+   */
+  onMouseDown: PropTypes.func,
 }

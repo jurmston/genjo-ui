@@ -3,7 +3,7 @@ module.exports = {
     "../src/**/*.stories.js",
   ],
   "addons": [
-    "@storybook/addon-links",
+    "@storybook/addon-links/preset",
     "@storybook/addon-essentials",
     "@storybook/addon-controls",
     "storybook-dark-mode",

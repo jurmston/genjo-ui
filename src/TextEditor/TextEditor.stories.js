@@ -10,23 +10,21 @@ export default {
 }
 
 export const Primary = () => {
-  const [value, setValue] = React.useState('')
+  const [value, setValue] = React.useState(null)
 
-  function onSave(newValue) {
-    setValue(newValue)
-  }
+  const parsedValue = JSON.parse(value)
 
   return (
     <>
       <TextEditor
-        value={value}
-        onSave={onSave}
+        value={parsedValue}
+        onSave={newValue => setValue(JSON.stringify(newValue))}
       />
 
       <div style={{ marginBottom: 32 }} />
 
       <TextField
-        label="Value as Markdown"
+        label="Value as JSON"
         variant="filled"
         value={value}
         onChange={event => setValue(event.target.value)}
