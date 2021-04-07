@@ -17,6 +17,9 @@ import { MenuPanel } from './components/MenuPanel'
 import { MenuPanelLoader } from '../MenuPanelLoader/MenuPanelLoader'
 import { MenuPanelItem } from '../MenuPanelItem/MenuPanelItem'
 
+import { NavTab } from '../NavTab'
+import { NavTabs } from '../NavTabs'
+
 import story_logo from './story_logo.svg'
 
 export default {
@@ -77,6 +80,7 @@ const PageWithoutMenu = ({ setPage }) => {
 export const Main = () => {
 
   const [page, setPage] = React.useState('menu')
+  const [tab, setTab] = React.useState(0)
 
   return (
     <Shell
@@ -99,6 +103,16 @@ export const Main = () => {
             <ListItemText primary="Log out" />
           </MenuItem>
         </List>
+      }
+      appBarContent={
+        <NavTabs
+          value={tab}
+          onChange={(event, newTab) => setTab(newTab)}
+        >
+          <NavTab label="Projects" />
+          <NavTab label="People" />
+          <NavTab label="Settings" />
+        </NavTabs>
       }
     >
       {page === 'menu'

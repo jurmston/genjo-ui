@@ -9,20 +9,21 @@ import { UserMenu } from './components/UserMenu'
 
 const MENU_CLOSED_WIDTH = 21
 const MENU_OPEN_WIDTH = 256
+const APP_BAR_HEIGHT = 48
 
-const useStyles = makeStyles(theme => ({
+
+const useStyles = makeStyles({
   main: {
     position: 'fixed',
-    top: props => props.hasAppBar ? 48 : 0,
+    top: APP_BAR_HEIGHT,
     left: props => (!props.hasMenu || props.isMobile) ? 0 : props.menuIsOpen ? MENU_OPEN_WIDTH : MENU_CLOSED_WIDTH,
     right: 0,
     bottom: 0,
     overflowY: 'auto',
     overflowX: 'hidden',
     transition: `left 0.15s ease`,
-    // transition: theme.transitions.create('left'),
   },
-}))
+})
 
 
 export const ShellContext = React.createContext()
@@ -33,19 +34,19 @@ export const ShellContext = React.createContext()
  */
 export const Shell = ({
   children,
-  hasAppBar = true,
   defaultTitle = '',
   logo,
   brandName,
   user,
   userMenuContent,
+  appBarContent,
 }) => {
   const [menuIsOpen, setMenuIsOpen] = React.useState(false)
   const [menuContent, setMenuContent] = React.useState(null)
   const [title, setTitle] = React.useState(defaultTitle)
 
   const hasMenu = Boolean(menuContent)
-  const classes = useStyles({ hasMenu, menuIsOpen, hasAppBar })
+  const classes = useStyles({ hasMenu, menuIsOpen })
 
   // Synchronize document title
   React.useEffect(
@@ -69,7 +70,9 @@ export const Shell = ({
             {userMenuContent}
           </UserMenu>
         }
-      />
+      >
+        {appBarContent}
+      </AppBar>
 
       <MenuPanel
         isOpen={menuIsOpen}
@@ -116,11 +119,11 @@ export const withShell = (Component, shellProps) => {
 Shell.propTypes = {
   /** Content inside the shell. */
   children: PropTypes.node,
-  title: PropTypes.string,
-  requiresAuthentication: PropTypes.bool,
-  requiresAdminUser: PropTypes.bool,
-  hasAppBar: PropTypes.bool,
-  hasPublicMenu: PropTypes.bool,
-  hasFooter: PropTypes.bool,
   menuContent: PropTypes.node,
+  defaultTitle: PropTypes.string,
+  logo: PropTypes.string,
+  brandName: PropTypes.string,
+  user: PropTypes.object,
+  userMenuContent: PropTypes.node,
+  appBarContent: PropTypes.node,
 }

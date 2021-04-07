@@ -1,6 +1,6 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import { UserMenu } from './UserMenu'
 
 
 const useStyles = makeStyles(theme => ({
@@ -68,21 +68,20 @@ const useStyles = makeStyles(theme => ({
 /**
  * Desktop App Bar
  */
-function AppBar({ children, logo, name, homeLink, userMenu }) {
+export function AppBar({ children, logo, brandName, homeLink, userMenu }) {
   const classes = useStyles()
 
   return (
     <div className={classes.appBar}>
       <a href={homeLink} className={classes.logoLink}>
         <img
-          alt={name}
+          alt={brandName}
           src={logo}
           className={classes.logo}
         />
       </a>
 
       {children}
-
       <div style={{ flex: 1 }} />
 
       {userMenu}
@@ -90,4 +89,10 @@ function AppBar({ children, logo, name, homeLink, userMenu }) {
   )
 }
 
-export { AppBar }
+AppBar.propTypes = {
+  children: PropTypes.node,
+  logo: PropTypes.string,
+  brandName: PropTypes.string,
+  homeLink: PropTypes.string,
+  userMenu: PropTypes.node,
+}

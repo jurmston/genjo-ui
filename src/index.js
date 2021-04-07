@@ -1,2 +1,6 @@
 export * from './DateField'
 export * from './ThemeProvider'
+export * from './Shell'
+export * from './DataTable'
+export * from './useDebounce'
+export * from './useDimensions'

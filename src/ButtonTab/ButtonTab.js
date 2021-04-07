@@ -1,11 +1,12 @@
 import * as React from 'react'
 
-import { experimentalStyled } from '@material-ui/core/styles'
+import { experimentalStyled, makeStyles } from '@material-ui/core/styles'
 import Tab from '@material-ui/core/Tab'
 
 
-export const ButtonTab = experimentalStyled(Tab)(({ theme }) => ({
-  '&.MuiTab-root': {
+
+const useStyles = makeStyles(theme => ({
+  root: {
     '&:hover': {
       opacity: 1
     },
@@ -15,10 +16,26 @@ export const ButtonTab = experimentalStyled(Tab)(({ theme }) => ({
       minWidth: 120
     }
   },
-  '& .MuiTab-wrapper': {
+  wrapper: {
     // zIndex: 2,
     // marginTop: spacing(0.5),
-    color: theme.palette.text.primary,
-    textTransform: 'initial'
+    textTransform: 'initial',
+    '& .Mui-selected': {
+      color: theme.palette.text.primary,
+    },
   },
 }))
+
+export const ButtonTab = props => {
+  const classes = useStyles()
+
+  return (
+    <Tab
+      {...props}
+      classes={{
+        root: classes.root,
+        wrapper: classes.wrapper,
+      }}
+    />
+  )
+}

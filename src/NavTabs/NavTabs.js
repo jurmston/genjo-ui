@@ -1,14 +1,11 @@
 import * as React from 'react'
-
 import { makeStyles } from '@material-ui/core/styles'
 import Tabs from '@material-ui/core/Tabs'
 
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.mode === 'light' ? '#eee' : theme.palette.divider,
-    borderRadius: theme.shape.borderRadius,
-    minHeight: 44
+    minHeight: 48
   },
   flexContainer: {
     display: 'inline-flex',
@@ -21,28 +18,32 @@ const useStyles = makeStyles(theme => ({
     }
   },
   indicator: {
-    top: 3,
-    bottom: 3,
-    right: 3,
+    top: 2,
+    bottom: 0,
+    right: 0,
     height: 'auto',
     background: 'none',
     '&:after': {
       content: '""',
       display: 'block',
       position: 'absolute',
+      boxSizing: 'border-box',
       top: 0,
       left: 4,
       right: 4,
       bottom: 0,
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.palette.mode === 'light' ? '#fff' : theme.palette.action.selected,
-      boxShadow: '0 4px 12px 0 rgba(0,0,0,0.16)',
+      borderBottom: `4px solid ${theme.palette.primary.main}`,
+      borderTopLeftRadius: theme.shape.borderRadius,
+      borderTopRightRadius: theme.shape.borderRadius,
+      // backgroundColor: theme.palette.mode === 'light' ? '#fff' : theme.palette.action.selected,
+      backgroundColor: theme.palette.primary[50],
+      boxShadow: '0 2px 4px 0 rgba(0,0,0,0.16)',
     }
   },
-
 }))
 
-export const ButtonTabs = props => {
+
+export const NavTabs = props => {
   const classes = useStyles()
 
   return (

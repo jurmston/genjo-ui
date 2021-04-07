@@ -6,9 +6,10 @@ import { createTheme, defaultTheme } from '../theme'
 
 // Material-UI needs to specify inject order to allow customization
 // See: https://next.material-ui.com/guides/migration-v4/#styled-engine
-import { CacheProvider } from '@emotion/react';
+import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 
+import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
 
 // This needs to be used to prevent a bug with @emotion using the :first-child
 // psuedo selectors
@@ -40,7 +41,7 @@ export const ThemeProvider = ({ theme: themeFromProps = null, children }) => {
   )
 
   return (
-    <CacheProvider value={cache}>
+    <StyledEngineProvider injectFirst>
       <MuiThemeProvider
         theme={createTheme(theme)}
       >
@@ -52,7 +53,7 @@ export const ThemeProvider = ({ theme: themeFromProps = null, children }) => {
           {children}
         </ThemeContext.Provider>
       </MuiThemeProvider>
-    </CacheProvider>
+    </StyledEngineProvider>
   )
 }
 
