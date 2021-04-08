@@ -15,25 +15,47 @@ const LoaderContext = React.createContext()
 
 
 const LoaderProvider = ({ children }) => {
+  const [isOpen, setIsOpen] = React.useState(false)
   const [message, setMessage] = React.useState('')
 
-  const clear = () => setMessage('')
+  const close = React.useCallback(
+    () => setIsOpen(false),
+    [],
+  )
+
+  const open = React.useCallback(
+    messageValue => {
+      setMessage(messageValue)
+      setIsOpen(true)
+    },
+    [],
+  )
+
+  const clearMessage = React.useCallback(
+    () => {
+      if (!isOpen) {
+        setMessage('')
+      }
+    },
+    [isOpen],
+  )
 
   return (
     <LoaderContext.Provider
       value={{
-        message,
-        setMessage,
-        clear,
+        open,
+        close,
       }}
     >
       {children}
       <Dialog
+        fullWidth={false}
         disableEscapeKeyDown
-        open={Boolean(message)}
+        open={isOpen}
         TransitionProps={{
           mountOnEnter: true,
           unmountOnExit: true,
+          onExited: clearMessage,
         }}
       >
         <DialogContent>

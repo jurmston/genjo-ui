@@ -13,8 +13,8 @@ const TriggerLoaderButton = () => {
   const loader = useLoader()
 
   function trigger() {
-    loader.setMessage('Saving data...')
-    setTimeout(loader.clear, 3000)
+    loader.open('Saving data...')
+    setTimeout(loader.close, 3000)
   }
 
   return (

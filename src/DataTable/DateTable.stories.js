@@ -12,15 +12,8 @@ import { useSelectionSet } from '../useSelectionSet'
 
 import { colors } from '../colors'
 
-import Button from '@material-ui/core/Button'
-
-import InfiniteLoader from 'react-window-infinite-loader'
-
 import { DateTime } from 'luxon'
 
-import { simpleRange } from '../utils/arrays'
-
-import { useDebounce } from '../useDebounce'
 
 import {
   createDataTableTestData,
@@ -30,7 +23,7 @@ import {
 const TEST_DATA = createDataTableTestData(100)
 
 export default {
-  title: 'Components/DataTable',
+  title: 'Widgets/DataTable',
   component: DataTable,
 }
 

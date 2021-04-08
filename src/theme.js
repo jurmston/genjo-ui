@@ -167,6 +167,10 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
       // --- DIALOG
       MuiDialog: {
+        defaultProps: {
+          fullWidth: true,
+        },
+
         styleOverrides: {
           container: {
             position: 'z`absolute',
@@ -182,7 +186,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
       MuiDialogActions: {
         styleOverrides: {
           root: {
-            borderTop: `1px solid rgba(0, 0, 0, 0.12)`,
+            // borderTop: `1px solid rgba(0, 0, 0, 0.12)`,
           },
         },
       },
@@ -191,8 +195,8 @@ export const createTheme = ({ mode, primary, secondary }) =>
       MuiDialogTitle: {
         styleOverrides: {
           root: {
-            backgroundColor: primary?.main ?? primary?.[500],
-            color: '#fff',
+            // backgroundColor: primary?.main ?? primary?.[500],
+            // color: '#fff',
           },
         },
       },
@@ -358,16 +362,12 @@ export const createTheme = ({ mode, primary, secondary }) =>
           positionStart: {
             marginLeft: 6,
             marginRight: 0,
-            '&$filled:not($hiddenLabel)': {
-              marginTop: 0,
-            },
+            marginTop: '0 !important',
           },
           positionEnd: {
             marginRight: 6,
             marginLeft: 0,
-            '&$filled:not($hiddenLabel)': {
-              marginTop: 0,
-            },
+            marginTop: '0 !important',
           },
         },
       },
@@ -662,6 +662,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
       MuiTextField: {
         defaultProps: {
           fullWidth: true,
+          variant: 'filled',
         },
       },
 

@@ -1,17 +1,10 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import { conformToMask } from 'react-text-mask'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
 import TextField from '@material-ui/core/TextField'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import Tooltip from '@material-ui/core/Tooltip'
 import Paper from '@material-ui/core/Paper'
-import StaticDatePicker from '@material-ui/lab/StaticDatePicker'
 import DayPicker from '@material-ui/lab/DayPicker'
 import { DateTime } from 'luxon'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
@@ -48,7 +41,6 @@ function parseInputValue(inputValue, inputFormat) {
     const parsedValue = DateTime.fromFormat(inputValue, format)
 
     if (!parsedValue.invalid) {
-      console.log({ match: format })
       return parsedValue
     }
   }
@@ -70,10 +62,6 @@ function getInputValue(value, inputFormat) {
 
 
 function maskInputValue(inputValue = '') {
-  let first = 0
-  let second = 0
-  let year = 0
-
   const sections = inputValue.split('/').slice(0, 3)
 
   // If the user types an extra digit we will assume they want
@@ -104,13 +92,13 @@ export const DateField = ({
   displayFormat = DateTime.DATE_MED,
   value,
   onChange,
-  hasPicker = true,
+  disablePicker = false,
   ...textFieldProps
 }) => {
   const [isEditing, setIsEditing] = React.useState(false)
   const [inputValue, setInputValue] = React.useState('')
   const [pickerIsOpen, setPickerIsOpen] = React.useState(false)
-  const [isHoveringPicker, setIsHoveringPicker] = React.useState(false)
+  // const [isHoveringPicker, setIsHoveringPicker] = React.useState(false)
 
   const [ref, dim, ] = useDimensions()
 
@@ -126,11 +114,11 @@ export const DateField = ({
     }
   }
 
-  function handleFocus(event) {
+  function handleFocus() {
     setIsEditing(true)
   }
 
-  function handleInputBlur(event) {
+  function handleInputBlur() {
     if (!pickerIsOpen) {
       setIsEditing(false)
       const newValue = parseInputValue(inputValue, inputFormat)
@@ -150,12 +138,6 @@ export const DateField = ({
     if (event.key === 'ArrowDown') {
       setPickerIsOpen(true)
     }
-  }
-
-  function updateValueFromPicker(newValue) {
-    onChange(newValue)
-    setPickerIsOpen(false)
-    setIsEditing(false)
   }
 
   React.useEffect(
@@ -186,7 +168,7 @@ export const DateField = ({
         onKeyDown={handleKeyDown}
         InputProps={{
           ...textFieldProps.InputProps,
-          endAdornment: hasPicker && (
+          endAdornment: !disablePicker && (
             <InputAdornment position="end">
               <IconButton
                 onClick={() => setPickerIsOpen(!pickerIsOpen)}
@@ -209,8 +191,6 @@ export const DateField = ({
               position: 'absolute',
               top: dim.height + 8,
             }}
-            onMouseEnter={() => setIsHoveringPicker(true)}
-            onMouseLeave={() => setIsHoveringPicker(false)}
           >
             <DayPicker
               allowKeyboardControl
@@ -230,5 +210,14 @@ export const DateField = ({
 }
 
 DateField.propTypes = {
-
+  /** Input style when using the keyboard. */
+  inputFormat: PropTypes.oneOf(['month-first', 'day-first']),
+  /** DateTime formating object. */
+  displayFormat: PropTypes.object,
+  /** ISO Date string. */
+  value: PropTypes.string,
+  /** Callback when date value is changed. */
+  onChange: PropTypes.func,
+  /** If `true`, the picker element will be hidden. */
+  disablePicker: PropTypes.bool,
 }

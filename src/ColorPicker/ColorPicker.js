@@ -8,7 +8,7 @@ import Popover from '@material-ui/core/Popover'
 
 import CheckIcon from '@material-ui/icons/Check'
 
-import { colorsMain } from '../colors'
+import { colors as themeColors, colorsMain } from '../colors'
 
 
 
@@ -26,7 +26,7 @@ const useMenuStyles = makeStyles({
 
 const useButtonStyles = makeStyles(theme => ({
   button: {
-    backgroundColor: props => props.color || colors.blueGrey[500],
+    backgroundColor: props => props.color || themeColors.blueGrey[500],
     color: theme.palette.white,
     margin: theme.spacing(0.5),
     minWidth: 22,
@@ -37,7 +37,7 @@ const useButtonStyles = makeStyles(theme => ({
           // Fade requires a properly formatted hex color.
           return alpha(props.color || '', 0.5)
         } catch {
-          return colors.blueGrey[500]
+          return themeColors.blueGrey[500]
         }
       },
     },
@@ -65,7 +65,7 @@ const usePickerStyles = makeStyles({
  */
 const ColorPickerButton = ({
   checked,
-  color = colors.blueGrey[500],
+  color = themeColors.blueGrey[500],
   label = '',
   onClick,
 }) => {
@@ -130,7 +130,7 @@ const ColorPickerMenu = ({
 /** Input for selecting color values. */
 const ColorPicker = ({
   id,
-  value = colors.blueGrey[500],
+  value = themeColors.blueGrey[500],
   onChange,
   label,
   colors = colorsMain,

@@ -9,8 +9,6 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, maxPlaces, fixedDecimalPlaces, ...other } = props
 
-  console.log({ props })
-
   return (
     <NumberFormat
       {...other}
@@ -18,7 +16,6 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, r
       onValueChange={(values) => {
         onChange({
           target: {
-            name: props.name,
             value: values.value,
           },
         })
@@ -31,8 +28,19 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, r
   )
 })
 
+NumberFormatCustom.propTypes = {
+  onChange: PropTypes.func,
+  maxPlaces: PropTypes.number,
+  fixedDecimalPlaces: PropTypes.bool,
+}
 
-export const CurrencyField = ({ symbol = '$', maxPlaces = 2, fixedDecimalPlaces = true, ...textFieldProps}) => {
+
+export const CurrencyField = ({
+  symbol = '$',
+  maxPlaces = 2,
+  fixedDecimalPlaces = true,
+  ...textFieldProps
+}) => {
 
   return (
     <TextField
@@ -59,5 +67,10 @@ export const CurrencyField = ({ symbol = '$', maxPlaces = 2, fixedDecimalPlaces 
 }
 
 CurrencyField.propTypes = {
-
+  /** The currency symbol to use. */
+  symbol: PropTypes.string,
+  /** The max number of decimal places to show. */
+  maxPlaces: PropTypes.number,
+  /** If `true`, the field will always display the zero-padding max decimal places. */
+  fixedDecimalPlaces: PropTypes.bool,
 }

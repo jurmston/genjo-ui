@@ -1,94 +1,104 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Slide from '@material-ui/core/Slide'
-import Snackbar from '@material-ui/core/Snackbar'
-import Alert from '@material-ui/lab/Alert'
+import { v4 as uuid } from 'uuid'
+import { makeStyles } from '@material-ui/core/styles'
+import { SnackbarMessage } from './SnackbarMessage'
 
 
-const AUTO_HIDE_DURATION = 3000
+const useStyles = makeStyles(theme => ({
+  container: {
+    position: 'fixed',
+    left: 16,
+    bottom: 16,
+    display: 'flex',
+    flexDirection: 'column-reverse',
+    transitions: theme.transitions.create('height'),
+  },
+}))
+
 
 const SnackbarContext = React.createContext()
 
+/** Hook for using the SnackbarContext */
+const useSnackbar = () => {
+  const context = React.useContext(SnackbarContext)
 
-/**
- *
- * Message API
- *   message = {
- *     value: string
- *     type: 'info' | 'error' | 'warning' | 'success' = 'info'
- *     action: node = null
- *     autoHideDuration: number = AUTO_HIDE_DURATION
- *   }
- */
-class SnackbarProvider extends React.Component {
-  state = {
-    messages: [],
-    currentMessage: null,
-    status: 'ready',
+  if (context === undefined) {
+    throw new Error('useSnackbar must be within a SnackbarProivider')
   }
 
-  componentDidUpdate = () => {
-    if (this.state.status === 'ready' && this.state.messages.length) {
-      this.setState({
-        currentMessage: this.state.messages[0],
-        messages: this.state.messages.slice(1),
-        status: 'live',
-      })
-    }
-  }
-
-  addMessage = message => {
-    // We need the callback version of setState to make sure that quick calls
-    // to drop messages.
-    this.setState(prevState => ({
-      messages: prevState.messages.concat(message),
-    })
-    )
-  }
-
-  clearMessage = () =>
-    this.setState({
-      status: 'dead',
-    })
-
-  render = () => {
-    const { children } = this.props
-    const { currentMessage, status } = this.state
-
-    return (
-      <SnackbarContext.Provider
-        value={{
-          add: this.addMessage,
-          clear: this.clearMessage,
-        }}
-      >
-        {children}
-        <Snackbar
-          open={status === 'live'}
-          autoHideDuration={currentMessage?.autoHideDuration || AUTO_HIDE_DURATION}
-          onClose={this.clearMessage}
-          onExited={() => this.setState({ status: 'ready' })}
-          TransitionComponent={Slide}
-        >
-          <Alert
-            onClose={this.clearMessage}
-            severity={currentMessage?.type || 'info'}
-            action={currentMessage?.action}
-          >
-            {currentMessage?.value}
-          </Alert>
-        </Snackbar>
-      </SnackbarContext.Provider>
-    )
-  }
+  return context
 }
 
-const useSnackbar = () => React.useContext(SnackbarContext)
+
+const SnackbarProvider = ({ maxMessages = 3, children }) => {
+  const classes = useStyles()
+
+  const [messages, setMessages] = React.useState([])
+  const [reaper, setReaper] = React.useState(new Set())
+
+  function addMessage({ type, text }) {
+    const newMessages = messages.concat({ type, text, id: uuid() })
+    setMessages(newMessages)
+  }
+
+  function clearMessages() {
+    const newReaper = new Set(reaper)
+    messages.forEach(message => newReaper.add(message.id))
+    setReaper(newReaper)
+  }
+
+  function killMessage(idToKill) {
+    const newReaper = new Set([ ...reaper, idToKill ])
+    setReaper(newReaper)
+  }
+
+  // Clean up dead messages.
+  React.useEffect(
+    () => {
+      if (reaper.size) {
+        const filteredMessages = messages.filter(message => !reaper.has(message.id))
+        setMessages(filteredMessages)
+        setReaper(new Set())
+      }
+    },
+    [reaper, messages]
+  )
+
+  console.log(messages)
+
+  return (
+    <SnackbarContext.Provider
+      value={{
+        addMessage,
+        clearMessages,
+      }}
+    >
+      {children}
+
+      {messages.length > 0 && (
+        <div className={classes.container}>
+          {messages.slice(0, maxMessages).map((message, index) => (
+            <SnackbarMessage
+              {...message}
+              key={message.id}
+              kill={() => killMessage(message.id)}
+              shouldMakeRoom={index === 0 && messages.length > maxMessages}
+            />
+          ))}
+        </div>
+      )}
+    </SnackbarContext.Provider>
+  )
+}
+
 
 SnackbarProvider.propTypes = {
-  /** Wrapped content of the provider */
+  /** Wrapped content of the provider. */
   children: PropTypes.node,
+  /** The maximum number of messages that can appear on the screen. */
+  maxMessages: PropTypes.number,
 }
 
 export {

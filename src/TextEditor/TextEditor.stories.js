@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField'
 import { TextEditor } from './TextEditor'
 
 export default {
-  title: 'Components/TextEditor',
+  title: 'Widgets/TextEditor',
   component: TextEditor,
 }
 
