@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 
+import ShellContext from './ShellContext'
+
 import { AppBar } from './components/AppBar'
 import { MenuPanel } from './components/MenuPanel'
 import { UserMenu } from './components/UserMenu'
@@ -23,7 +25,6 @@ const useStyles = makeStyles({
   },
 })
 
-export const ShellContext = React.createContext()
 
 /**
  * Content wrapper for public website.
@@ -74,30 +75,8 @@ export const Shell = ({
   )
 }
 
-export const useShell = ({ title = '', menuContent = null }) => {
-  const { setMenuContent, setTitle } = React.useContext(ShellContext)
 
-  React.useEffect(
-    () => {
-      setMenuContent(menuContent)
-      setTitle(title)
-    },
-    // This effect should only be called once.
-    // eslint-disable-next-line
-    []
-  )
-}
 
-/** HOC to wrap pages with Shell */
-export const withShell = (Component, shellProps) => {
-  const WrappedComponent = props => (
-    <Shell {...shellProps}>
-      <Component {...props} />
-    </Shell>
-  )
-
-  return WrappedComponent
-}
 
 Shell.propTypes = {
   /** Content inside the shell. */

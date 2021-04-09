@@ -5,9 +5,9 @@ import { useQuery, useInfiniteQuery, QueryClient, QueryClientProvider } from 're
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import CancelIcon from '@material-ui/icons/Cancel'
 
-import { DataTable } from './DataTable'
-import { useDimensions } from '../useDimensions'
-import { useSelectionSet } from '../useSelectionSet'
+import DataTable from './DataTable'
+import useDimensions from '../useDimensions'
+import useSelectionSet from '../useSelectionSet'
 
 import { colors } from '../styles'
 

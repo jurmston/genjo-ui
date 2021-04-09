@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { ButtonTab } from '../ButtonTab/ButtonTab'
-import { ButtonTabs } from './ButtonTabs'
+import ButtonTab from '../ButtonTab'
+import ButtonTabs from './ButtonTabs'
 
 export default {
   title: 'Components/ButtonTabs',

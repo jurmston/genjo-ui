@@ -1,9 +1,7 @@
 import React from 'react'
 
-import SettingsIcon from '@material-ui/icons/Settings'
-
-import { NavTab } from '../NavTab'
-import { NavTabs } from './NavTabs'
+import NavTab from '../NavTab'
+import NavTabs from './NavTabs'
 
 export default {
   title: 'Components/NavTabs',

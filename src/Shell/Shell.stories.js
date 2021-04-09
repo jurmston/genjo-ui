@@ -12,14 +12,12 @@ import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
 import ContactSupportIcon from '@material-ui/icons/ContactSupport'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
-import { Shell, useShell } from './Shell'
-import { MenuPanel } from './components/MenuPanel'
-import { MenuPanelLoader } from '../MenuPanelLoader/MenuPanelLoader'
-import { MenuPanelItem } from '../MenuPanelItem/MenuPanelItem'
+import MenuPanelItem from '../MenuPanelItem'
+import NavTab from '../NavTab'
+import NavTabs from '../NavTabs'
 
-import { NavTab } from '../NavTab'
-import { NavTabs } from '../NavTabs'
-
+import Shell from './Shell'
+import useShell from './useShell'
 import story_logo from './story_logo.svg'
 
 export default {
