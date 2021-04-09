@@ -56,3 +56,5 @@ export function useSelectionSet(key = '', rowCount = 0) {
     unselectAll,
   }
 }
+
+export default useSelectionSet

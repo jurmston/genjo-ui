@@ -70,3 +70,5 @@ MiniLoader.propTypes = {
   /** Color variant of the loader. */
   variant: PropTypes.oneOf(['default', 'primary', 'secondary']),
 }
+
+export default MiniLoader

@@ -1,1 +1,1 @@
-export * from './CurrencyField'
+export { default } from './CurrencyField'

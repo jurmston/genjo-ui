@@ -1,8 +1,6 @@
 import * as React from 'react'
-
-import { experimentalStyled, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import Tab from '@material-ui/core/Tab'
-
 
 
 const useStyles = makeStyles(theme => ({
@@ -39,3 +37,5 @@ export const ButtonTab = props => {
     />
   )
 }
+
+export default ButtonTab

@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import { LoaderProvider, useLoader } from './LoaderProvider'
+import LoaderProvider from './LoaderProvider'
+import useLoader from './useLoader'
 
 export default {
   title: 'Providers/LoaderProvider',

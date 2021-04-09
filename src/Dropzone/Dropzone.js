@@ -10,8 +10,8 @@ import DescriptionIcon from '@material-ui/icons/Description'
 import PhotoIcon from '@material-ui/icons/Photo'
 
 import { getFileExtension, sizeToBytes } from '../utils/files'
-import { CircleLoader } from '../CircleLoader'
-import { Spacer } from '../Spacer'
+import CircleLoader from '../CircleLoader'
+import Spacer from '../Spacer'
 
 const IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif', 'svg']
 
@@ -241,4 +241,4 @@ Dropzone.propTypes = {
   label: PropTypes.string,
 }
 
-export { Dropzone }
+export default Dropzone

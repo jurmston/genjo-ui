@@ -14,7 +14,7 @@ import CancelIcon from '@material-ui/icons/Cancel'
 
 import clsx from 'clsx'
 import { useTable } from '../context'
-import { colors } from '../../colors'
+import { colors } from '../../styles'
 
 
 

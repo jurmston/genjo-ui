@@ -7,9 +7,9 @@ import DialogActions from '@material-ui/core/DialogActions'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import { ClosableDialogTitle } from '../ClosableDialogTitle'
 import { useSlate } from 'slate-react'
 
+import ClosableDialogTitle from '../ClosableDialogTitle'
 import { insertLink } from './utils'
 
 

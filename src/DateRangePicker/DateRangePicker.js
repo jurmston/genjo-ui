@@ -237,3 +237,5 @@ export const DateRangePicker = ({ }) => {
 DateRangePicker.propTypes = {
 
 }
+
+export default DateRangePicker

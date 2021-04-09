@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { AutoFormattedTextField } from './AutoFormattedTextField'
+import AutoFormattedTextField from './AutoFormattedTextField'
 
 export default {
   title: 'Components/AutoFormattedTextField',

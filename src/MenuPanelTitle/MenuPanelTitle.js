@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * Title for a menu panel.
  */
-const MenuPanelTitle = ({ avatar, subtitle, title }) => {
+export const MenuPanelTitle = ({ avatar, subtitle, title }) => {
   const classes = useStyles()
 
   return (
@@ -43,4 +43,4 @@ MenuPanelTitle.propTypes = {
   title: PropTypes.string.isRequired,
 }
 
-export { MenuPanelTitle }
+export default MenuPanelTitle

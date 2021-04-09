@@ -13,7 +13,7 @@ import { HeaderCell } from './components/HeaderCell'
 import { TotalCell } from './components/TotalCell'
 import { ResultsLoader } from './components/ResultsLoader'
 
-import { CircleLoader } from '../CircleLoader'
+import CircleLoader from '../CircleLoader'
 
 import { useStyles } from './styles'
 
@@ -258,3 +258,5 @@ export const DataTable = ({
 DataTable.propTypes = {
 
 }
+
+export default DataTable

@@ -37,3 +37,5 @@ Spacer.propTypes = {
   axis: PropTypes.oneOf(['', 'horizontal', 'vertical']),
   style: PropTypes.object,
 }
+
+export default Spacer

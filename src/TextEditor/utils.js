@@ -142,3 +142,8 @@ export function getCurrentWord(editor) {
   const text = Editor.string(editor, [])
   return text.substr(text.lastIndexOf(' ') + 1)
 }
+
+
+export function insertLink() {
+
+}

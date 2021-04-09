@@ -3,10 +3,9 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import { CircleLoader } from '../../CircleLoader'
+
+import CircleLoader from '../../CircleLoader'
 import { useTable } from '../context'
 
 const useStyles = makeStyles({

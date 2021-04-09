@@ -1,9 +1,7 @@
-import React from 'react'
-
+import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
-import { AddressField } from './AddressField'
-
-import { GoogleMapsWrapper } from '../../.storybook/components/GoogleMapsWrapper'
+import AddressField from './AddressField'
+import GoogleMapsWrapper from '../../.storybook/components/GoogleMapsWrapper'
 
 export default {
   title: 'Components/AddressField',

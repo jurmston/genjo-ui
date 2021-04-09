@@ -1,1 +1,1 @@
-export * from './DateField'
+export { default } from './DateField'

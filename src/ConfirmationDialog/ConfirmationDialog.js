@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button'
 import { ClosableDialogTitle } from '../ClosableDialogTitle/ClosableDialogTitle'
 
 
-const ConfirmationDialog = ({
+export const ConfirmationDialog = ({
   isOpen,
   onClose,
   onConfirm,
@@ -55,4 +55,4 @@ ConfirmationDialog.propTypes = {
   confirmText: PropTypes.string,
 }
 
-export { ConfirmationDialog }
+export default ConfirmationDialog

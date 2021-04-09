@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { DateRangePicker } from './DateRangePicker'
-import { colors, colorsLight } from '../colors'
+import { colors, colorsLight } from '../styles'
 
 export default {
   title: 'Components/DateRangePicker',

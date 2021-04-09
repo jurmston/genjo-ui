@@ -1,20 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
-// MAterial UI
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
-
-// App
-import { CircleLoader } from '../CircleLoader'
-
-
-const LoaderContext = React.createContext()
+import CircleLoader from '../CircleLoader'
+import LoaderContext from './LoaderContext'
 
 
-const LoaderProvider = ({ children }) => {
+export const LoaderProvider = ({ children }) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [message, setMessage] = React.useState('')
 
@@ -75,14 +69,8 @@ const LoaderProvider = ({ children }) => {
   )
 }
 
-const useLoader = () => React.useContext(LoaderContext)
-
 LoaderProvider.propTypes = {
   children: PropTypes.node,
 }
 
-export {
-  LoaderContext,
-  LoaderProvider,
-  useLoader,
-}
+export default LoaderProvider

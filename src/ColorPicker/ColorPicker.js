@@ -8,7 +8,7 @@ import Popover from '@material-ui/core/Popover'
 
 import CheckIcon from '@material-ui/icons/Check'
 
-import { colors as themeColors, colorsMain } from '../colors'
+import { colors as themeColors, colorsMain } from '../styles/colors'
 
 
 
@@ -209,3 +209,5 @@ export {
   ColorPickerButton,
   ColorPickerMenu,
 }
+
+export default ColorPicker

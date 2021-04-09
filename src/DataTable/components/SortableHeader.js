@@ -14,7 +14,7 @@ import SortNumberDescendingIcon from '../../icons/SortNumberDescendingIcon'
 import SortGenericIcon from '../../icons/SortGenericIcon'
 import SortGenericAscendingIcon from '../../icons/SortGenericAscendingIcon'
 import SortGenericDescendingIcon from '../../icons/SortGenericDescendingIcon'
-import { colors } from '../../colors'
+import { colors } from '../../styles'
 
 const useStyles = makeStyles(theme => ({
   head: {

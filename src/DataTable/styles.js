@@ -1,6 +1,6 @@
 import { makeStyles, alpha } from '@material-ui/core/styles'
 import scrollbarSize from 'dom-helpers/scrollbarSize'
-import { colors } from '../colors'
+import { colors } from '../styles'
 
 
 export const useStyles = makeStyles(theme => ({

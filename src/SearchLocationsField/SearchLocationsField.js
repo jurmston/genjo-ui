@@ -10,8 +10,8 @@ import SearchIcon from '@material-ui/icons/Search'
 
 import { usePlacesAutocomplete, useGeocoder } from '../GoogleMapsProvider'
 
-import { colors } from '../colors'
-import { useDebounce } from '../useDebounce'
+import { colors } from '../styles'
+import useDebounce from '../useDebounce'
 import { parseGeocoderResults } from '../utils/geo'
 
 

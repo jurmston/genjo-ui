@@ -2,14 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { createTheme, defaultTheme } from '../theme'
+import { createTheme, defaultTheme } from '../styles/theme'
 
 // Material-UI needs to specify inject order to allow customization
 // See: https://next.material-ui.com/guides/migration-v4/#styled-engine
-import { CacheProvider } from '@emotion/react'
+// import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 
 import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
+
+import ThemeContext from './ThemeContext'
+
 
 // This needs to be used to prevent a bug with @emotion using the :first-child
 // psuedo selectors
@@ -23,15 +26,13 @@ const cache = createCache({
 cache.compat = true
 
 
-export const ThemeContext = React.createContext()
-export const useThemeContext = () => React.useContext(ThemeContext)
-
-
 /**
  * Provides the app with a change-able MUI theme.
  */
 export const ThemeProvider = ({ theme: themeFromProps = null, children }) => {
   const [theme, setTheme] = React.useState(themeFromProps ?? defaultTheme)
+
+  const muiTheme = createTheme(theme)
 
   React.useEffect(
     () => {
@@ -48,7 +49,7 @@ export const ThemeProvider = ({ theme: themeFromProps = null, children }) => {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <ThemeContext.Provider
-          value={{ theme, setTheme }}
+          value={{ muiTheme, theme, setTheme }}
         >
           {children}
         </ThemeContext.Provider>
@@ -60,4 +61,8 @@ export const ThemeProvider = ({ theme: themeFromProps = null, children }) => {
 ThemeProvider.propTypes = {
   /** Wrapped content of the provider */
   children: PropTypes.node,
+  /** Theme object with default mode and colors */
+  theme: PropTypes.object,
 }
+
+export default ThemeProvider

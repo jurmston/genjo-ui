@@ -26,3 +26,5 @@ export const MenuPanelLoader = () => {
     </div>
   )
 }
+
+export default MenuPanelLoader

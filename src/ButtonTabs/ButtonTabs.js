@@ -57,3 +57,5 @@ export const ButtonTabs = props => {
     />
   )
 }
+
+export default ButtonTabs

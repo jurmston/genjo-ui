@@ -2,11 +2,11 @@ import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { SearchLocationsField } from '../SearchLocationsField'
-import { GoogleMapsProvider } from './GoogleMapsProvider'
 
 import { getFormattedAddress } from '../utils/geo'
-import { AddressField } from '../AddressField'
+import AddressField from '../AddressField'
+import SearchLocationsField from '../SearchLocationsField'
+import GoogleMapsProvider from './GoogleMapsProvider'
 
 import { GoogleMapsWrapper } from '../../.storybook/components/GoogleMapsWrapper'
 

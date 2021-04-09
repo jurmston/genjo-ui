@@ -10,7 +10,7 @@ import { DataTable } from './DataTable'
 import { useDimensions } from '../useDimensions'
 import { useSelectionSet } from '../useSelectionSet'
 
-import { colors } from '../colors'
+import { colors } from '../styles'
 
 import { DateTime } from 'luxon'
 

@@ -74,3 +74,5 @@ CurrencyField.propTypes = {
   /** If `true`, the field will always display the zero-padding max decimal places. */
   fixedDecimalPlaces: PropTypes.bool,
 }
+
+export default CurrencyField

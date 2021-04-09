@@ -4,7 +4,7 @@ import {
   unstable_createMuiStrictModeTheme as createMuiTheme
 } from '@material-ui/core/styles'
 import { create } from '@storybook/theming/create'
-import { colors } from '../src/colors'
+import { colors } from '../src/styles'
 
 
 const createThemeFromMUITheme = (name, theme) => {

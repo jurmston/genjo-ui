@@ -83,3 +83,5 @@ export function useDimensions(isResponsive = true) {
 
   return [ref, dimensions, node]
 }
+
+export default useDimensions

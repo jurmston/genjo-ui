@@ -82,3 +82,5 @@ AddressField.propTypes = {
    */
   onAddressComponentsChange: PropTypes.func,
 }
+
+export default AddressField

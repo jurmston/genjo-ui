@@ -75,3 +75,5 @@ SnackbarMessage.propTypes = {
    */
   shouldMakeRoom: PropTypes.bool,
 }
+
+export default SnackbarMessage

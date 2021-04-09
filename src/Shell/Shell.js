@@ -40,6 +40,7 @@ export const Shell = ({
   user,
   userMenuContent,
   appBarContent,
+  defaultMenuContent,
 }) => {
   const [menuIsOpen, setMenuIsOpen] = React.useState(false)
   const [menuContent, setMenuContent] = React.useState(null)
@@ -56,6 +57,16 @@ export const Shell = ({
       return () => document.title = defaultTitle
     },
     [title]
+  )
+
+  // Load the shell with the default menu content.
+  React.useEffect(
+    () => {
+      if (defaultMenuContent) {
+        setMenuContent(defaultMenuContent)
+      }
+    },
+    [defaultMenuContent]
   )
 
   return (
@@ -119,7 +130,7 @@ export const withShell = (Component, shellProps) => {
 Shell.propTypes = {
   /** Content inside the shell. */
   children: PropTypes.node,
-  menuContent: PropTypes.node,
+  defaultMenuContent: PropTypes.node,
   defaultTitle: PropTypes.string,
   logo: PropTypes.string,
   brandName: PropTypes.string,
@@ -127,3 +138,5 @@ Shell.propTypes = {
   userMenuContent: PropTypes.node,
   appBarContent: PropTypes.node,
 }
+
+export default Shell

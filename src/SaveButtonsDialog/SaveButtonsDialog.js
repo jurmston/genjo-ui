@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Slide from '@material-ui/core/Slide'
 import Button from '@material-ui/core/Button'
 
-import { useDimensions } from '../useDimensions'
+import useDimensions from '../useDimensions'
 
 
 const useStyles = makeStyles(theme => ({
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const SaveButtonsDialog = ({ isIn = false, onCancel, onSave }) => {
+export const SaveButtonsDialog = ({ isIn = false, onCancel, onSave }) => {
   const classes = useStyles()
 
   const [ref, dim, ] = useDimensions()
@@ -68,4 +68,4 @@ SaveButtonsDialog.propTypes = {
   onSave: PropTypes.func,
 }
 
-export { SaveButtonsDialog }
+export default SaveButtonsDialog

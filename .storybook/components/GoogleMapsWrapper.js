@@ -1,7 +1,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import { GoogleMapsProvider } from '../../src/GoogleMapsProvider'
+import GoogleMapsProvider from '../../src/GoogleMapsProvider'
 
 
 /**
@@ -24,3 +24,5 @@ GoogleMapsWrapper.propTypes = {
    */
   children: PropTypes.node,
 }
+
+export default GoogleMapsWrapper

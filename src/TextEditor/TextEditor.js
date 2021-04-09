@@ -24,7 +24,7 @@ import {
 import { withLinks } from './plugins/links'
 
 
-const TextEditor = ({
+export const TextEditor = ({
   readOnly = false,
   value: valueFromProps = null,
   onSave,
@@ -110,4 +110,4 @@ TextEditor.propTypes = {
 }
 
 
-export { TextEditor }
+export default TextEditor

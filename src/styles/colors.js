@@ -86,3 +86,5 @@ export const colorsLight = [
   colors.brown[200],
   colors.blueGrey[200],
 ]
+
+export default colors

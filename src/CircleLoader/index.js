@@ -1,1 +1,1 @@
-export * from './CircleLoader'
+export { default } from './CircleLoader'

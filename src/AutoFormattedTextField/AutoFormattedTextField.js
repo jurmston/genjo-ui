@@ -1,11 +1,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 import { conformToMask } from 'react-text-mask'
-import Input from '@material-ui/core/Input'
-import InputLabel from '@material-ui/core/InputLabel'
 import TextField from '@material-ui/core/TextField'
-import FormControl from '@material-ui/core/FormControl'
-import FormHelperText from '@material-ui/core/FormHelperText'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -87,5 +83,14 @@ export const AutoFormattedTextField = ({
 }
 
 AutoFormattedTextField.propTypes = {
-
+  /** Mask format value */
+  mask: PropTypes.string,
+  /** Value of the input */
+  value: PropTypes.string,
+  /** Callback when the input changes */
+  onChange: PropTypes.func,
+  /** If `true`, the mask function will be applied when `onChange` is called. */
+  autoFormat: PropTypes.bool,
 }
+
+export default AutoFormattedTextField

@@ -1,1 +1,1 @@
-export * from './useSelectionSet'
+export { default } from './useSelectionSet'

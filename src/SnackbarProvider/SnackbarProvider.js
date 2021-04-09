@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 
 import { v4 as uuid } from 'uuid'
 import { makeStyles } from '@material-ui/core/styles'
+import SnackbarContext from './SnackbarContext'
 import { SnackbarMessage } from './SnackbarMessage'
 
 
@@ -18,18 +19,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const SnackbarContext = React.createContext()
-
-/** Hook for using the SnackbarContext */
-const useSnackbar = () => {
-  const context = React.useContext(SnackbarContext)
-
-  if (context === undefined) {
-    throw new Error('useSnackbar must be within a SnackbarProivider')
-  }
-
-  return context
-}
 
 
 const SnackbarProvider = ({ maxMessages = 3, children }) => {
@@ -101,8 +90,4 @@ SnackbarProvider.propTypes = {
   maxMessages: PropTypes.number,
 }
 
-export {
-  SnackbarProvider,
-  SnackbarContext,
-  useSnackbar,
-}
+export default SnackbarProvider

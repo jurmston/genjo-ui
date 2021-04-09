@@ -9,7 +9,7 @@ import DayPicker from '@material-ui/lab/DayPicker'
 import { DateTime } from 'luxon'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 
-import { useDimensions } from '../useDimensions'
+import useDimensions from '../useDimensions'
 
 
 const monthFirstFormats = [
@@ -98,7 +98,6 @@ export const DateField = ({
   const [isEditing, setIsEditing] = React.useState(false)
   const [inputValue, setInputValue] = React.useState('')
   const [pickerIsOpen, setPickerIsOpen] = React.useState(false)
-  // const [isHoveringPicker, setIsHoveringPicker] = React.useState(false)
 
   const [ref, dim, ] = useDimensions()
 
@@ -221,3 +220,5 @@ DateField.propTypes = {
   /** If `true`, the picker element will be hidden. */
   disablePicker: PropTypes.bool,
 }
+
+export default DateField

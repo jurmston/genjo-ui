@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
       borderTopRightRadius: theme.shape.borderRadius,
       // backgroundColor: theme.palette.mode === 'light' ? '#fff' : theme.palette.action.selected,
       backgroundColor: theme.palette.primary[50],
-      boxShadow: '0 2px 4px 0 rgba(0,0,0,0.16)',
+      // boxShadow: '0 2px 4px 0 rgba(0,0,0,0.16)',
     }
   },
 }))
@@ -58,3 +58,5 @@ export const NavTabs = props => {
     />
   )
 }
+
+export default NavTabs

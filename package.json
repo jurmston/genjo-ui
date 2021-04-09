@@ -1,10 +1,11 @@
 {
   "name": "genjo-ui",
-  "version": "0.0.21",
+  "version": "0.0.25",
   "description": "",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "source": "src/index.js",
+  "main": "core/index.js",
+  "files": [
+    "core"
+  ],
   "scripts": {
     "test": "jest",
     "lint": "eslint ./src/**/.js --no-error-on-unmatched-pattern",
@@ -13,7 +14,10 @@
     "build-storybook": "build-storybook",
     "build": "rollup -c",
     "build-watch": "rollup -c -w",
-    "chromatic": "npx chromatic storybook-static/"
+    "chromatic": "npx chromatic storybook-static/",
+    "prepublishOnly": "npm run build",
+    "prettier": "prettier --write src/**/*.js",
+    "prettier:check": "prettier --list-different src/**/*.js"
   },
   "author": "",
   "license": "ISC",
@@ -31,6 +35,7 @@
   "devDependencies": {
     "@babel/cli": "^7.13.10",
     "@babel/core": "^7.13.10",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/preset-env": "^7.13.12",
     "@babel/preset-react": "^7.12.13",
     "@emotion/react": "^11.1.5",
@@ -40,6 +45,7 @@
     "@material-ui/lab": "^5.0.0-alpha.28",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^18.0.0",
+    "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@storybook/addon-actions": "^6.2.3",
     "@storybook/addon-controls": "^6.2.3",
@@ -55,14 +61,17 @@
     "babel-loader": "^8.2.2",
     "chromatic": "^5.7.0",
     "eslint": "^7.23.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "install": "^0.13.0",
     "jest": "^26.6.3",
     "luxon": "^1.26.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.2.1",
     "random-words": "^1.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

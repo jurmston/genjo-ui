@@ -60,3 +60,5 @@ export function CircleLoader(props) {
 CircleLoader.propTypes = {
   className: PropTypes.string,
 }
+
+export default CircleLoader

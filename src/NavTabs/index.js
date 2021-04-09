@@ -1,1 +1,1 @@
-export * from './NavTabs'
+export { default } from './NavTabs'

@@ -9,7 +9,6 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
-import Icon from '@material-ui/core/Icon'
 
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
@@ -47,12 +46,8 @@ const defaultProps = {
 
 const isTooShort = (password, minLength) => password.length < minLength
 
-/**
- * @author Jeff Urmston
- *
- * Custom MUI Text Field with password strength and visibility features.
- */
-class PasswordField extends React.Component {
+
+export class PasswordField extends React.Component {
   state = {
     passwordIsVisible: false,
     capsLockOn: false,
@@ -225,4 +220,4 @@ class PasswordField extends React.Component {
 PasswordField.propTypes = propTypes
 PasswordField.defaultProps = defaultProps
 
-export { PasswordField }
+export default PasswordField
