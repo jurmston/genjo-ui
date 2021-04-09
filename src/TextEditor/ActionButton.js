@@ -5,13 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 
 import { useTextEditor } from './context'
 
-
-export const ActionButton = ({
-  isActive,
-  icon: IconComponent,
-  label,
-  onMouseDown,
-}) => {
+export const ActionButton = ({ isActive, icon: IconComponent, label, onMouseDown }) => {
   const { classes } = useTextEditor()
 
   return (

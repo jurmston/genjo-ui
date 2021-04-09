@@ -5,7 +5,6 @@ import TextField from '@material-ui/core/TextField'
 import { useGeocoder } from '../GoogleMapsProvider'
 import { parseGeocoderResults } from '../utils/geo'
 
-
 export const AddressField = ({
   disableGeocode = false,
   value: valueFromProps,
@@ -43,13 +42,10 @@ export const AddressField = ({
   }
 
   // Synchronize the value from props
-  React.useEffect(
-    () => {
-      setValue(valueFromProps)
-      setOriginalValue(valueFromProps)
-    },
-    [valueFromProps]
-  )
+  React.useEffect(() => {
+    setValue(valueFromProps)
+    setOriginalValue(valueFromProps)
+  }, [valueFromProps])
 
   return (
     <TextField

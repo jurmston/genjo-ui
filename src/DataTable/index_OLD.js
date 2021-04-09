@@ -18,15 +18,12 @@ import { useResizableColumns } from './useResizableColumns'
 
 import { HeaderCell } from './HeaderCell'
 
-
 const ROW_HEIGHT = 36
 
 const COL_MIN_WIDTH = 64
 const COL_MAX_WIDTH = 800
 
-
 const useStyles = makeStyles(theme => ({
-
   fixedColumnShadow: {
     position: 'absolute',
     top: 0,
@@ -57,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     // border to make it look seemless with the rest of the headers.
     '&:nth-last-child(2) ~ div:not($headerCell)': {
       borderBottom: `2px solid ${colors.blueGrey[300]}`,
-    }
+    },
   },
 
   hasContent: {},
@@ -80,7 +77,6 @@ const useStyles = makeStyles(theme => ({
         borderBottomRightRadius: theme.shape.borderRadius,
       },
     },
-
   },
 
   headerCellContent: {
@@ -154,14 +150,13 @@ const useStyles = makeStyles(theme => ({
         '& > div': {
           backgroundColor: colors.blueGrey[100],
           width: 'unset',
-        }
+        },
       },
     },
 
     '&$isSelected': {
       backgroundColor: colors.amber[100],
     },
-
   },
 
   totalPrimary: {
@@ -174,7 +169,6 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 300,
   },
 }))
-
 
 export function Table({
   // columns = testDataColumnSet,
@@ -202,12 +196,7 @@ export function Table({
   const classes = useStyles(scrollInfo)
 
   // Resizable columns
-  const {
-    widths,
-    handleResizeColumn,
-    fixedColumnWidth,
-    totalWidth,
-  } = useResizableColumns({
+  const { widths, handleResizeColumn, fixedColumnWidth, totalWidth } = useResizableColumns({
     containerWidth: width,
     columns,
     fixedColumnCount,
@@ -219,20 +208,18 @@ export function Table({
     ({ index }) => {
       return widths[index] ?? defaultColumnWidth
     },
-    [widths, defaultColumnWidth],
+    [widths, defaultColumnWidth]
   )
 
   const _getTotalColumnWidth = React.useCallback(
     ({ index }) => {
       const baseWidth = widths[index] ?? defaultColumnWidth
 
-      const scrollbarWidth = index === widths.length - 1
-        ? scrollbarSize()
-        : 0
+      const scrollbarWidth = index === widths.length - 1 ? scrollbarSize() : 0
 
       return baseWidth + scrollbarWidth
     },
-    [widths, defaultColumnWidth],
+    [widths, defaultColumnWidth]
   )
 
   // Recomputing columns widths needs to be manually triggered:
@@ -240,27 +227,18 @@ export function Table({
   const gridRef = React.useRef()
   const totalGridRef = React.useRef()
 
-  React.useEffect(
-    () => {
-      gridRef?.current?.recomputeGridSize()
-      totalGridRef?.current?.recomputeGridSize()
-    },
-    [
-      widths,
-      gridRef,
-      totalGridRef,
-    ]
-  )
-
+  React.useEffect(() => {
+    gridRef?.current?.recomputeGridSize()
+    totalGridRef?.current?.recomputeGridSize()
+  }, [widths, gridRef, totalGridRef])
 
   const handleHoverCell = React.useCallback(
     (rowIndex, columnIndex) => {
       setHoveredState([rowIndex, columnIndex])
       gridRef?.current?.forceUpdateGrids()
     },
-    [gridRef],
+    [gridRef]
   )
-
 
   function _renderDataCell({ key, columnIndex, style, rowIndex }) {
     return (
@@ -272,21 +250,16 @@ export function Table({
           classes.dataCell,
           selectedCells.has(rowIndex) && classes.isSelected,
           hoveredState[0] === rowIndex && classes.hoveredRowCell,
-          hoveredState[1] === columnIndex && classes.hoveredColumnCell,
+          hoveredState[1] === columnIndex && classes.hoveredColumnCell
         )}
         style={style}
       >
-        <div>
-          {getCellData(rowIndex - 1, columnIndex)}
-        </div>
+        <div>{getCellData(rowIndex - 1, columnIndex)}</div>
       </div>
     )
   }
 
-
-
   function _renderCell({ key, columnIndex, style, rowIndex }) {
-
     if (columnIndex === 0) {
       return (
         <TableCell
@@ -304,20 +277,14 @@ export function Table({
             rowIndex > 0 && classes.dataCell,
             rowIndex > 1 && classes.roundBottom,
             rowIndex < rowCount - 2 && classes.roundTop,
-            selectedCells.has(rowIndex) && classes.isSelected,
+            selectedCells.has(rowIndex) && classes.isSelected
           )}
           onMouseOver={() => handleHoverCell(rowIndex, columnIndex)}
         >
           <Checkbox
             indeterminate={rowIndex === 0 && selectedCells.size && selectedCells.size < rowCount}
-            checked={rowIndex === 0
-              ? selectedCells.size === rowCount
-              : selectedCells.has(rowIndex)
-            }
-            onClick={() => rowIndex === 0
-              ? toggleSelectAll()
-              : toggleSelectRow(rowIndex)
-            }
+            checked={rowIndex === 0 ? selectedCells.size === rowCount : selectedCells.has(rowIndex)}
+            onClick={() => (rowIndex === 0 ? toggleSelectAll() : toggleSelectRow(rowIndex))}
           />
         </TableCell>
       )
@@ -343,11 +310,9 @@ export function Table({
     }
 
     return _renderDataCell({ key, style, rowIndex, columnIndex })
-
   }
 
   function _renderTotalCell({ key, columnIndex, style }) {
-
     const { total } = columns[columnIndex]
 
     const isFirst = !Boolean(columns?.[columnIndex - 1]?.total)
@@ -365,30 +330,28 @@ export function Table({
           classes.totalCell,
           Boolean(total) && classes.hasContent,
           isFirst && classes.isFirst,
-          isLast && classes.isLast,
+          isLast && classes.isLast
         )}
       >
         {Boolean(total) && (
           <>
-            <Typography variant="caption" component="div" className={classes.totalSecondary}>Total</Typography>
-            <Typography component="div" className={classes.totalPrimary}>$2,400.23</Typography>
+            <Typography variant="caption" component="div" className={classes.totalSecondary}>
+              Total
+            </Typography>
+            <Typography component="div" className={classes.totalPrimary}>
+              $2,400.23
+            </Typography>
           </>
         )}
       </TableCell>
     )
   }
 
-
-
   // Selection
 
-
-  React.useEffect(
-    () => {
-      gridRef?.current?.forceUpdateGrids()
-    },
-    [selectedCells, gridRef]
-  )
+  React.useEffect(() => {
+    gridRef?.current?.forceUpdateGrids()
+  }, [selectedCells, gridRef])
 
   // Calculate the scroll left for the total row
   const { scrollLeft } = scrollInfo
@@ -396,20 +359,14 @@ export function Table({
   // Calculate the width of the window that is scrollable
   const scrollableWidth = totalWidth - width + scrollbarSize()
 
-  const percentScrolled = safeDivide(
-    scrollLeft,
-    scrollableWidth,
-  )
+  const percentScrolled = safeDivide(scrollLeft, scrollableWidth)
 
   const totalRowScrollLeft = percentScrolled * (totalWidth - width + scrollbarSize())
 
   const totalRowHeight = 20 + 14 + 8 + 4 + 8
 
   return (
-    <div
-      style={{ position: 'relative' }}
-      onMouseLeave={() => setHoveredState([-1, -1])}
-    >
+    <div style={{ position: 'relative' }} onMouseLeave={() => setHoveredState([-1, -1])}>
       <MultiGrid
         ref={gridRef}
         fixedColumnCount={fixedColumnCount}
@@ -452,16 +409,7 @@ export function Table({
         classNameBottomRightGrid={classes.gridContainer}
       />
 
-      {scrollLeft > 0 && (
-        <div
-          className={classes.fixedColumnShadow}
-          style={{ left: fixedColumnWidth, height }}
-        />
-      )}
-
+      {scrollLeft > 0 && <div className={classes.fixedColumnShadow} style={{ left: fixedColumnWidth, height }} />}
     </div>
   )
-
 }
-
-

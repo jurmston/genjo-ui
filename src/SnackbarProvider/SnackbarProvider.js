@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import SnackbarContext from './SnackbarContext'
 import { SnackbarMessage } from './SnackbarMessage'
 
-
 const useStyles = makeStyles(theme => ({
   container: {
     position: 'fixed',
@@ -17,9 +16,6 @@ const useStyles = makeStyles(theme => ({
     transitions: theme.transitions.create('height'),
   },
 }))
-
-
-
 
 const SnackbarProvider = ({ maxMessages = 3, children }) => {
   const classes = useStyles()
@@ -39,21 +35,18 @@ const SnackbarProvider = ({ maxMessages = 3, children }) => {
   }
 
   function killMessage(idToKill) {
-    const newReaper = new Set([ ...reaper, idToKill ])
+    const newReaper = new Set([...reaper, idToKill])
     setReaper(newReaper)
   }
 
   // Clean up dead messages.
-  React.useEffect(
-    () => {
-      if (reaper.size) {
-        const filteredMessages = messages.filter(message => !reaper.has(message.id))
-        setMessages(filteredMessages)
-        setReaper(new Set())
-      }
-    },
-    [reaper, messages]
-  )
+  React.useEffect(() => {
+    if (reaper.size) {
+      const filteredMessages = messages.filter(message => !reaper.has(message.id))
+      setMessages(filteredMessages)
+      setReaper(new Set())
+    }
+  }, [reaper, messages])
 
   console.log(messages)
 
@@ -81,7 +74,6 @@ const SnackbarProvider = ({ maxMessages = 3, children }) => {
     </SnackbarContext.Provider>
   )
 }
-
 
 SnackbarProvider.propTypes = {
   /** Wrapped content of the provider. */

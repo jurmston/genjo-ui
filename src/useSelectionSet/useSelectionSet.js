@@ -1,18 +1,14 @@
 import * as React from 'react'
 
-
 export function useSelectionSet(key = '', rowCount = 0) {
   const [selected, setSelected] = React.useState(new Set())
-
 
   function unselectAll() {
     setSelected(new Set())
   }
 
   function selectAll() {
-    setSelected(
-      new Set(Array.from({ length: rowCount }).map((_, index) => index))
-    )
+    setSelected(new Set(Array.from({ length: rowCount }).map((_, index) => index)))
   }
 
   /**
@@ -41,12 +37,9 @@ export function useSelectionSet(key = '', rowCount = 0) {
   }
 
   // Reset the selected set any time the key or row count changes.
-  React.useEffect(
-    () => {
-      setSelected(new Set())
-    },
-    [key, rowCount]
-  )
+  React.useEffect(() => {
+    setSelected(new Set())
+  }, [key, rowCount])
 
   return {
     selected,

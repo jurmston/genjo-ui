@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button'
 
 import useDimensions from '../useDimensions'
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     position: 'relative',
@@ -33,27 +32,15 @@ const useStyles = makeStyles(theme => ({
 export const SaveButtonsDialog = ({ isIn = false, onCancel, onSave }) => {
   const classes = useStyles()
 
-  const [ref, dim, ] = useDimensions()
+  const [ref, dim] = useDimensions()
 
   return (
-    <div
-      className={classes.root}
-      ref={ref}
-    >
+    <div className={classes.root} ref={ref}>
       <Slide in={isIn} direction="up">
-        <div
-          className={classes.card}
-          style={{ width: dim.width, left: dim.left }}
-        >
-          <Button onClick={onCancel}>
-            Discard Changes
-          </Button>
+        <div className={classes.card} style={{ width: dim.width, left: dim.left }}>
+          <Button onClick={onCancel}>Discard Changes</Button>
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={onSave}
-          >
+          <Button variant="contained" color="primary" onClick={onSave}>
             Save Changes
           </Button>
         </div>

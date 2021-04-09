@@ -8,7 +8,6 @@ import TextFieldsIcon from '@material-ui/icons/TextFields'
 
 import { titleCase } from './text'
 
-
 export default {
   title: 'Utilities/TitleCase',
 }
@@ -35,13 +34,11 @@ export const Primary = () => {
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton
-              onClick={applyTitleCase}
-            >
+            <IconButton onClick={applyTitleCase}>
               <TextFieldsIcon />
             </IconButton>
           </InputAdornment>
-        )
+        ),
       }}
     />
   )

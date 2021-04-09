@@ -10,9 +10,9 @@ export default {
       control: {
         type: 'select',
         options: ['filled', 'standard', 'outlined'],
-      }
+      },
     },
-  }
+  },
 }
 
 export const Main = ({ variant, ...args }) => {
@@ -20,12 +20,7 @@ export const Main = ({ variant, ...args }) => {
 
   return (
     <div style={{ width: 300 }}>
-      <CurrencyField
-        {...args}
-        variant={variant}
-        value={value}
-        onChange={(event, newValue) => setValue(newValue)}
-      />
+      <CurrencyField {...args} variant={variant} value={value} onChange={(event, newValue) => setValue(newValue)} />
     </div>
   )
 }

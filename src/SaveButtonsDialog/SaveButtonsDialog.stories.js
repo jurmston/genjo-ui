@@ -13,11 +13,7 @@ export const Primary = () => {
 
   return (
     <div style={{ width: 300 }}>
-      <TextField
-        variant="filled"
-        value={value}
-        onChange={event => setValue(event.target.value)}
-      />
+      <TextField variant="filled" value={value} onChange={event => setValue(event.target.value)} />
 
       <SaveButtonsDialog
         isIn={value !== originalValue}

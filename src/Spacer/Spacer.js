@@ -1,19 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-
 /**
  * Utility to fill the gaps.
  *
  * From:
  * https://www.joshwcomeau.com/react/modern-spacer-gif/
  */
-export const Spacer = ({
-  size,
-  axis = '',
-  style = {},
-  ...delegated
-}) => {
+export const Spacer = ({ size, axis = '', style = {}, ...delegated }) => {
   const width = axis === 'vertical' ? 1 : size
   const height = axis === 'horizontal' ? 1 : size
 

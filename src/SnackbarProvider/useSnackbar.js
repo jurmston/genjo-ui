@@ -1,7 +1,6 @@
 import * as React from 'react'
 import SnackbarContext from './SnackbarContext'
 
-
 export const useSnackbar = () => {
   const context = React.useContext(SnackbarContext)
 

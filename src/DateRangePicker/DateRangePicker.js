@@ -8,9 +8,7 @@ import TextField from '@material-ui/core/TextField'
 import { DateTime } from 'luxon'
 import clsx from 'clsx'
 
-
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   isFirstDay: {},
   isLastDay: {},
 
@@ -50,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-
   selectionDay: {
     backgroundColor: theme.palette.primary.main,
 
@@ -70,8 +67,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-
-export const DateRangePicker = ({ }) => {
+export const DateRangePicker = ({}) => {
   const [state, setState] = React.useState({
     start: null,
     end: null,
@@ -96,7 +92,6 @@ export const DateRangePicker = ({ }) => {
     end: end?.toLocaleString(DateTime.DATETIME_MED),
     currentSelection,
   })
-
 
   function handleChange(newValue) {
     // Case: the first selection.
@@ -155,23 +150,13 @@ export const DateRangePicker = ({ }) => {
     let isBetweenDayHover = false
 
     if (hoveredDay) {
-      isFirstDayHover = currentSelection === 'end'
-        && date >= hoveredStart
-        && date <= hoveredEnd
-        && date < startStart
+      isFirstDayHover = currentSelection === 'end' && date >= hoveredStart && date <= hoveredEnd && date < startStart
 
-      isLastDayHover = currentSelection === 'start'
-        && date >= hoveredStart
-        && date <= hoveredEnd
-        && date > endEnd
+      isLastDayHover = currentSelection === 'start' && date >= hoveredStart && date <= hoveredEnd && date > endEnd
 
-      const dayIsBetweenHoverAndStart = currentSelection === 'end'
-        && date > hoveredEnd
-        && date <= startEnd
+      const dayIsBetweenHoverAndStart = currentSelection === 'end' && date > hoveredEnd && date <= startEnd
 
-      const dayIsBetweenHoverAndEnd = currentSelection === 'start'
-        && date < hoveredStart
-        && date >= endStart
+      const dayIsBetweenHoverAndEnd = currentSelection === 'start' && date < hoveredStart && date >= endStart
 
       isBetweenDayHover = dayIsBetweenHoverAndStart || dayIsBetweenHoverAndEnd
     }
@@ -179,15 +164,13 @@ export const DateRangePicker = ({ }) => {
     const isInHoverRange = isFirstDayHover || isLastDayHover || isBetweenDayHover
 
     return (
-      <div
-        style={{ position: 'relative' }}
-      >
+      <div style={{ position: 'relative' }}>
         {isInHoverRange && (
           <div
             className={clsx(
               classes.hoverHighlight,
               isFirstDayHover && classes.isFirstDay,
-              isLastDayHover && classes.isLastDay,
+              isLastDayHover && classes.isLastDay
             )}
           />
         )}
@@ -197,7 +180,7 @@ export const DateRangePicker = ({ }) => {
             className={clsx(
               classes.selectionHighlight,
               isFirstDay && classes.isFirstDay,
-              isLastDay && classes.isLastDay,
+              isLastDay && classes.isLastDay
             )}
           />
         )}
@@ -216,10 +199,9 @@ export const DateRangePicker = ({ }) => {
             [classes.hoverDay]: isInHoverRange,
           })}
         />
-
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <StaticDatePicker
@@ -227,15 +209,13 @@ export const DateRangePicker = ({ }) => {
       value={start}
       onChange={handleChange}
       renderDay={renderWeekPickerDay}
-      renderInput={(params) => <TextField {...params} variant="standard" />}
+      renderInput={params => <TextField {...params} variant="standard" />}
       clearable
       showToolbar={false}
     />
   )
 }
 
-DateRangePicker.propTypes = {
-
-}
+DateRangePicker.propTypes = {}
 
 export default DateRangePicker

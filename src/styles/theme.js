@@ -1,7 +1,7 @@
 import {
   // Material-UI uses findDOMNode which is deprecated in React.StrictMode
   // See https://github.com/mui-org/material-ui/issues/13394
-  unstable_createMuiStrictModeTheme as createMuiTheme
+  unstable_createMuiStrictModeTheme as createMuiTheme,
 } from '@material-ui/core/styles'
 import { colors } from './colors'
 
@@ -58,7 +58,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
     // -- Default Props for Mui Components
     components: {
-
       // AUTOCOMPLETE
       MuiAutocomplete: {
         styleOverrides: {
@@ -92,7 +91,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // --- AVATER
       MuiAvatar: {
         styleOverrides: {
@@ -102,7 +100,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
         },
       },
-
 
       // BUTTON
       MuiButton: {
@@ -132,7 +129,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // BUTTON BASE
       MuiButtonBase: {
         styleOverrides: {
@@ -149,7 +145,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // --- CHIP
       MuiChip: {
         defaultProps: {
@@ -163,7 +158,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
         },
       },
-
 
       // --- DIALOG
       MuiDialog: {
@@ -201,14 +195,12 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // FAB
       MuiFab: {
         defaultProps: {
           size: 'small',
         },
       },
-
 
       // -- FILLED INPUT
       MuiFilledInput: {
@@ -256,7 +248,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // --- FORM CONTROL
       MuiFormControl: {
         styleOverrides: {
@@ -266,7 +257,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // --- FORM CONTROL LABEL
       MuiFormControlLabel: {
         styleOverrides: {
@@ -275,10 +265,9 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
           label: {
             marginLeft: 0,
-          }
+          },
         },
       },
-
 
       // --- FORM LABEL
       MuiFormLabel: {
@@ -288,7 +277,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
         },
       },
-
 
       // --- FORM HELPER TEXT
       MuiFormHelperText: {
@@ -304,7 +292,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // --- ICON
       MuiIcon: {
         defaultProps: {
@@ -315,9 +302,8 @@ export const createTheme = ({ mode, primary, secondary }) =>
           fontSizeSmall: {
             fontSize: '20px !important',
           },
-        }
+        },
       },
-
 
       // --- ICON BUTTON
       MuiIconButton: {
@@ -325,7 +311,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
           size: 'small',
         },
       },
-
 
       // --- INPUT
       MuiInput: {
@@ -352,9 +337,8 @@ export const createTheme = ({ mode, primary, secondary }) =>
               marginTop: 0,
             },
           },
-        }
+        },
       },
-
 
       // --- INPUT ADORNMENT
       MuiInputAdornment: {
@@ -371,7 +355,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
         },
       },
-
 
       // --- INPUT BASE
       MuiInputBase: {
@@ -395,7 +378,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
         },
       },
-
 
       // --- INPUT LABEL
       MuiInputLabel: {
@@ -431,7 +413,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // LIST
       MuiList: {
         defaultProps: {
@@ -439,7 +420,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
           disablePadding: true,
         },
       },
-
 
       // --- LIST ITEM AVATAR
       MuiListItemAvatar: {
@@ -450,7 +430,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // LIST ITEM ICON
       MuiListItemIcon: {
         styleOverrides: {
@@ -459,7 +438,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
         },
       },
-
 
       // LIST ITEM TEXT
       MuiListItemText: {
@@ -483,7 +461,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // --- LIST SUBHEADER
       MuiListSubheader: {
         defaultProps: {
@@ -497,16 +474,14 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // MENU ITEM
       MuiMenuItem: {
         styleOverrides: {
           root: {
             ...typographyText,
-          }
+          },
         },
       },
-
 
       // --- OUTLINED INPUT
       MuiOutlinedInput: {
@@ -557,7 +532,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // SELECT
       MuiSelect: {
         styleOverrides: {
@@ -566,10 +540,9 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
           selectMenu: {
             height: 'none',
-          }
+          },
         },
       },
-
 
       // --- SVG ICON
       MuiSvgIcon: {
@@ -587,8 +560,8 @@ export const createTheme = ({ mode, primary, secondary }) =>
             '&> *:first-of-type': {
               marginBottom: 0,
             },
-          }
-        }
+          },
+        },
       },
 
       // TABLE CELL
@@ -617,7 +590,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // TABLE PAGINATION
       MuiTablePagination: {
         styleOverrides: {
@@ -634,17 +606,15 @@ export const createTheme = ({ mode, primary, secondary }) =>
             // '&.MuiTableRow-head td': {
             //   borderBottom: `2px solid ${colors.blueGrey[200]}`,
             // },
-
             // '&:last-child td:not(.MuiTableCell-footer)': {
             //   borderBottom: `2px solid ${colors.blueGrey[200]}`,
             // },
-
           },
 
           head: {
             '& th': {
               borderBottom: `2px solid ${colors.blueGrey[200]}`,
-            }
+            },
           },
 
           footer: {
@@ -652,11 +622,10 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
             '& td': {
               borderTop: `2px solid ${colors.blueGrey[200]}`,
-            }
-          }
+            },
+          },
         },
       },
-
 
       // TEXT FIELD
       MuiTextField: {
@@ -666,17 +635,14 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-
       // TYPOGRAPHY
       MuiTypography: {
         defaultProps: {
           variant: 'body2',
         },
       },
-
     },
   })
-
 
 export const defaultTheme = {
   mode: 'light',

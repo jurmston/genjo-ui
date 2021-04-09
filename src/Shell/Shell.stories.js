@@ -27,27 +27,16 @@ export default {
   component: Shell,
 }
 
-
 const PageWithMenu = ({ setPage }) => {
-  const menuContent = (
-    <MenuPanelItem
-      icon={<ArrowBackIcon />}
-      title="Back to Dashboard"
-      isSelected={false}
-    />
-  )
+  const menuContent = <MenuPanelItem icon={<ArrowBackIcon />} title="Back to Dashboard" isSelected={false} />
 
   useShell({ menuContent })
 
   return (
     <Container>
-      <Typography variant="h1">
-        Website Content
-      </Typography>
+      <Typography variant="h1">Website Content</Typography>
 
-      <Typography>
-        This is my website. Roar.
-      </Typography>
+      <Typography>This is my website. Roar.</Typography>
 
       <Button variant="contained" color="primary" onClick={() => setPage('no-menu')}>
         Without Menu
@@ -61,13 +50,9 @@ const PageWithoutMenu = ({ setPage }) => {
 
   return (
     <Container>
-      <Typography variant="h1">
-        Website Content
-      </Typography>
+      <Typography variant="h1">Website Content</Typography>
 
-      <Typography>
-        This is my website. Roar.
-      </Typography>
+      <Typography>This is my website. Roar.</Typography>
 
       <Button variant="contained" color="primary" onClick={() => setPage('menu')}>
         With Menu
@@ -76,9 +61,7 @@ const PageWithoutMenu = ({ setPage }) => {
   )
 }
 
-
 export const Main = () => {
-
   const [page, setPage] = React.useState('menu')
   const [tab, setTab] = React.useState(0)
 
@@ -89,36 +72,36 @@ export const Main = () => {
       userMenuContent={
         <List>
           <MenuItem>
-            <ListItemIcon><ContactSupportIcon /></ListItemIcon>
+            <ListItemIcon>
+              <ContactSupportIcon />
+            </ListItemIcon>
             <ListItemText primary="Support" />
           </MenuItem>
 
           <MenuItem divider>
-            <ListItemIcon><AccountCircleIcon /></ListItemIcon>
+            <ListItemIcon>
+              <AccountCircleIcon />
+            </ListItemIcon>
             <ListItemText primary="My profile" />
           </MenuItem>
 
           <MenuItem>
-            <ListItemIcon><PowerSettingsNewIcon /></ListItemIcon>
+            <ListItemIcon>
+              <PowerSettingsNewIcon />
+            </ListItemIcon>
             <ListItemText primary="Log out" />
           </MenuItem>
         </List>
       }
       appBarContent={
-        <NavTabs
-          value={tab}
-          onChange={(event, newTab) => setTab(newTab)}
-        >
+        <NavTabs value={tab} onChange={(event, newTab) => setTab(newTab)}>
           <NavTab label="Projects" />
           <NavTab label="People" />
           <NavTab label="Settings" />
         </NavTabs>
       }
     >
-      {page === 'menu'
-        ? <PageWithMenu setPage={setPage} />
-        : <PageWithoutMenu setPage={setPage} />
-      }
+      {page === 'menu' ? <PageWithMenu setPage={setPage} /> : <PageWithoutMenu setPage={setPage} />}
     </Shell>
   )
 }

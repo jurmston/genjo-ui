@@ -15,21 +15,11 @@ import { ButtonPanel } from './ButtonPanel'
 import { Input } from './Input'
 import { useStyles } from './styles'
 
-
-import {
-  withDeleteBackwards,
-  getEmptyValue,
-} from './utils'
+import { withDeleteBackwards, getEmptyValue } from './utils'
 
 import { withLinks } from './plugins/links'
 
-
-export const TextEditor = ({
-  readOnly = false,
-  value: valueFromProps = null,
-  onSave,
-  saveOnEnter = false,
-}) => {
+export const TextEditor = ({ readOnly = false, value: valueFromProps = null, onSave, saveOnEnter = false }) => {
   const classes = useStyles({ readOnly })
 
   const [value, setValue] = React.useState(getEmptyValue())
@@ -38,10 +28,7 @@ export const TextEditor = ({
 
   const [isFocused, setIsFocused] = React.useState(false)
 
-  const editor = React.useMemo(
-    () => withLinks(withDeleteBackwards(withHistory(withReact(createEditor())))),
-    [],
-  )
+  const editor = React.useMemo(() => withLinks(withDeleteBackwards(withHistory(withReact(createEditor())))), [])
 
   function resetEditor() {
     editor.selection = {
@@ -60,14 +47,11 @@ export const TextEditor = ({
   // }, [value])
 
   // Synchronize the value whenever the props value changes.
-  React.useEffect(
-    () => {
-      resetEditor()
-      setValue(valueFromProps || getEmptyValue())
-      setOriginalValue(valueFromProps || getEmptyValue())
-    },
-    [valueFromProps]
-  )
+  React.useEffect(() => {
+    resetEditor()
+    setValue(valueFromProps || getEmptyValue())
+    setOriginalValue(valueFromProps || getEmptyValue())
+  }, [valueFromProps])
 
   return (
     <TextEditorContext.Provider
@@ -80,11 +64,7 @@ export const TextEditor = ({
         value,
       }}
     >
-      <Slate
-        editor={editor}
-        value={value}
-        onChange={setValue}
-      >
+      <Slate editor={editor} value={value} onChange={setValue}>
         <div className={classes.editor}>
           <Input />
           <ButtonPanel />
@@ -93,7 +73,6 @@ export const TextEditor = ({
     </TextEditorContext.Provider>
   )
 }
-
 
 TextEditor.propTypes = {
   /** If `true` the content cannot be edited */
@@ -108,6 +87,5 @@ TextEditor.propTypes = {
    */
   onSave: PropTypes.func,
 }
-
 
 export default TextEditor

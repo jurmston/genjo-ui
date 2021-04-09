@@ -12,66 +12,34 @@ import { useSlate } from 'slate-react'
 import ClosableDialogTitle from '../ClosableDialogTitle'
 import { insertLink } from './utils'
 
-
-export const LinkDialog = ({
-  isOpen,
-  onClose,
-  text: textFromProps = '',
-  url: urlFromProps = '',
-  onSave,
-  linkInfo,
-}) => {
+export const LinkDialog = ({ isOpen, onClose, text: textFromProps = '', url: urlFromProps = '', onSave, linkInfo }) => {
   const [text, setText] = React.useState('')
   const [url, setUrl] = React.useState('')
 
   const editor = useSlate()
 
-  React.useEffect(
-    () => {
-      setText(textFromProps)
-      setUrl(urlFromProps)
-    },
-    [isOpen, textFromProps, urlFromProps]
-  )
+  React.useEffect(() => {
+    setText(textFromProps)
+    setUrl(urlFromProps)
+  }, [isOpen, textFromProps, urlFromProps])
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={onClose}
-      maxWidth="xs"
-      fullWidth
-    >
+    <Dialog open={isOpen} onClose={onClose} maxWidth="xs" fullWidth>
       <ClosableDialogTitle onClose={onClose}>Edit Link</ClosableDialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-
           <Grid item xs={12}>
-            <TextField
-              variant="filled"
-              label="Text"
-              value={text}
-              onChange={event => setText(event.target.value)}
-            />
+            <TextField variant="filled" label="Text" value={text} onChange={event => setText(event.target.value)} />
           </Grid>
 
           <Grid item xs={12}>
-            <TextField
-              variant="filled"
-              label="URL"
-              value={url}
-              onChange={event => setUrl(event.target.value)}
-            />
+            <TextField variant="filled" label="URL" value={url} onChange={event => setUrl(event.target.value)} />
           </Grid>
-
         </Grid>
       </DialogContent>
 
       <DialogActions>
-        <Button
-          onClick={onClose}
-        >
-          Cancel
-        </Button>
+        <Button onClick={onClose}>Cancel</Button>
 
         <Button
           disabled={!url}
@@ -89,6 +57,4 @@ export const LinkDialog = ({
   )
 }
 
-LinkDialog.propTypes = {
-
-}
+LinkDialog.propTypes = {}

@@ -8,7 +8,6 @@ export default {
   component: AddressField,
 }
 
-
 export const Primary = () => {
   const [value, setValue] = React.useState('')
   const [components, setComponents] = React.useState({})
@@ -22,7 +21,7 @@ export const Primary = () => {
           onAddressComponentsChange={setComponents}
           label="Primary Address"
         />
-        <div style={{ marginTop: 32}} />
+        <div style={{ marginTop: 32 }} />
         {Object.entries(components).map((component, index) => (
           <Typography key={index}>{`${component[0]}: ${component[1]}`}</Typography>
         ))}

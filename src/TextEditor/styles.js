@@ -1,13 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles'
 
-
 export const useStyles = makeStyles(theme => ({
   editor: {
     overflow: 'hidden',
     position: 'relative',
-    border: props => !props.readOnly
-      ? `1px solid ${theme.palette.divider}`
-      : 'none',
+    border: props => (!props.readOnly ? `1px solid ${theme.palette.divider}` : 'none'),
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.background.default,
     outline: 'none',
@@ -35,7 +32,6 @@ export const useStyles = makeStyles(theme => ({
         opacity: 1,
       },
     },
-
   },
 
   actionButton: {
@@ -72,7 +68,7 @@ export const useStyles = makeStyles(theme => ({
     marginBlockEnd: `${theme.spacing(0.5)}px`,
     '& span': {
       fontSize: theme.typography.h6.fontSize,
-    }
+    },
   },
 
   quote: {

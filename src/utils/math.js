@@ -6,7 +6,6 @@ export function safeDivide(dividend, divisor) {
   return dividend / divisor
 }
 
-
 export function minMax(min, value, max) {
   return Math.min(max, Math.max(min, value))
 }

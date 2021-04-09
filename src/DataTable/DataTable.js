@@ -25,7 +25,6 @@ const COL_DEFAULT_WIDTH = 100
 const HEIGHT_BUFFER = 7
 const INNER_BORDER_WIDTH = 2
 
-
 export const DataTable = ({
   fixedColumnCount = 0,
   height = 0,
@@ -54,12 +53,9 @@ export const DataTable = ({
 }) => {
   const [columns, setColumns] = React.useState([])
 
-  React.useEffect(
-    () => {
-      setColumns(columnsFromProps)
-    },
-    [columnsFromProps]
-  )
+  React.useEffect(() => {
+    setColumns(columnsFromProps)
+  }, [columnsFromProps])
 
   // Compute the basic dimensions for the grids.
   const hasScrollbar = (height - 2 * rowHeight) / rowHeight < rowCount
@@ -78,10 +74,7 @@ export const DataTable = ({
     totalGridRef?.current?.resetAfterColumnIndex(0, true)
   }
 
-  const {
-    getColumnWidth,
-    widths,
-  } = useResizableColumns({
+  const { getColumnWidth, widths } = useResizableColumns({
     containerWidth: width,
     columns,
     minWidth: COL_MIN_WIDTH,
@@ -90,12 +83,9 @@ export const DataTable = ({
     hasScrollbar,
   })
 
-  React.useEffect(
-    () => {
-      updateGrid()
-    },
-    [width, widths, updateGrid, subtotalField, sortBy]
-  )
+  React.useEffect(() => {
+    updateGrid()
+  }, [width, widths, updateGrid, subtotalField, sortBy])
 
   const [hoveredState, setHoveredState] = React.useState([-1, -1])
 
@@ -127,11 +117,7 @@ export const DataTable = ({
   function handleDrag(event, { deltaX }) {
     setDragInfo({
       ...dragInfo,
-      currentWidth: minMax(
-        COL_MIN_WIDTH,
-        dragInfo.currentWidth + deltaX,
-        COL_MAX_WIDTH,
-      ),
+      currentWidth: minMax(COL_MIN_WIDTH, dragInfo.currentWidth + deltaX, COL_MAX_WIDTH),
     })
   }
 
@@ -168,11 +154,7 @@ export const DataTable = ({
       }}
     >
       <div className={classes.root}>
-
-        <div
-          className={classes.headerGridContainer}
-          onMouseLeave={() => setHoveredState([-1, -1])}
-        >
+        <div className={classes.headerGridContainer} onMouseLeave={() => setHoveredState([-1, -1])}>
           <VariableSizeGrid
             className={clsx(classes.noScrollbars)}
             columnCount={columns.length + 1}
@@ -201,9 +183,7 @@ export const DataTable = ({
               height={dataGridHeight}
               rowCount={rowCount}
               rowHeight={index => {
-                return getSubtotalData(index)
-                  ? 3 * rowHeight
-                  : rowHeight
+                return getSubtotalData(index) ? 3 * rowHeight : rowHeight
               }}
               width={width}
               ref={dataGridRef}
@@ -213,10 +193,7 @@ export const DataTable = ({
               {DataCell}
             </VariableSizeGrid>
           ) : (
-            <div
-              className={classes.loadingContainer}
-              style={{ height: dataGridHeight }}
-            >
+            <div className={classes.loadingContainer} style={{ height: dataGridHeight }}>
               <CircleLoader size={64} />
             </div>
           )}
@@ -249,14 +226,11 @@ export const DataTable = ({
             }}
           />
         )}
-
       </div>
     </TableContext.Provider>
   )
 }
 
-DataTable.propTypes = {
-
-}
+DataTable.propTypes = {}
 
 export default DataTable

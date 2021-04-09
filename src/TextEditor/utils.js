@@ -1,19 +1,15 @@
 import isUrl from 'is-url'
 import { Editor, Transforms, Point, Range, Element, Value } from 'slate'
 
-
 /** Returns a new empty slate value */
 export function getEmptyValue() {
   return [
     {
       type: 'paragraph',
-      children: [
-        { text: '' },
-      ],
+      children: [{ text: '' }],
     },
   ]
 }
-
 
 /**
  * Adds backspace command to editor
@@ -33,10 +29,7 @@ export const withDeleteBackwards = editor => {
         const [block, path] = match
         const start = Editor.start(editor, path)
 
-        if (
-          block.type !== 'paragraph' &&
-          Point.equals(selection.anchor, start)
-        ) {
+        if (block.type !== 'paragraph' && Point.equals(selection.anchor, start)) {
           Transforms.setNodes(editor, { type: 'paragraph' })
 
           if (block.type === 'list-item') {
@@ -57,15 +50,12 @@ export const withDeleteBackwards = editor => {
   return editor
 }
 
-
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
-
 
 /** Returns `true` if the block is active. */
 export function isBlockActive(editor, block) {
   const [match] = Editor.nodes(editor, {
-    match: n =>
-      !Editor.isEditor(n) && Element.isElement(n) && n.type === block,
+    match: n => !Editor.isEditor(n) && Element.isElement(n) && n.type === block,
   })
 
   return Boolean(match)
@@ -130,20 +120,15 @@ export function insertDivider(editor) {
   Transforms.insertNodes(editor, paragraph)
 }
 
-
 export function getCurrentNodeType(editor) {
   const { selection } = editor
   const currentNode = editor.children[selection.anchor.path[0]]
   return currentNode?.type
 }
 
-
 export function getCurrentWord(editor) {
   const text = Editor.string(editor, [])
   return text.substr(text.lastIndexOf(' ') + 1)
 }
 
-
-export function insertLink() {
-
-}
+export function insertLink() {}

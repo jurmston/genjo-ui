@@ -16,10 +16,7 @@ export const Primary = () => {
 
   return (
     <>
-      <TextEditor
-        value={parsedValue}
-        onSave={newValue => setValue(JSON.stringify(newValue))}
-      />
+      <TextEditor value={parsedValue} onSave={newValue => setValue(JSON.stringify(newValue))} />
 
       <div style={{ marginBottom: 32 }} />
 

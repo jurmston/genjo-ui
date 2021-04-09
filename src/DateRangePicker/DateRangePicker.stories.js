@@ -11,10 +11,5 @@ export default {
 export const Primary = () => {
   const [value, setValue] = React.useState(null)
 
-  return (
-    <DateRangePicker
-      value={value}
-      onChange={setValue}
-    />
-  )
+  return <DateRangePicker value={value} onChange={setValue} />
 }

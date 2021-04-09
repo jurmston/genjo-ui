@@ -31,11 +31,7 @@ export const ClosableDialogTitle = ({ children, onClose, ...other }) => {
         {children}
       </Typography>
       {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
         </IconButton>
       ) : null}

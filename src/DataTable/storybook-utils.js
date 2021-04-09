@@ -1,24 +1,13 @@
 import randomWords from 'random-words'
 import { DateTime } from 'luxon'
 
-
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-
-const TEST_DISCIPLINES = [
-  'Engineering',
-  'Local Government',
-  'Homeowner',
-  'Architect',
-  'Developer',
-  'Interiors',
-]
-
-
+const TEST_DISCIPLINES = ['Engineering', 'Local Government', 'Homeowner', 'Architect', 'Developer', 'Interiors']
 
 export const testDataColumnSet = [
   {
@@ -68,12 +57,10 @@ export const testDataColumnSet = [
     format: '',
     width: 200,
   },
-
 ]
 
 const BASE_TIMESTAMP = DateTime.fromISO('2018-02-01')
 const DIFF_MILLIS = -BASE_TIMESTAMP.diffNow('milliseconds')
-
 
 export function createDataTableTestData(count = 1000) {
   const names = randomWords(count)
@@ -88,7 +75,7 @@ export function createDataTableTestData(count = 1000) {
       size: { value: 0, label: 'Average', type: 'number' },
       modified: { value: null, label: 'Lastest', type: 'datetime' },
       is_active: { value: 0, label: 'Active Count', type: 'number' },
-    }
+    },
   }
 
   for (let i = 0; i < count; i += 1) {
@@ -119,12 +106,12 @@ export function createDataTableTestData(count = 1000) {
     metaData.totals.size.value += (record.size - metaData.totals.size.value) / (i + 1)
     metaData.totals.is_active.value += +record.is_active
 
-    metaData.totals.modified.value = i === 0
-      ? newModified.toISO()
-      : newModified > DateTime.fromISO(metaData.totals.modified.value)
-      ? newModified.toISO()
-      : metaData.totals.modified.value
-
+    metaData.totals.modified.value =
+      i === 0
+        ? newModified.toISO()
+        : newModified > DateTime.fromISO(metaData.totals.modified.value)
+        ? newModified.toISO()
+        : metaData.totals.modified.value
   }
 
   // Create discipline subtotal data
@@ -159,7 +146,7 @@ export function createDataTableTestData(count = 1000) {
           count: 0,
           size: 0,
           modified: record.modified,
-        }
+        },
       }
 
       subtotalIndex += 1
@@ -175,11 +162,12 @@ export function createDataTableTestData(count = 1000) {
     disciplines[key].subtotals.is_active += +record.is_active
 
     const newModified = DateTime.fromISO(record.modified)
-    disciplines[key].subtotals.modified = i === 0
-      ? newModified.toISO()
-      : newModified > DateTime.fromISO(disciplines[key].subtotals.modified)
-      ? newModified.toISO()
-      : disciplines[key].subtotals.modified
+    disciplines[key].subtotals.modified =
+      i === 0
+        ? newModified.toISO()
+        : newModified > DateTime.fromISO(disciplines[key].subtotals.modified)
+        ? newModified.toISO()
+        : disciplines[key].subtotals.modified
   }
 
   return {
@@ -187,10 +175,9 @@ export function createDataTableTestData(count = 1000) {
     metaData,
     subtotals: {
       discipline: disciplines,
-    }
+    },
   }
 }
-
 
 export const companiesDefaultColumnSet = {
   name: 'Default View',
@@ -277,9 +264,8 @@ export const companiesDefaultColumnSet = {
       total: 'latest',
       align: 'right',
     },
-  ]
+  ],
 }
-
 
 export const companyColumnSetSchema = {
   created: {
@@ -390,5 +376,4 @@ export const companyColumnSetSchema = {
     title: 'Count',
     type: 'number',
   },
-
 }

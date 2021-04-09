@@ -22,14 +22,7 @@ function convertStringMaskToArray(stringMask = '') {
   })
 }
 
-
-export const AutoFormattedTextField = ({
-  mask = '',
-  value = '',
-  onChange,
-  autoFormat = false,
-  ...textFieldProps
-}) => {
+export const AutoFormattedTextField = ({ mask = '', value = '', onChange, autoFormat = false, ...textFieldProps }) => {
   const [isAutoFormatting, setIsAutoFormatting] = React.useState(autoFormat)
 
   function handleChange(event) {
@@ -41,13 +34,9 @@ export const AutoFormattedTextField = ({
 
     const formattedMask = convertStringMaskToArray(mask)
 
-    const result = conformToMask(
-      rawValue,
-      formattedMask,
-      {
-        guide: false,
-      },
-    )
+    const result = conformToMask(rawValue, formattedMask, {
+      guide: false,
+    })
 
     return onChange(event, result?.conformedValue ?? '')
   }
@@ -61,17 +50,11 @@ export const AutoFormattedTextField = ({
         ...textFieldProps.InputProps,
         endAdornment: autoFormat && (
           <InputAdornment position="end">
-            <Tooltip
-              arrow
-              title={isAutoFormatting
-                ? 'Turn auto-formatting OFF'
-                : 'Turn auto-formatting ON'
-              }
-            >
+            <Tooltip arrow title={isAutoFormatting ? 'Turn auto-formatting OFF' : 'Turn auto-formatting ON'}>
               <IconButton
                 onClick={() => setIsAutoFormatting(!isAutoFormatting)}
                 color={isAutoFormatting ? 'primary' : 'default'}
-                >
+              >
                 <AutoAwesomeIcon />
               </IconButton>
             </Tooltip>

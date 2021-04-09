@@ -10,8 +10,6 @@ import CheckIcon from '@material-ui/icons/Check'
 
 import { colors as themeColors, colorsMain } from '../styles/colors'
 
-
-
 const useMenuStyles = makeStyles({
   popover: {
     marginTop: 4,
@@ -63,23 +61,14 @@ const usePickerStyles = makeStyles({
 /**
  * Button for selecting the picker color.
  */
-const ColorPickerButton = ({
-  checked,
-  color = themeColors.blueGrey[500],
-  label = '',
-  onClick,
-}) => {
+const ColorPickerButton = ({ checked, color = themeColors.blueGrey[500], label = '', onClick }) => {
   const classes = useButtonStyles({
     color,
   })
 
   return (
     <Tooltip title={label}>
-      <IconButton
-        onClick={onClick}
-        className={classes.button}
-        aria-label={label}
-      >
+      <IconButton onClick={onClick} className={classes.button} aria-label={label}>
         {checked && <CheckIcon />}
       </IconButton>
     </Tooltip>
@@ -87,13 +76,7 @@ const ColorPickerButton = ({
 }
 
 /** Popover menu for selecting a color. */
-const ColorPickerMenu = ({
-  anchor,
-  close,
-  onChange,
-  value,
-  colors,
-}) => {
+const ColorPickerMenu = ({ anchor, close, onChange, value, colors }) => {
   const classes = useMenuStyles()
 
   return (
@@ -114,27 +97,15 @@ const ColorPickerMenu = ({
     >
       <div className={classes.picker}>
         {colors.map(color => (
-          <ColorPickerButton
-            key={color}
-            color={color}
-            onClick={() => onChange(color)}
-            checked={value === color}
-          />
+          <ColorPickerButton key={color} color={color} onClick={() => onChange(color)} checked={value === color} />
         ))}
       </div>
     </Popover>
   )
 }
 
-
 /** Input for selecting color values. */
-const ColorPicker = ({
-  id,
-  value = themeColors.blueGrey[500],
-  onChange,
-  label,
-  colors = colorsMain,
-}) => {
+const ColorPicker = ({ id, value = themeColors.blueGrey[500], onChange, label, colors = colorsMain }) => {
   const classes = usePickerStyles()
 
   const [anchor, setAnchor] = React.useState(null)
@@ -142,11 +113,7 @@ const ColorPicker = ({
   const close = () => setAnchor(null)
 
   return (
-    <div
-      id={id}
-      className={classes.root}
-      aria-label={label}
-    >
+    <div id={id} className={classes.root} aria-label={label}>
       <div>
         <ColorPickerButton
           color={value}
@@ -204,10 +171,6 @@ ColorPicker.propTypes = {
   value: PropTypes.string,
 }
 
-export {
-  ColorPicker,
-  ColorPickerButton,
-  ColorPickerMenu,
-}
+export { ColorPicker, ColorPickerButton, ColorPickerMenu }
 
 export default ColorPicker

@@ -13,7 +13,6 @@ import IconButton from '@material-ui/core/IconButton'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 
-
 const propTypes = {
   /** Update callback */
   onChange: PropTypes.func.isRequired,
@@ -45,7 +44,6 @@ const defaultProps = {
 }
 
 const isTooShort = (password, minLength) => password.length < minLength
-
 
 export class PasswordField extends React.Component {
   state = {
@@ -83,7 +81,7 @@ export class PasswordField extends React.Component {
         isValid,
         score,
       },
-      () => onChange(password, isValid),
+      () => onChange(password, isValid)
     )
   }
 
@@ -159,24 +157,12 @@ export class PasswordField extends React.Component {
                   {textFieldProps.InputProps?.endAdornment}
                   <InputAdornment position="end">
                     {detectPasswordStrength && !!value.length && (
-                      <Typography
-                        variant="caption"
-                        noWrap
-                        color="textSecondary"
-                      >
-                        {passwordIsTooShort
-                          ? tooShortMessage
-                          : scoreMessages[score]}
+                      <Typography variant="caption" noWrap color="textSecondary">
+                        {passwordIsTooShort ? tooShortMessage : scoreMessages[score]}
                       </Typography>
                     )}
-                    <IconButton
-                      onClick={this.togglePasswordVisibility}
-                      tabIndex={-1}
-                    >
-                      {passwordIsVisible
-                        ? <VisibilityIcon />
-                        : <VisibilityOffIcon />
-                      }
+                    <IconButton onClick={this.togglePasswordVisibility} tabIndex={-1}>
+                      {passwordIsVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
                     </IconButton>
                   </InputAdornment>
                 </>
@@ -190,23 +176,22 @@ export class PasswordField extends React.Component {
           {detectPasswordStrength && (
             <div style={{ width: '100%', marginTop: 0 }}>
               <LinearProgress
-                color={score >= 3
-                  ? 'success'
-                  : score === 2
-                  ? 'info'
-                  : score === 1
-                  ? 'warning'
-                  : value.length
-                  ? 'error'
-                  : 'primary'
-
+                color={
+                  score >= 3
+                    ? 'success'
+                    : score === 2
+                    ? 'info'
+                    : score === 1
+                    ? 'warning'
+                    : value.length
+                    ? 'error'
+                    : 'primary'
                 }
                 variant="determinate"
                 value={score * 25}
                 style={{
                   borderBottomLeftRadius: 4,
                   borderBottomRightRadius: 4,
-
                 }}
               />
             </div>

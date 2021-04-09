@@ -8,21 +8,14 @@ import { toggleMark } from './utils'
 import { Element } from './Element'
 import { Leaf } from './Leaf'
 
-
 const HOTKEYS = {
   'mod+b': 'bold',
   'mod+i': 'italic',
   'mod+shift+x': 'strikeThrough',
 }
 
-
 export const Input = () => {
-
-  const {
-    classes,
-    readOnly,
-    setIsFocused,
-  } = useTextEditor()
+  const { classes, readOnly, setIsFocused } = useTextEditor()
 
   const editor = useSlate()
   const renderElement = React.useCallback(props => <Element {...props} />, [])

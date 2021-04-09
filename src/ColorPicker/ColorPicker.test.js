@@ -4,7 +4,6 @@ import { render, screen } from '@testing-library/react'
 import { ColorPicker } from './ColorPicker'
 
 describe('Testing <ColorPicker />...', () => {
-
   it('should render with accessible label', () => {
     render(<ColorPicker id="test" label="Picker" onChange={() => {}} />)
     screen.getByLabelText('Picker')

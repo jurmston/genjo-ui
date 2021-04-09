@@ -13,7 +13,6 @@ import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
 
 import ThemeContext from './ThemeContext'
 
-
 // This needs to be used to prevent a bug with @emotion using the :first-child
 // psuedo selectors
 // See: https://github.com/mui-org/material-ui/issues/24894
@@ -25,7 +24,6 @@ const cache = createCache({
 
 cache.compat = true
 
-
 /**
  * Provides the app with a change-able MUI theme.
  */
@@ -34,25 +32,16 @@ export const ThemeProvider = ({ theme: themeFromProps = null, children }) => {
 
   const muiTheme = createTheme(theme)
 
-  React.useEffect(
-    () => {
-      setTheme(themeFromProps ?? defaultTheme)
-    },
-    [themeFromProps]
-  )
+  React.useEffect(() => {
+    setTheme(themeFromProps ?? defaultTheme)
+  }, [themeFromProps])
 
   return (
     <StyledEngineProvider injectFirst>
-      <MuiThemeProvider
-        theme={createTheme(theme)}
-      >
+      <MuiThemeProvider theme={createTheme(theme)}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <ThemeContext.Provider
-          value={{ muiTheme, theme, setTheme }}
-        >
-          {children}
-        </ThemeContext.Provider>
+        <ThemeContext.Provider value={{ muiTheme, theme, setTheme }}>{children}</ThemeContext.Provider>
       </MuiThemeProvider>
     </StyledEngineProvider>
   )

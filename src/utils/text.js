@@ -26,9 +26,11 @@ export function titleCase({ value = '', prefixes = [], uppers = [], lowers = [] 
       // 1. The prefix must be at least 2 characters long
       // 2. The target word must be longer than the prefix
       if (prefix.length >= 2 && lowerWord.length > prefix.length && lowerWord.startsWith(lowerPrefix)) {
-        return prefix
-          + lowerWord[prefix.length].toUpperCase()  // Captialize the remaining word
-          + lowerWord.slice(prefix.length + 1) // Append the remaining characters
+        return (
+          prefix +
+          lowerWord[prefix.length].toUpperCase() + // Captialize the remaining word
+          lowerWord.slice(prefix.length + 1)
+        ) // Append the remaining characters
       }
     }
 

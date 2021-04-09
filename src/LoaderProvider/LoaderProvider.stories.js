@@ -8,7 +8,6 @@ export default {
   component: LoaderProvider,
 }
 
-
 const TriggerLoaderButton = () => {
   const loader = useLoader()
 
@@ -24,9 +23,7 @@ const TriggerLoaderButton = () => {
   )
 }
 
-
 export const Main = () => {
-
   return (
     <LoaderProvider>
       <TriggerLoaderButton />

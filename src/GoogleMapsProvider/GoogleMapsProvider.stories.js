@@ -10,12 +10,10 @@ import GoogleMapsProvider from './GoogleMapsProvider'
 
 import { GoogleMapsWrapper } from '../../.storybook/components/GoogleMapsWrapper'
 
-
 export default {
   title: 'Providers/GoogleMapsProvider',
   component: GoogleMapsProvider,
 }
-
 
 export const Primary = () => {
   const [values, setValues] = React.useState({
@@ -33,7 +31,6 @@ export const Primary = () => {
   })
   const addressRef = React.useRef()
   const [address, setAddress] = React.useState('')
-
 
   function handleSearchResult(result) {
     const newValues = Object.keys(values).reduce((acc, key) => {
@@ -55,10 +52,7 @@ export const Primary = () => {
       <div style={{ width: 300 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <SearchLocationsField
-              placeholder="Search for an address..."
-              onChange={handleSearchResult}
-            />
+            <SearchLocationsField placeholder="Search for an address..." onChange={handleSearchResult} />
           </Grid>
 
           <Grid item xs={12}>
@@ -72,46 +66,32 @@ export const Primary = () => {
           </Grid>
 
           <Grid item xs={12}>
-              <Typography>
-                {`Street Address: ${values.streetAddress}`}
-              </Typography>
-            </Grid>
+            <Typography>{`Street Address: ${values.streetAddress}`}</Typography>
+          </Grid>
 
-            <Grid item xs={12}>
-              <Typography>
-                {`City: ${values.city}`}
-              </Typography>
-            </Grid>
+          <Grid item xs={12}>
+            <Typography>{`City: ${values.city}`}</Typography>
+          </Grid>
 
-            <Grid item xs={12}>
-              <Typography>
-                {`County: ${values.county}`}
-              </Typography>
-            </Grid>
+          <Grid item xs={12}>
+            <Typography>{`County: ${values.county}`}</Typography>
+          </Grid>
 
-            <Grid item xs={12}>
-              <Typography>
-                {`State: ${values.state}`}
-              </Typography>
-            </Grid>
+          <Grid item xs={12}>
+            <Typography>{`State: ${values.state}`}</Typography>
+          </Grid>
 
-            <Grid item xs={12}>
-              <Typography>
-                {`Zip Code: ${values.postalCode}`}
-              </Typography>
-            </Grid>
+          <Grid item xs={12}>
+            <Typography>{`Zip Code: ${values.postalCode}`}</Typography>
+          </Grid>
 
-            <Grid item xs={12}>
-              <Typography>
-                {`Country: ${values.country}`}
-              </Typography>
-            </Grid>
+          <Grid item xs={12}>
+            <Typography>{`Country: ${values.country}`}</Typography>
+          </Grid>
 
-            <Grid item xs={12}>
-              <Typography>
-                {`Geo: ${values.latitude ?? '-'}, ${values.longitude ?? '-'} (${values.geohash})`}
-              </Typography>
-            </Grid>
+          <Grid item xs={12}>
+            <Typography>{`Geo: ${values.latitude ?? '-'}, ${values.longitude ?? '-'} (${values.geohash})`}</Typography>
+          </Grid>
         </Grid>
       </div>
     </GoogleMapsWrapper>

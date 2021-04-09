@@ -8,11 +8,12 @@ https://codepen.io/danielmorosan/pen/XmYBVx
 Huge thanks to @tobiasahlin at http://tobiasahlin.com/spinkit/ */
 const useStyles = makeStyles(theme => ({
   ball: {
-    backgroundColor: props => props.variant === 'primary'
-      ? theme.palette.primary.main
-      : props.variant === 'secondary'
-      ? theme.palette.secondary.main
-      : theme.palette.grey[500]
+    backgroundColor: props =>
+      props.variant === 'primary'
+        ? theme.palette.primary.main
+        : props.variant === 'secondary'
+        ? theme.palette.secondary.main
+        : theme.palette.grey[500],
   },
   bounce1: {},
   bounce2: {},

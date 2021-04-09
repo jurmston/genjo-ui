@@ -24,16 +24,13 @@ const useStyles = makeStyles(theme => ({
     width: 0,
   },
   dropzone: {
-    height: props => props.isResponsive ? '100%' : 250,
-    width: props => props.isResponsive ? '100%' : 250,
+    height: props => (props.isResponsive ? '100%' : 250),
+    width: props => (props.isResponsive ? '100%' : 250),
     padding: 16,
     border: props =>
-      props.isDragging
-        ? `2px solid ${theme.palette.primary.main}`
-        : `2px solid ${theme.palette.grey[300]}`,
+      props.isDragging ? `2px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.grey[300]}`,
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: props =>
-      props.isDragging ? theme.palette.primary[50] : theme.palette.grey[100],
+    backgroundColor: props => (props.isDragging ? theme.palette.primary[50] : theme.palette.grey[100]),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -182,31 +179,21 @@ const Dropzone = ({
     }
   }
 
-  const IconComponent = errors?.length
-    ? WarningIcon
-    : isImage
-    ? PhotoIcon
-    : DescriptionIcon
+  const IconComponent = errors?.length ? WarningIcon : isImage ? PhotoIcon : DescriptionIcon
 
   return (
-    <ButtonBase
-      ref={containerRef}
-      className={classes.dropzone}
-      onClick={focusInput}
-    >
-      {isLoading ? (
-        <CircleLoader size={48} />
-      ) : (
-        <IconComponent className={classes.dropzoneIcon} />
-      )}
+    <ButtonBase ref={containerRef} className={classes.dropzone} onClick={focusInput}>
+      {isLoading ? <CircleLoader size={48} /> : <IconComponent className={classes.dropzoneIcon} />}
 
       <Spacer axis="vertical" size={16} />
 
-      {errors?.length ? errors.map((error, index) => (
-        <Typography key={index} color="error" align="center">
-          {`Error with ${error[0]}: ${error[1]?.message || 'Error'}`}
-        </Typography>
-      )) : (
+      {errors?.length ? (
+        errors.map((error, index) => (
+          <Typography key={index} color="error" align="center">
+            {`Error with ${error[0]}: ${error[1]?.message || 'Error'}`}
+          </Typography>
+        ))
+      ) : (
         <Typography color="textSecondary" align="center">
           {isLoading ? 'Uploading files...' : label}
         </Typography>

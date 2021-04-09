@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography'
 
 import * as icons from './index'
 
-
 export default {
   title: 'Icons/Icons',
 }
@@ -13,7 +12,6 @@ export default {
 export const Primary = () => {
   return (
     <Grid container spacing={2}>
-
       {Object.entries(icons).map(([title, IconComponent]) => (
         <Grid key={title} item xs={3}>
           <Grid container spacing={1} alignItems="center" justifyContent="center" direction="column">
@@ -27,7 +25,6 @@ export const Primary = () => {
           </Grid>
         </Grid>
       ))}
-
     </Grid>
   )
 }

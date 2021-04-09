@@ -7,32 +7,22 @@ import DialogContent from '@material-ui/core/DialogContent'
 import CircleLoader from '../CircleLoader'
 import LoaderContext from './LoaderContext'
 
-
 export const LoaderProvider = ({ children }) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [message, setMessage] = React.useState('')
 
-  const close = React.useCallback(
-    () => setIsOpen(false),
-    [],
-  )
+  const close = React.useCallback(() => setIsOpen(false), [])
 
-  const open = React.useCallback(
-    messageValue => {
-      setMessage(messageValue)
-      setIsOpen(true)
-    },
-    [],
-  )
+  const open = React.useCallback(messageValue => {
+    setMessage(messageValue)
+    setIsOpen(true)
+  }, [])
 
-  const clearMessage = React.useCallback(
-    () => {
-      if (!isOpen) {
-        setMessage('')
-      }
-    },
-    [isOpen],
-  )
+  const clearMessage = React.useCallback(() => {
+    if (!isOpen) {
+      setMessage('')
+    }
+  }, [isOpen])
 
   return (
     <LoaderContext.Provider

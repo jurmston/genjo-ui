@@ -8,47 +8,40 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Icon from '@material-ui/core/Icon'
 
-
 const useStyles = makeStyles(theme => ({
   listItem: {
-    color: props => props.isSelected
-      ? theme.palette.primary.main
-      : theme.palette.text.secondary,
+    color: props => (props.isSelected ? theme.palette.primary.main : theme.palette.text.secondary),
     position: 'relative',
-    paddingLeft: props => props.isSubmenu
-      ? 48
-      : 16,
-    backgroundColor: props => props.isSelected && props.isSubmenu
-      ? theme.palette.primary[50]
-      : props.isSelected
-      ? theme.palette.grey[200]
-      : props.isSubmenu
-      ? theme.palette.grey[200]
-      : 'transparent',
+    paddingLeft: props => (props.isSubmenu ? 48 : 16),
+    backgroundColor: props =>
+      props.isSelected && props.isSubmenu
+        ? theme.palette.primary[50]
+        : props.isSelected
+        ? theme.palette.grey[200]
+        : props.isSubmenu
+        ? theme.palette.grey[200]
+        : 'transparent',
     '&:hover': {
-      backgroundColor: props => props.isSelected
-      ? theme.palette.grey[300]
-      : props.isSubmenu
-      ? theme.palette.grey[300]
-      : theme.palette.grey[300],
+      backgroundColor: props =>
+        props.isSelected
+          ? theme.palette.grey[300]
+          : props.isSubmenu
+          ? theme.palette.grey[300]
+          : theme.palette.grey[300],
       '&:active': {
         backgroundColor: theme.palette.primary[50],
       },
     },
   },
   listItemIcon: {
-    color: props => props.isSelected
-      ? theme.palette.primary.main
-      : theme.palette.text.secondary,
+    color: props => (props.isSelected ? theme.palette.primary.main : theme.palette.text.secondary),
   },
   /** Styles applied to `CircularProgress`. */
   loader: {
     color: theme.palette.text.secondary,
   },
   arrow: {
-    color: props => props.isHovered
-      ? theme.palette.primary.main
-      : theme.palette.text.secondary,
+    color: props => (props.isHovered ? theme.palette.primary.main : theme.palette.text.secondary),
   },
 }))
 
@@ -104,25 +97,20 @@ export const MenuPanelItem = ({
       >
         {(!!icon || isLoading) && !isSubmenu && (
           <ListItemIcon className={classes.listItemIcon}>
-            {isLoading ? (
-              <CircularProgress
-                className={classes.loader}
-                size={16}
-              />
-            ) : icon}
+            {isLoading ? <CircularProgress className={classes.loader} size={16} /> : icon}
           </ListItemIcon>
         )}
         <ListItemText
-          primary={tag ? (
-            <>
-              <span style={{ marginRight: 8 }}>{title}</span>
-              <Chip
-                size="small"
-                label={tag}
-                color="primary"
-              />
-            </>
-          ) : title}
+          primary={
+            tag ? (
+              <>
+                <span style={{ marginRight: 8 }}>{title}</span>
+                <Chip size="small" label={tag} color="primary" />
+              </>
+            ) : (
+              title
+            )
+          }
           primaryTypographyProps={{
             color: 'inherit',
             display: 'inline',
@@ -137,22 +125,19 @@ export const MenuPanelItem = ({
               right: 8,
             }}
           >
-            {isOpen ? (
-              <Icon>arrow_downward</Icon>
-            ) : (
-              <Icon>arrow_forward</Icon>
-            )}
+            {isOpen ? <Icon>arrow_downward</Icon> : <Icon>arrow_forward</Icon>}
           </div>
         )}
       </ListItem>
-      {isOpen && submenuItems.map((child, index) => React.cloneElement(
-        child,
-        {
-          isSubmenu: true,
-          isLast: index === submenuItems.length - 1,
-        }),
-        // sub-MenuPanelItem children are not rendered
-      )}
+      {isOpen &&
+        submenuItems.map(
+          (child, index) =>
+            React.cloneElement(child, {
+              isSubmenu: true,
+              isLast: index === submenuItems.length - 1,
+            })
+          // sub-MenuPanelItem children are not rendered
+        )}
     </>
   )
 }

@@ -12,12 +12,7 @@ export const Main = () => {
 
   return (
     <div style={{ width: 300 }}>
-      <DateField
-        label="Start Date"
-        variant="filled"
-        value={value}
-        onChange={setValue}
-      />
+      <DateField label="Start Date" variant="filled" value={value} onChange={setValue} />
     </div>
   )
 }

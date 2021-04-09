@@ -3,22 +3,21 @@ import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Tabs from '@material-ui/core/Tabs'
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.mode === 'light' ? '#eee' : theme.palette.divider,
     borderRadius: theme.shape.borderRadius,
-    minHeight: 44
+    minHeight: 44,
   },
   flexContainer: {
     display: 'inline-flex',
     position: 'relative',
-    zIndex: 1
+    zIndex: 1,
   },
   scroller: {
     [theme.breakpoints.up('md')]: {
       padding: '0 8px',
-    }
+    },
   },
   indicator: {
     top: 3,
@@ -37,9 +36,8 @@ const useStyles = makeStyles(theme => ({
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.mode === 'light' ? '#fff' : theme.palette.action.selected,
       boxShadow: '0 4px 12px 0 rgba(0,0,0,0.16)',
-    }
+    },
   },
-
 }))
 
 export const ButtonTabs = props => {

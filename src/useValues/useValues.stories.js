@@ -22,7 +22,7 @@ function getInitialValues() {
 export const Primary = () => {
   const [initialValues, setInitialValues] = React.useState({
     name: 'Bob',
-    description: 'Monkeys'
+    description: 'Monkeys',
   })
 
   const { values, setFieldValue, resetValues, isDirty } = useValues(initialValues)
@@ -34,13 +34,8 @@ export const Primary = () => {
   return (
     <div style={{ width: 300 }}>
       <Grid container spacing={2}>
-
         <Grid item xs={12}>
-          <TextField
-            label="Name"
-            value={values.name}
-            onChange={event => setFieldValue('name', event.target.value)}
-          />
+          <TextField label="Name" value={values.name} onChange={event => setFieldValue('name', event.target.value)} />
         </Grid>
 
         <Grid item xs={12}>
@@ -52,41 +47,26 @@ export const Primary = () => {
         </Grid>
 
         <Grid item xs={12}>
-
           <Grid container spacing={1} alignItems="center">
-
             <Grid item>
-              <Button
-                disabled={!isDirty}
-                variant="contained"
-                onClick={() => resetValues()}
-              >
+              <Button disabled={!isDirty} variant="contained" onClick={() => resetValues()}>
                 Reset
               </Button>
             </Grid>
 
             <Grid item>
-              <Button
-                disabled={!isDirty}
-                variant="contained"
-                onClick={() => saveValues()}
-              >
+              <Button disabled={!isDirty} variant="contained" onClick={() => saveValues()}>
                 Save
               </Button>
             </Grid>
 
             <Grid item>
-              <Button
-                variant="contained"
-                onClick={() => setInitialValues(getInitialValues())}
-              >
+              <Button variant="contained" onClick={() => setInitialValues(getInitialValues())}>
                 Get new initial values
               </Button>
             </Grid>
           </Grid>
-
         </Grid>
-
       </Grid>
     </div>
   )

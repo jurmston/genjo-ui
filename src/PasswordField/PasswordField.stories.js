@@ -25,5 +25,4 @@ export const Main = () => {
   )
 }
 
-Main.args = {
-}
+Main.args = {}

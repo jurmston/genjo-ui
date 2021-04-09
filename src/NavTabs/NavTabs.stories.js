@@ -14,13 +14,10 @@ export const Primary = () => {
   const [tab, setTab] = React.useState(0)
 
   return (
-    <NavTabs
-      value={tab}
-      onChange={(event, newTab) => setTab(newTab)}
-    >
+    <NavTabs value={tab} onChange={(event, newTab) => setTab(newTab)}>
       <NavTab label="Home" />
       <NavTab label="Projects" />
-      <NavTab label="People"  />
+      <NavTab label="People" />
       <NavTab label="Contracts" />
       <NavTab label="Address Book" />
       <NavTab label="Settings" />

@@ -19,7 +19,6 @@ import grey from '@material-ui/core/colors/grey'
 import blueGrey from '@material-ui/core/colors/blueGrey'
 import common from '@material-ui/core/colors/common'
 
-
 export const colors = {
   amber,
   blue,
@@ -43,7 +42,6 @@ export const colors = {
   yellow,
 }
 
-
 export const colorsMain = [
   colors.red[500],
   colors.pink[500],
@@ -64,7 +62,6 @@ export const colorsMain = [
   colors.brown[500],
   colors.blueGrey[500],
 ]
-
 
 export const colorsLight = [
   colors.red[200],

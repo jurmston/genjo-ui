@@ -4,8 +4,8 @@
  * @param {string} filename
  * @return {string} Extension of input filename
  */
- function getFileExtension(filename) {
-  if (!filename || typeof(filename) !== 'string') {
+function getFileExtension(filename) {
+  if (!filename || typeof filename !== 'string') {
     return ''
   }
   return filename.slice().split('.').pop().toLowerCase()
@@ -46,8 +46,4 @@ function bytesToSize(bytes) {
   return `${Math.round(bytes / BYTES[unit])} ${unit}`
 }
 
-export {
-  getFileExtension,
-  sizeToBytes,
-  bytesToSize,
-}
+export { getFileExtension, sizeToBytes, bytesToSize }

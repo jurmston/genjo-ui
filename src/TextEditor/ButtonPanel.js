@@ -20,130 +20,121 @@ import LinkIcon from '@material-ui/icons/Link'
 
 import { useTextEditor } from './context'
 import { ActionButton } from './ActionButton'
-import {
-  toggleMark,
-  toggleBlock,
-  isBlockActive,
-  isMarkActive,
-  insertDivider,
-  insertLink,
-  isLinkActive,
-} from './utils'
+import { toggleMark, toggleBlock, isBlockActive, isMarkActive, insertDivider, insertLink, isLinkActive } from './utils'
 import { LinkDialog } from './LinkDialog'
-
-
 
 const MARK_FORMATS = [
   { value: 'bold', icon: FormatBoldIcon, label: 'Bold' },
   { value: 'italic', icon: FormatItalicIcon, label: 'Italic' },
-  { value: 'strikethrough', icon: FormatStrikethroughIcon, label: 'Strikethrough' },
+  {
+    value: 'strikethrough',
+    icon: FormatStrikethroughIcon,
+    label: 'Strikethrough',
+  },
 ]
 
 const BLOCK_FORMATS = [
   { value: 'heading-one', icon: LooksOneIcon, label: 'Heading 1' },
   { value: 'heading-two', icon: LooksTwoIcon, label: 'Heading 2' },
   { value: 'block-quote', icon: FormatQuoteIcon, label: 'Quote' },
-  { value: 'numbered-list', icon: FormatListNumberedIcon, label: 'Numbered List' },
-  { value: 'bulleted-list', icon: FormatListBulletedIcon, label: 'Bulletted List' },
+  {
+    value: 'numbered-list',
+    icon: FormatListNumberedIcon,
+    label: 'Numbered List',
+  },
+  {
+    value: 'bulleted-list',
+    icon: FormatListBulletedIcon,
+    label: 'Bulletted List',
+  },
 ]
 
-
 export const ButtonPanel = () => {
-
   const [linkInfo, setLinkInfo] = React.useState(null)
 
-  const {
-    classes,
-    isFocused,
-    onSave,
-    isDirty,
-    handleSave,
-  } = useTextEditor()
+  const { classes, isFocused, onSave, isDirty, handleSave } = useTextEditor()
 
   const editor = useSlate()
 
   return (
-    <div
-      className={clsx(classes.buttons, isFocused && classes.isFocused)}
-    >
-        {/* Marks */}
-        {MARK_FORMATS.map(mark => (
-          <ActionButton
-            key={mark.value}
-            isActive={isMarkActive(editor, mark.value)}
-            value={mark.value}
-            label={mark.label}
-            icon={mark.icon}
-            onMouseDown={event => {
-              event.preventDefault()
-              toggleMark(editor, mark.value)
-            }}
-          />
-        ))}
-
-        {/* Blocks */}
-        {BLOCK_FORMATS.map(block => (
-          <ActionButton
-            key={block.value}
-            isActive={isBlockActive(editor, block.value)}
-            value={block.value}
-            label={block.label}
-            icon={block.icon}
-            onMouseDown={event => {
-              event.preventDefault()
-              toggleBlock(editor, block.value)
-            }}
-          />
-        ))}
-
-        {/* Link Button */}
+    <div className={clsx(classes.buttons, isFocused && classes.isFocused)}>
+      {/* Marks */}
+      {MARK_FORMATS.map(mark => (
         <ActionButton
-          icon={LinkIcon}
-          label="Add Link"
+          key={mark.value}
+          isActive={isMarkActive(editor, mark.value)}
+          value={mark.value}
+          label={mark.label}
+          icon={mark.icon}
           onMouseDown={event => {
             event.preventDefault()
-            const { selection } = editor
-            setLinkInfo({ selection })
+            toggleMark(editor, mark.value)
           }}
         />
+      ))}
 
-        {/* Divider button */}
+      {/* Blocks */}
+      {BLOCK_FORMATS.map(block => (
         <ActionButton
-          icon={ViewAgendaIcon}
-          label="Add Divider"
+          key={block.value}
+          isActive={isBlockActive(editor, block.value)}
+          value={block.value}
+          label={block.label}
+          icon={block.icon}
           onMouseDown={event => {
             event.preventDefault()
-            insertDivider(editor)
+            toggleBlock(editor, block.value)
           }}
         />
+      ))}
 
-        <div style={{ flex: 1 }} />
+      {/* Link Button */}
+      <ActionButton
+        icon={LinkIcon}
+        label="Add Link"
+        onMouseDown={event => {
+          event.preventDefault()
+          const { selection } = editor
+          setLinkInfo({ selection })
+        }}
+      />
 
-        {Boolean(isDirty) && (
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.saveButton}
-            onMouseDown={event => {
-              event.preventDefault()
-              handleSave()
+      {/* Divider button */}
+      <ActionButton
+        icon={ViewAgendaIcon}
+        label="Add Divider"
+        onMouseDown={event => {
+          event.preventDefault()
+          insertDivider(editor)
+        }}
+      />
 
-            }}
-          >
-            Save
-          </Button>
-        )}
+      <div style={{ flex: 1 }} />
 
-        <LinkDialog
-          isOpen={Boolean(linkInfo)}
-          onSave={(url, text) => {
-            if (!linkInfo?.selection) return
-            insertLink(editor, linkInfo?.selection, url, text)
-            setLinkInfo(null)
+      {Boolean(isDirty) && (
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.saveButton}
+          onMouseDown={event => {
+            event.preventDefault()
+            handleSave()
           }}
-          linkInfo={linkInfo}
-          onClose={() => setLinkInfo(null)}
-        />
+        >
+          Save
+        </Button>
+      )}
+
+      <LinkDialog
+        isOpen={Boolean(linkInfo)}
+        onSave={(url, text) => {
+          if (!linkInfo?.selection) return
+          insertLink(editor, linkInfo?.selection, url, text)
+          setLinkInfo(null)
+        }}
+        linkInfo={linkInfo}
+        onClose={() => setLinkInfo(null)}
+      />
     </div>
   )
 }

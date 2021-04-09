@@ -12,7 +12,6 @@ import Grid from '@material-ui/core/Grid'
 
 import { DateTime, Duration } from 'luxon'
 
-
 const DateTimeRangeField = ({
   start: startFromProps,
   end: endFromProps,
@@ -23,22 +22,16 @@ const DateTimeRangeField = ({
   helperText = '',
   error = false,
 }) => {
-  const start = (startFromProps && !startFromProps.invalid
-    ? startFromProps
-    : DateTime.local().startOf('hour')
-  ).startOf('minute')
+  const start = (startFromProps && !startFromProps.invalid ? startFromProps : DateTime.local().startOf('hour')).startOf(
+    'minute'
+  )
 
-  const end = (endFromProps && !endFromProps.invalid
-    ? endFromProps
-    : start.plus({ hours: 1 })
-  ).startOf('minute')
+  const end = (endFromProps && !endFromProps.invalid ? endFromProps : start.plus({ hours: 1 })).startOf('minute')
 
   const duration = end.diff(start)
 
   const hasNegativeDuration = duration < 0
-  const durationToAdd = hasNegativeDuration
-    ? Duration.fromObject({ hours: 1 })
-    : duration
+  const durationToAdd = hasNegativeDuration ? Duration.fromObject({ hours: 1 }) : duration
 
   // If the duration is less than an hour, display the time in minutes
   // If the duraction is less than a day, display the time in hours
@@ -151,7 +144,7 @@ const DateTimeRangeField = ({
               {durationString}
             </Typography>
           </InputAdornment>
-        )
+        ),
       }}
     />
   )
@@ -227,9 +220,7 @@ const DateTimeRangeField = ({
       />
       */}
 
-      {Boolean(helperText) && (
-        <FormHelperText>{helperText}</FormHelperText>
-      )}
+      {Boolean(helperText) && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   )
 }

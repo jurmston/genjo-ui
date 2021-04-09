@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button'
 
 import { ClosableDialogTitle } from '../ClosableDialogTitle/ClosableDialogTitle'
 
-
 export const ConfirmationDialog = ({
   isOpen,
   onClose,
@@ -19,12 +18,7 @@ export const ConfirmationDialog = ({
   confirmText = 'Yes, do it',
 }) => {
   return (
-    <Dialog
-      fullWidth
-      maxWidth="xs"
-      open={isOpen}
-      onClose={onClose}
-    >
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <ClosableDialogTitle onClose={onClose}>{title}</ClosableDialogTitle>
       {Boolean(message) && (
         <DialogContent>
@@ -33,9 +27,7 @@ export const ConfirmationDialog = ({
       )}
 
       <DialogActions>
-        <Button onClick={onClose}>
-          {cancelText}
-        </Button>
+        <Button onClick={onClose}>{cancelText}</Button>
 
         <Button onClick={onConfirm} color="primary" variant="contained">
           {confirmText}

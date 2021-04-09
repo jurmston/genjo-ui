@@ -26,9 +26,7 @@ const COMPONENTS = new Set([
   'subpremise',
 ])
 
-const SHORT_NAME_COMPONENTS = new Set([
-  'country', 'adminstrative_area_level_1',
-])
+const SHORT_NAME_COMPONENTS = new Set(['country', 'adminstrative_area_level_1'])
 
 export function parseGeocoderResults(results) {
   const place = results?.[0]
@@ -70,7 +68,6 @@ export function parseGeocoderResults(results) {
   }
 }
 
-
 export function getFormattedAddress({
   streetAddress = '',
   city = '',
@@ -81,10 +78,7 @@ export function getFormattedAddress({
   subpremise = '',
   includeCountry = false,
 }) {
-
-  const formattedCode = postalCodeSuffix && postalCode
-    ? `${postalCode}-${postalCodeSuffix}`
-    : postalCode
+  const formattedCode = postalCodeSuffix && postalCode ? `${postalCode}-${postalCodeSuffix}` : postalCode
 
   const sepStreetSubpremise = streetAddress && subpremise ? ' ' : ''
   const sepCityState = city && state ? ', ' : ''
@@ -94,7 +88,9 @@ export function getFormattedAddress({
     `${streetAddress}${sepStreetSubpremise}${subpremise}`,
     `${city}${sepCityState}${state}${sepStatePostalCode}${postalCode}`,
     includeCountry ? country : '',
-  ].filter(x => x).join('\n')
+  ]
+    .filter(x => x)
+    .join('\n')
 
   return result
 }

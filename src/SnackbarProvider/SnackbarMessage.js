@@ -20,41 +20,23 @@ function getMessageDuration(text = '') {
   return Math.max(Math.min(text.length * MS_PER_CHARACTER, MAX_DURATION), MIN_DURATION)
 }
 
-
 export const SnackbarMessage = ({ text, type, kill, shouldMakeRoom }) => {
   const [isOnScreen, setIsOnScreen] = React.useState(true)
   const [isFullHeight, setIsFullHeight] = React.useState(true)
 
   // On mount, start a timeout for the calculated duration of the message.
-  React.useEffect(
-    () => {
-      const interval = setTimeout(
-        () => {
-          setIsOnScreen(false)
-        },
-        getMessageDuration(text),
-      )
+  React.useEffect(() => {
+    const interval = setTimeout(() => {
+      setIsOnScreen(false)
+    }, getMessageDuration(text))
 
-      return () => clearTimeout(interval)
-    },
-    []
-  )
+    return () => clearTimeout(interval)
+  }, [])
 
   return (
-    <Collapse
-      in={isFullHeight}
-      onExited={() => kill()}
-    >
-      <Slide
-        in={isOnScreen && !shouldMakeRoom}
-        direction="right"
-        onExited={() => setIsFullHeight(false)}
-      >
-        <Alert
-          style={{ marginTop: 8, maxWidth: 300 }}
-          onClose={() => setIsOnScreen(false)}
-          severity={type}
-        >
+    <Collapse in={isFullHeight} onExited={() => kill()}>
+      <Slide in={isOnScreen && !shouldMakeRoom} direction="right" onExited={() => setIsFullHeight(false)}>
+        <Alert style={{ marginTop: 8, maxWidth: 300 }} onClose={() => setIsOnScreen(false)} severity={type}>
           {text}
         </Alert>
       </Slide>

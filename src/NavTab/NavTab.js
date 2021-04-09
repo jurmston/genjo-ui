@@ -1,11 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles'
 import Tab from '@material-ui/core/Tab'
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     '&:hover': {
-      opacity: 1
+      opacity: 1,
     },
     display: 'flex',
     flexDirection: 'column',

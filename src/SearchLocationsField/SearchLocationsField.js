@@ -14,7 +14,6 @@ import { colors } from '../styles'
 import useDebounce from '../useDebounce'
 import { parseGeocoderResults } from '../utils/geo'
 
-
 const useStyles = makeStyles({
   // input: {
   //   ...theme.typography.subtitle1,
@@ -29,11 +28,7 @@ const useStyles = makeStyles({
   },
 })
 
-
-export const SearchLocationsField = ({
-  onChange,
-  ...textFieldProps
-}) => {
+export const SearchLocationsField = ({ onChange, ...textFieldProps }) => {
   const classes = useStyles()
   const [options, setOptions] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(false)
@@ -43,7 +38,6 @@ export const SearchLocationsField = ({
 
   const [inputValue, setInputValue] = React.useState('')
   const debouncedInputValue = useDebounce(inputValue)
-
 
   /**
    * Passes a selected AutocompleteService value into the
@@ -72,7 +66,6 @@ export const SearchLocationsField = ({
     }
   }
 
-
   /**
    * Renders an AutocompleteService result.
    * @param {*} props
@@ -80,7 +73,7 @@ export const SearchLocationsField = ({
    * @returns
    */
   function renderOption(props, option) {
-    if (typeof (option) === 'string') {
+    if (typeof option === 'string') {
       return (
         <Typography variant="body2" color="textSecondary">
           {option}
@@ -90,9 +83,7 @@ export const SearchLocationsField = ({
 
     return (
       <li {...props}>
-        <Typography variant="body2">
-          {option.structured_formatting.main_text}
-        </Typography>
+        <Typography variant="body2">{option.structured_formatting.main_text}</Typography>
 
         <Typography style={{ marginLeft: 8 }} variant="caption" color="textSecondary">
           {option.structured_formatting.secondary_text}
@@ -100,7 +91,6 @@ export const SearchLocationsField = ({
       </li>
     )
   }
-
 
   // Synchronize calls to the AutocompleteService with changes
   // to the debounced input.
@@ -131,7 +121,6 @@ export const SearchLocationsField = ({
     }
   }, [debouncedInputValue, getPlacePredictions])
 
-
   return (
     <Autocomplete
       getOptionLabel={option => (typeof option === 'string' ? option : option.description)}
@@ -145,9 +134,7 @@ export const SearchLocationsField = ({
       forcePopupIcon={false}
       loading={isLoading}
       noOptionsText={
-        inputValue
-          ? 'Start typing to search for a matching address.'
-          : 'Could not find a matching address.'
+        inputValue ? 'Start typing to search for a matching address.' : 'Could not find a matching address.'
       }
       filterSelectedOptions
       onChange={handlePlaceChange}
@@ -166,7 +153,7 @@ export const SearchLocationsField = ({
               <InputAdornment position="start">
                 <SearchIcon />
               </InputAdornment>
-            )
+            ),
           }}
           inputProps={{
             ...params.inputProps,

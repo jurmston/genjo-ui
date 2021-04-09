@@ -11,22 +11,11 @@ export default {
 export const Primary = () => {
   const [color, setColor] = React.useState(colors.blue[500])
 
-  return (
-    <ColorPicker
-      value={color}
-      onChange={setColor}
-    />
-  )
+  return <ColorPicker value={color} onChange={setColor} />
 }
 
 export const Secondary = () => {
   const [color, setColor] = React.useState(colors.blue[200])
 
-  return (
-    <ColorPicker
-      value={color}
-      onChange={setColor}
-      colors={colorsLight}
-    />
-  )
+  return <ColorPicker value={color} onChange={setColor} colors={colorsLight} />
 }

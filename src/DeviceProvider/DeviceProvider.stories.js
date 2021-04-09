@@ -7,28 +7,32 @@ export default {
   component: DeviceProvider,
 }
 
-
 const ShowDeviceInfo = () => {
-  const {
-    width,
-    isMobile,
-    orientation,
-    mode,
-  } = useDevice()
+  const { width, isMobile, orientation, mode } = useDevice()
 
   return (
     <div>
-      <Typography><strong>Width: </strong>{width}</Typography>
-      <Typography><strong>Is Mobile?: </strong>{isMobile ? 'Yes' : 'No'}</Typography>
-      <Typography><strong>Orientation: </strong>{orientation}</Typography>
-      <Typography><strong>Mode: </strong>{mode}</Typography>
+      <Typography>
+        <strong>Width: </strong>
+        {width}
+      </Typography>
+      <Typography>
+        <strong>Is Mobile?: </strong>
+        {isMobile ? 'Yes' : 'No'}
+      </Typography>
+      <Typography>
+        <strong>Orientation: </strong>
+        {orientation}
+      </Typography>
+      <Typography>
+        <strong>Mode: </strong>
+        {mode}
+      </Typography>
     </div>
   )
 }
 
-
 export const Main = () => {
-
   return (
     <DeviceProvider>
       <ShowDeviceInfo />

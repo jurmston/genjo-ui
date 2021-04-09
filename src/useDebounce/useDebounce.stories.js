@@ -14,9 +14,9 @@ export default {
         min: 100,
         max: 2000,
         step: 10,
-      }
-    }
-  }
+      },
+    },
+  },
 }
 
 export const Primary = ({ ...args }) => {
@@ -25,11 +25,7 @@ export const Primary = ({ ...args }) => {
 
   return (
     <div style={{ width: 300 }}>
-      <TextField
-        label="Seach Query"
-        value={value}
-        onChange={event => setValue(event.target.value)}
-      />
+      <TextField label="Seach Query" value={value} onChange={event => setValue(event.target.value)} />
 
       <Typography>{`Query to search: ${debouncedValue}`}</Typography>
     </div>

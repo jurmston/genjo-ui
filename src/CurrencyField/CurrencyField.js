@@ -5,7 +5,6 @@ import NumberFormat from 'react-number-format'
 import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 
-
 const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, ref) {
   const { onChange, maxPlaces, fixedDecimalPlaces, ...other } = props
 
@@ -13,7 +12,7 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(props, r
     <NumberFormat
       {...other}
       getInputRef={ref}
-      onValueChange={(values) => {
+      onValueChange={values => {
         onChange({
           target: {
             value: values.value,
@@ -34,23 +33,14 @@ NumberFormatCustom.propTypes = {
   fixedDecimalPlaces: PropTypes.bool,
 }
 
-
-export const CurrencyField = ({
-  symbol = '$',
-  maxPlaces = 2,
-  fixedDecimalPlaces = true,
-  ...textFieldProps
-}) => {
-
+export const CurrencyField = ({ symbol = '$', maxPlaces = 2, fixedDecimalPlaces = true, ...textFieldProps }) => {
   return (
     <TextField
       {...textFieldProps}
       InputProps={{
         ...textFieldProps.InputProps,
         inputComponent: NumberFormatCustom,
-        startAdornment: (
-          <InputAdornment position="start">{symbol}</InputAdornment>
-        )
+        startAdornment: <InputAdornment position="start">{symbol}</InputAdornment>,
       }}
       inputProps={{
         ...textFieldProps.inputProps,
@@ -62,7 +52,6 @@ export const CurrencyField = ({
         },
       }}
     />
-
   )
 }
 

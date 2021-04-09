@@ -6,17 +6,15 @@ import { AppBar } from './components/AppBar'
 import { MenuPanel } from './components/MenuPanel'
 import { UserMenu } from './components/UserMenu'
 
-
 const MENU_CLOSED_WIDTH = 21
 const MENU_OPEN_WIDTH = 256
 const APP_BAR_HEIGHT = 48
-
 
 const useStyles = makeStyles({
   main: {
     position: 'fixed',
     top: APP_BAR_HEIGHT,
-    left: props => (!props.hasMenu || props.isMobile) ? 0 : props.menuIsOpen ? MENU_OPEN_WIDTH : MENU_CLOSED_WIDTH,
+    left: props => (!props.hasMenu || props.isMobile ? 0 : props.menuIsOpen ? MENU_OPEN_WIDTH : MENU_CLOSED_WIDTH),
     right: 0,
     bottom: 0,
     overflowY: 'auto',
@@ -25,9 +23,7 @@ const useStyles = makeStyles({
   },
 })
 
-
 export const ShellContext = React.createContext()
-
 
 /**
  * Content wrapper for public website.
@@ -50,52 +46,30 @@ export const Shell = ({
   const classes = useStyles({ hasMenu, menuIsOpen })
 
   // Synchronize document title
-  React.useEffect(
-    () => {
-      document.title = title
+  React.useEffect(() => {
+    document.title = title
 
-      return () => document.title = defaultTitle
-    },
-    [title]
-  )
+    return () => (document.title = defaultTitle)
+  }, [title])
 
   // Load the shell with the default menu content.
-  React.useEffect(
-    () => {
-      if (defaultMenuContent) {
-        setMenuContent(defaultMenuContent)
-      }
-    },
-    [defaultMenuContent]
-  )
+  React.useEffect(() => {
+    if (defaultMenuContent) {
+      setMenuContent(defaultMenuContent)
+    }
+  }, [defaultMenuContent])
 
   return (
     <ShellContext.Provider value={{ setMenuContent, setTitle }}>
-      <AppBar
-        logo={logo}
-        brandName={brandName}
-        userMenu={
-          <UserMenu
-            user={user}
-          >
-            {userMenuContent}
-          </UserMenu>
-        }
-      >
+      <AppBar logo={logo} brandName={brandName} userMenu={<UserMenu user={user}>{userMenuContent}</UserMenu>}>
         {appBarContent}
       </AppBar>
 
-      <MenuPanel
-        isOpen={menuIsOpen}
-        setIsOpen={setMenuIsOpen}
-        hasContent={Boolean(menuContent)}
-      >
+      <MenuPanel isOpen={menuIsOpen} setIsOpen={setMenuIsOpen} hasContent={Boolean(menuContent)}>
         {menuContent}
       </MenuPanel>
 
-      <main className={classes.main}>
-        {children}
-      </main>
+      <main className={classes.main}>{children}</main>
     </ShellContext.Provider>
   )
 }
@@ -110,10 +84,9 @@ export const useShell = ({ title = '', menuContent = null }) => {
     },
     // This effect should only be called once.
     // eslint-disable-next-line
-    [],
+    []
   )
 }
-
 
 /** HOC to wrap pages with Shell */
 export const withShell = (Component, shellProps) => {
@@ -125,7 +98,6 @@ export const withShell = (Component, shellProps) => {
 
   return WrappedComponent
 }
-
 
 Shell.propTypes = {
   /** Content inside the shell. */

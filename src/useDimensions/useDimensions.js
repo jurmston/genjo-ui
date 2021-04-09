@@ -35,51 +35,47 @@ export function useDimensions(isResponsive = true) {
 
   const [node, setNode] = React.useState(null)
 
-  const ref = React.useCallback(
-    node => setNode(node),
-    [],
-  )
+  const ref = React.useCallback(node => setNode(node), [])
 
-  React.useEffect(
-    () => {
-      let isActive = true
+  React.useEffect(() => {
+    let isActive = true
 
-      if (node) {
-        const measure = () => {
-          if (isActive) {
-            window.requestAnimationFrame(() => {
-              setDimensions(getNodeDimensions(node))
-            })
-          }
-        }
-
-        isActive && measure()
-
-        let remeasure
-        if (isResponsive) {
-          window.addEventListener('resize', measure)
-          window.addEventListener('scroll', measure, true)
-
-          // TODO(jeff): there is a weird glitch where the
-          // initial dimensions are slightly different and the
-          // hook doesn't catch it. This hack causes a manual
-          // remeasure after a reasonable time but is pretty
-          // damn hacky.
-          remeasure = setTimeout(measure, 100)
-        }
-
-        return () => {
-          isActive = false
-          window.removeEventListener('resize', measure)
-          window.removeEventListener('resize', measure)
-          clearTimeout(remeasure)
+    if (node) {
+      const measure = () => {
+        if (isActive) {
+          window.requestAnimationFrame(() => {
+            setDimensions(getNodeDimensions(node))
+          })
         }
       }
 
-      return () => { isActive = false }
-    },
-    [ref, node, isResponsive],
-  )
+      isActive && measure()
+
+      let remeasure
+      if (isResponsive) {
+        window.addEventListener('resize', measure)
+        window.addEventListener('scroll', measure, true)
+
+        // TODO(jeff): there is a weird glitch where the
+        // initial dimensions are slightly different and the
+        // hook doesn't catch it. This hack causes a manual
+        // remeasure after a reasonable time but is pretty
+        // damn hacky.
+        remeasure = setTimeout(measure, 100)
+      }
+
+      return () => {
+        isActive = false
+        window.removeEventListener('resize', measure)
+        window.removeEventListener('resize', measure)
+        clearTimeout(remeasure)
+      }
+    }
+
+    return () => {
+      isActive = false
+    }
+  }, [ref, node, isResponsive])
 
   return [ref, dimensions, node]
 }

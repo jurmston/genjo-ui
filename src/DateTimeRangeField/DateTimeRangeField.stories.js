@@ -11,10 +11,6 @@ export const Primary = () => {
   const [values, setValues] = React.useState({ start: null, end: null })
 
   return (
-    <DateTimeRangeField
-      start={values.start}
-      end={values.end}
-      onChange={(start, end) => setValues({ start, end })}
-    />
+    <DateTimeRangeField start={values.start} end={values.end} onChange={(start, end) => setValues({ start, end })} />
   )
 }

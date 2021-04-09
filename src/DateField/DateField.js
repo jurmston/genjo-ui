@@ -11,21 +11,18 @@ import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 
 import useDimensions from '../useDimensions'
 
-
 const monthFirstFormats = [
-  'M/d/yy', 'M/d/yyyy',
-  'M/dd/yy', 'M/dd/yyyy',
-  'MM/d/yy', 'MM/d/yyyy',
-  'MM/dd/yy', 'MM/dd/yyyy',
+  'M/d/yy',
+  'M/d/yyyy',
+  'M/dd/yy',
+  'M/dd/yyyy',
+  'MM/d/yy',
+  'MM/d/yyyy',
+  'MM/dd/yy',
+  'MM/dd/yyyy',
 ]
 
-const dayFirstFormats = [
-  'd/M/yy', 'd/M/yyyy',
-  'dd/M/yy', 'dd/M/yyyy',
-  'd/MM/yy', 'd/M/yyyy',
-  'dd/MM/yy', 'dd/MM/yyyy',
-]
-
+const dayFirstFormats = ['d/M/yy', 'd/M/yyyy', 'dd/M/yy', 'dd/M/yyyy', 'd/MM/yy', 'd/M/yyyy', 'dd/MM/yy', 'dd/MM/yyyy']
 
 /** Convert an input string to a DateTime value */
 function parseInputValue(inputValue, inputFormat) {
@@ -33,9 +30,7 @@ function parseInputValue(inputValue, inputFormat) {
     return null
   }
 
-  const formats = inputFormat === 'month-first'
-    ? monthFirstFormats
-    : dayFirstFormats
+  const formats = inputFormat === 'month-first' ? monthFirstFormats : dayFirstFormats
 
   for (let format of formats) {
     const parsedValue = DateTime.fromFormat(inputValue, format)
@@ -48,7 +43,6 @@ function parseInputValue(inputValue, inputFormat) {
   return null
 }
 
-
 /** Convert a DateTime value to an input string */
 function getInputValue(value, inputFormat) {
   if (!value) {
@@ -59,7 +53,6 @@ function getInputValue(value, inputFormat) {
 
   return value.toFormat(format)
 }
-
 
 function maskInputValue(inputValue = '') {
   const sections = inputValue.split('/').slice(0, 3)
@@ -86,7 +79,6 @@ function maskInputValue(inputValue = '') {
   return parsedSections.join('/')
 }
 
-
 export const DateField = ({
   inputFormat = 'month-first',
   displayFormat = DateTime.DATE_MED,
@@ -99,13 +91,11 @@ export const DateField = ({
   const [inputValue, setInputValue] = React.useState('')
   const [pickerIsOpen, setPickerIsOpen] = React.useState(false)
 
-  const [ref, dim, ] = useDimensions()
+  const [ref, dim] = useDimensions()
 
   const pickerRef = React.useRef()
 
-  const displayValue = value
-    ? value.toLocaleString(displayFormat)
-    : ''
+  const displayValue = value ? value.toLocaleString(displayFormat) : ''
 
   function handleInputChange(event) {
     if (isEditing) {
@@ -139,25 +129,16 @@ export const DateField = ({
     }
   }
 
-  React.useEffect(
-    () => {
-      setInputValue(getInputValue(value, inputFormat))
-    },
-    [value]
-  )
+  React.useEffect(() => {
+    setInputValue(getInputValue(value, inputFormat))
+  }, [value])
 
-  React.useEffect(
-    () => {
-      pickerRef.current?.focus()
-    },
-    [pickerRef]
-  )
+  React.useEffect(() => {
+    pickerRef.current?.focus()
+  }, [pickerRef])
 
   return (
-    <div
-      style={{ position: 'relative' }}
-      ref={ref}
-    >
+    <div style={{ position: 'relative' }} ref={ref}>
       <TextField
         {...textFieldProps}
         value={isEditing ? inputValue : displayValue}
@@ -169,10 +150,7 @@ export const DateField = ({
           ...textFieldProps.InputProps,
           endAdornment: !disablePicker && (
             <InputAdornment position="end">
-              <IconButton
-                onClick={() => setPickerIsOpen(!pickerIsOpen)}
-                color={pickerIsOpen ? 'primary' : 'default'}
-              >
+              <IconButton onClick={() => setPickerIsOpen(!pickerIsOpen)} color={pickerIsOpen ? 'primary' : 'default'}>
                 <CalendarTodayIcon />
               </IconButton>
             </InputAdornment>
@@ -181,9 +159,7 @@ export const DateField = ({
       />
 
       {pickerIsOpen && (
-        <ClickAwayListener
-          onClickAway={() => setPickerIsOpen(false)}
-        >
+        <ClickAwayListener onClickAway={() => setPickerIsOpen(false)}>
           <Paper
             style={{
               left: 0,
@@ -197,7 +173,6 @@ export const DateField = ({
               onChange={newValue => {
                 onChange(newValue)
                 setPickerIsOpen(false)
-
               }}
               ref={pickerRef}
             />
