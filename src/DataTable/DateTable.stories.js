@@ -13,7 +13,7 @@ import { colors } from '../styles'
 
 import { DateTime } from 'luxon'
 
-import { createDataTableTestData, companiesDefaultColumnSet } from './storybook-utils'
+import { createDataTableTestData, companiesDefaultColumnSet, testColumns } from './storybook-utils'
 
 const TEST_DATA = createDataTableTestData(100)
 
@@ -46,14 +46,14 @@ function renderCellData(field_type, cellData) {
 
     case 'datetime': {
       return {
-        value: DateTime.fromISO(cellData).toLocaleString(DateTime.DATETIME_SHORT),
+        value: <span>{DateTime.fromISO(cellData).toLocaleString(DateTime.DATETIME_SHORT)}</span>,
         align: 'right',
       }
     }
 
     case 'date': {
       return {
-        value: DateTime.fromISO(cellData).toLocaleString(DateTime.DATE_SHORT),
+        value: <span>{DateTime.fromISO(cellData).toLocaleString(DateTime.DATE_SHORT)}</span>,
         align: 'right',
       }
     }
@@ -165,7 +165,7 @@ async function testRecordsApi({ limit = 25, offset = 0, sortBy = '' }) {
 }
 
 const PrimaryInner = () => {
-  const columns = companiesDefaultColumnSet.columns
+  const columnSet = testColumns
 
   const [tableData, setTableData] = React.useState({
     count: 0,
@@ -183,6 +183,28 @@ const PrimaryInner = () => {
     count: 0,
     totals: {},
   })
+
+
+  const [columns, setColumns] = React.useState([])
+
+  React.useEffect(
+    () => {
+      setColumns(columnSet.map(column => {
+        const result = { ...column }
+
+        if (totals[column.dataKey]) {
+          const { value: totalValue, label: totalLabel, type: totalType } = totals[column.dataKey]
+          result.totalValue = totalValue
+          result.totalLabel = totalLabel
+          result.totalType = totalType
+        }
+
+        return result
+      }))
+    },
+    [columnSet, totals]
+  )
+
 
   const [subtotalData, setSubtotalData] = React.useState({})
 
@@ -240,19 +262,30 @@ const PrimaryInner = () => {
     },
   })
 
+  // Subtotal row data:
+  //   title: {
+  //     rowType: 'title',
+  //     title: string,
+  //     count: number,
+  //   },
+  //
+  //   subtotals: {
+  //      rowType: 'subtotals',
+  //      values: {/subtotal data/},
+  //   }
   const { isLoading: isLoadingSubtotal } = useQuery(['subtotals', subtotalField], mockSubtotalsApi, {
     enabled: Boolean(subtotalField),
     onSuccess: result => {
       const subtotalRows = {}
       Object.values(result).map(subtotalGroup => {
         subtotalRows[subtotalGroup.first] = {
-          type: 'title',
-          value: subtotalGroup.title,
+          rowType: 'title',
+          title: subtotalGroup.title,
           count: subtotalGroup.last - subtotalGroup.first + 1,
         }
 
         subtotalRows[subtotalGroup.last] = {
-          type: 'subtotals',
+          rowType: 'subtotals',
           value: subtotalGroup.subtotals,
         }
       })
@@ -269,52 +302,31 @@ const PrimaryInner = () => {
 
   function getCellData(rowIndex, columnIndex) {
     const item = rows[rowIndex]
-    const { field_name, field_type } = columns?.[columnIndex] ?? {}
-    return renderCellData(field_type, item?.[field_name])
+    const { dataKey } = columns?.[columnIndex] ?? {}
+
+    return item?.[dataKey]
   }
 
   function getSubtotalData(rowIndex, columnIndex) {
     const result = subtotalData?.[rowIndex] ?? null
 
-    if (!result) {
-      return null
+    if (result?.rowType === 'title') {
+      return {
+        title: result?.title ?? '',
+        count: result?.count ?? 0,
+      }
     }
 
-    const { type, title, value } = result
-
-    if (type === 'title') {
-      return result
+    if (result?.rowType === 'subtotals') {
+      const { field_name = '' } = columns?.[columnIndex] ?? {}
+      const value = result?.values?.[field_name] ?? {}
+      return {
+        type: 'subtotals',
+        ...renderCellData(totalType, value?.[fieldName]),
+      }
     }
 
-    const { field_name: fieldName = '' } = columns?.[columnIndex] ?? {}
-    const { type: totalType = '' } = totals?.[fieldName] ?? {}
-    return {
-      type: 'subtotals',
-      ...renderCellData(totalType, value?.[fieldName]),
-    }
-  }
-
-  function getHeaderData(columnIndex) {
-    const { title = '', sort_type = '', align = 'left', field_name = '', subtotal = false } =
-      columns?.[columnIndex] ?? {}
-    return {
-      title,
-      sortType: sort_type,
-      align,
-      fieldName: field_name,
-      hasSubtotal: subtotal,
-    }
-  }
-
-  function getTotalData(columnIndex) {
-    const { field_name: fieldName = '' } = columns?.[columnIndex] ?? {}
-
-    const { value = '', label = '', type = '' } = totals?.[fieldName] ?? {}
-
-    return {
-      ...renderCellData(type, value),
-      label,
-    }
+    return null
   }
 
   function onItemsRendered({ overscanRowStartIndex, overscanRowStopIndex }) {
@@ -355,7 +367,6 @@ const PrimaryInner = () => {
         columns={columns}
         totals={totals}
         getCellData={getCellData}
-        getHeaderData={getHeaderData}
         getSubtotalData={getSubtotalData}
         rowCount={rowCount}
         selectedCells={selected}
@@ -369,7 +380,7 @@ const PrimaryInner = () => {
         setSortBy={setSortBy}
         subtotalField={subtotalField}
         setSubtotalField={setSubtotalField}
-        getTotalData={getTotalData}
+        onRowClick={(event, rowIndex) => console.log(rowIndex)}
       />
     </div>
   )

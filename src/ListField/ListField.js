@@ -14,11 +14,6 @@ import CircleLoader from '../CircleLoader'
 
 
 const useStyles = makeStyles(theme => ({
-  list: {
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.grey[50],
-    border: `1px solid ${theme.palette.divider}`,
-  },
 
   deleteButton: {
     position: 'absolute',
@@ -70,7 +65,7 @@ export const ListField = ({
         </Typography>
       )}
 
-      <List className={classes.list}>
+      <List variant="filled">
         {readOnly && items.length === 0 && !isLoading && (
           <ListItem>
             <ListItemText primary={noItemText} />

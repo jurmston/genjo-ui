@@ -419,6 +419,19 @@ export const createTheme = ({ mode, primary, secondary }) =>
           dense: true,
           disablePadding: true,
         },
+
+        variants: [
+          {
+            props: { variant: 'filled' },
+            style: {
+              borderRadius,
+              borderWidth: 1,
+              borderStyle: 'solid',
+              borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
+              backgroundColor: mode === 'light' ? colors.grey[50] : colors.grey[800],
+            },
+          }
+        ],
       },
 
       // --- LIST ITEM AVATAR

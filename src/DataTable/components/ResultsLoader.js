@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 import CircleLoader from '../../CircleLoader'
-import { useTable } from '../context'
+import useDataTable from '../useDataTable'
 
 const useStyles = makeStyles({
   root: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
 })
 
 const ResultsLoader = ({ isLoading, isFetching, count }) => {
-  const { classes } = useTable()
+  const { classes } = useDataTable()
 
   if (isLoading) {
     return (

@@ -1,0 +1,56 @@
+import { DateTime } from 'luxon'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
+import CancelIcon from '@material-ui/icons/Cancel'
+import { colors } from '../../styles'
+import NumberFormat from 'react-number-format'
+
+
+export function renderCell(field_type, value) {
+  switch (field_type) {
+    case 'currency': {
+      return (
+        <NumberFormat
+          prefix="$"
+          displayType="text"
+          value={value}
+          thousandSeparator=","
+          fixedDecimalScale
+          decimalScale={2}
+        />
+      )
+    }
+
+    case 'number': {
+      return (
+        <NumberFormat
+          displayType="text"
+          value={value}
+          thousandSeparator=","
+          decimalScale={2}
+        />
+      )
+    }
+
+    case 'datetime': {
+      return DateTime.fromISO(value).toLocaleString(DateTime.DATETIME_SHORT)
+    }
+
+    case 'date': {
+      return DateTime.fromISO(value).toLocaleString(DateTime.DATE_SHORT)
+    }
+
+    case 'bool': {
+      return value ? (
+        <CheckCircleIcon style={{ color: colors.green[500] }} />
+      ) : (
+        <CancelIcon style={{ color: colors.red[500] }} />
+      )
+    }
+
+    default: {
+      return value
+    }
+  }
+}
+
+export default renderCell

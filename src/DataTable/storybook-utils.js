@@ -73,7 +73,7 @@ export function createDataTableTestData(count = 1000) {
       amount: { value: 0, label: 'Total', type: 'currency' },
       count: { value: 0, label: 'Total', type: 'number' },
       size: { value: 0, label: 'Average', type: 'number' },
-      modified: { value: null, label: 'Lastest', type: 'datetime' },
+      modified: { value: null, label: 'Latest', type: 'datetime' },
       is_active: { value: 0, label: 'Active Count', type: 'number' },
     },
   }
@@ -90,7 +90,7 @@ export function createDataTableTestData(count = 1000) {
       website: 'https://www.exmaple.com',
       phone_number: '+1 (775) 240-9128',
       primary_contact: null,
-      amount: getRandomIntInclusive(10, 478) + getRandomIntInclusive(0, 99) / 100,
+      amount: getRandomIntInclusive(10, 234987) + getRandomIntInclusive(0, 99) / 100,
       count: getRandomIntInclusive(0, 10000),
       size: Math.random() * 100 - 50,
       modified: newModified.toISO(),
@@ -377,3 +377,43 @@ export const companyColumnSetSchema = {
     type: 'number',
   },
 }
+
+
+
+export const testColumns = [
+  {
+    dataKey: 'name',
+    type: 'string',
+    title: 'Name',
+  },
+  {
+    dataKey: 'discipline',
+    type: 'string',
+    title: 'Discipline',
+  },
+  {
+    dataKey: 'is_active',
+    type: 'bool',
+    title: 'Active',
+  },
+  {
+    dataKey: 'amount',
+    type: 'currency',
+    title: 'Amount',
+  },
+  {
+    dataKey: 'count',
+    type: 'number',
+    title: 'Count',
+  },
+  {
+    dataKey: 'size',
+    type: 'number',
+    title: 'Size',
+  },
+  {
+    dataKey: 'modified',
+    type: 'datetime',
+    title: 'Modified',
+  },
+]

@@ -8,11 +8,16 @@ export const useStyles = makeStyles(theme => ({
     // flexDirection: 'column',
     position: 'relative',
     width: '100%',
+    border: `1px solid ${theme.palette.divider}`,
+    boxSizing: 'border-box',
+    overflow: 'hidden',
+    borderRadius: theme.shape.borderRadius,
   },
 
   headerGridContainer: {
     width: '100%',
     position: 'relative',
+
   },
 
   innerBorder: {
@@ -86,7 +91,9 @@ export const useStyles = makeStyles(theme => ({
   isSelected: {},
   isSubtotalTitle: {},
   isSubtotalTotal: {},
+  isClickable: {},
   cell: {
+    outline: 'none',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -121,6 +128,10 @@ export const useStyles = makeStyles(theme => ({
       backgroundColor: colors.blueGrey[50],
     },
 
+    '&$isClickable': {
+      cursor: 'pointer',
+    },
+
     //   '&$hoveredRowCell': {
     //     backgroundColor: colors.blueGrey[100],
     //     zIndex: 9999,
@@ -150,8 +161,8 @@ export const useStyles = makeStyles(theme => ({
   isSortable: {},
   isHovered: {},
   headerCell: {
-    borderTopLeftRadius: theme.shape.borderRadius,
-    borderTopRightRadius: theme.shape.borderRadius,
+    // borderTopLeftRadius: theme.shape.borderRadius,
+    // borderTopRightRadius: theme.shape.borderRadius,
     transition: theme.transitions.create('background-color'),
     fontWeight: 700,
     color: colors.blueGrey[500],
@@ -190,7 +201,7 @@ export const useStyles = makeStyles(theme => ({
     position: 'absolute',
     opacity: 0,
     width: 4,
-    borderTopRightRadius: theme.shape.borderRadius,
+    // borderTopRightRadius: theme.shape.borderRadius,
     backgroundColor: colors.blueGrey[700],
     cursor: 'col-resize',
 
@@ -249,7 +260,7 @@ export const useStyles = makeStyles(theme => ({
   subtotalTitleText: {
     padding: 8,
     backgroundColor: theme.palette.primary[100],
-    borderTopLeftRadius: theme.shape.borderRadius,
+    // borderTopLeftRadius: theme.shape.borderRadius,
     borderTopRightRadius: theme.shape.borderRadius,
     ...theme.typography.h6,
   },

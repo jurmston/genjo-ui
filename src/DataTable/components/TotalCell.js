@@ -1,45 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import { areEqual } from 'react-window'
-import { makeStyles } from '@material-ui/core/styles'
-import { DateTime } from 'luxon'
-
-import Checkbox from '@material-ui/core/Checkbox'
-import Skeleton from '@material-ui/core/Skeleton'
-
-import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import CancelIcon from '@material-ui/icons/Cancel'
-
-
 import clsx from 'clsx'
-import { useTable } from '../context'
-import { colors } from '../../styles'
+import useDataTable from '../useDataTable'
+import renderCell from '../utils/renderCell'
 
 
-
-export const TotalCell = React.memo(
-  ({ columnIndex, rowIndex, style }) => {
+const TotalCell = React.memo(
+  ({ columnIndex, style }) => {
 
     const {
       classes,
       columns,
       onHover,
-      getTotalData,
       hoveredState,
-    } = useTable()
+    } = useDataTable()
 
+    // Render a placeholder cell if `columnIndex === 0`, i.e. the checkbox
+    // column.
     if (columnIndex === 0) {
       return (
         <div
           className={clsx(classes.totalCell, classes.isFirst)}
           style={style}
           onMouseOver={() => onHover(-1, columnIndex)}
+          onFocus={() => onHover(-1, columnIndex)}
         />
       )
     }
 
-    const { value, label, align } = getTotalData(columnIndex - 1)
+    const { align, totalType, totalValue, totalLabel } = columns[columnIndex - 1]
     const isLast = columnIndex === columns.length
 
     return (
@@ -47,14 +37,15 @@ export const TotalCell = React.memo(
         className={clsx(classes.cell, classes.totalCell, {
           [classes.isLast]: isLast,
           [classes.hoveredColumnCell]: hoveredState[1] === columnIndex,
-          [classes.hasContent]: Boolean(label),
+          [classes.hasContent]: Boolean(totalLabel),
         })}
         style={style}
         onMouseOver={() => onHover(-1, columnIndex)}
+        onFocus={() => onHover(-1, columnIndex)}
       >
         <div style={{ textAlign: align }}>
-          <div className={classes.totalLabel}>{label}</div>
-          <div>{value}</div>
+          <div className={classes.totalLabel}>{totalLabel}</div>
+          <span>{renderCell(totalType, totalValue)}</span>
         </div>
       </div>
     )
@@ -65,5 +56,10 @@ export const TotalCell = React.memo(
 )
 
 TotalCell.propTypes = {
-
+  columnIndex: PropTypes.number,
+  style: PropTypes.object,
 }
+
+TotalCell.displayName = 'TotalCell'
+
+export { TotalCell }

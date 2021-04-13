@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     width: props => (props.isResponsive ? '100%' : 250),
     padding: 16,
     border: props =>
-      props.isDragging ? `2px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.grey[300]}`,
+      props.isDragging ? `1px solid ${theme.palette.primary.main}` : `1px solid ${theme.palette.grey[300]}`,
     borderRadius: theme.shape.borderRadius,
     backgroundColor: props => (props.isDragging ? theme.palette.primary[50] : theme.palette.grey[100]),
     display: 'flex',
