@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       opacity: 1,
     },
-    minHeight: 44,
+    minHeight: 'unset',
     minWidth: 96,
     [theme.breakpoints.up('md')]: {
       minWidth: 120,
@@ -17,9 +17,6 @@ const useStyles = makeStyles(theme => ({
     // zIndex: 2,
     // marginTop: spacing(0.5),
     textTransform: 'initial',
-    '& .Mui-selected': {
-      color: theme.palette.text.primary,
-    },
   },
 }))
 

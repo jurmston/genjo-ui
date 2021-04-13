@@ -22,3 +22,5 @@ Leaf.propTypes = {
   leaf: PropTypes.any,
   children: PropTypes.node,
 }
+
+export default Leaf

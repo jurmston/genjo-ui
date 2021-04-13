@@ -1,27 +1,26 @@
 import * as React from 'react'
 
 import clsx from 'clsx'
-import { Editor, Transforms } from 'slate'
 import { useSlate } from 'slate-react'
 
 import Button from '@material-ui/core/Button'
 
 import FormatBoldIcon from '@material-ui/icons/FormatBold'
 import FormatItalicIcon from '@material-ui/icons/FormatItalic'
-import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined'
 import LooksOneIcon from '@material-ui/icons/LooksOne'
 import LooksTwoIcon from '@material-ui/icons/LooksTwo'
 import FormatQuoteIcon from '@material-ui/icons/FormatQuote'
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered'
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted'
 import FormatStrikethroughIcon from '@material-ui/icons/FormatStrikethrough'
-import ViewAgendaIcon from '@material-ui/icons/ViewAgenda'
 import LinkIcon from '@material-ui/icons/Link'
 
-import { useTextEditor } from './context'
+import useTextEditor from './useTextEditor'
 import { ActionButton } from './ActionButton'
-import { toggleMark, toggleBlock, isBlockActive, isMarkActive, insertDivider, insertLink, isLinkActive } from './utils'
+import { toggleMark, toggleBlock, isBlockActive, isMarkActive } from './utils'
 import { LinkDialog } from './LinkDialog'
+
+import { isLinkActive, unwrapLink } from './plugins/links'
 
 const MARK_FORMATS = [
   { value: 'bold', icon: FormatBoldIcon, label: 'Bold' },
@@ -50,9 +49,9 @@ const BLOCK_FORMATS = [
 ]
 
 export const ButtonPanel = () => {
-  const [linkInfo, setLinkInfo] = React.useState(null)
+  const [linkSelection, setLinkSelection] = React.useState(null)
 
-  const { classes, isFocused, onSave, isDirty, handleSave } = useTextEditor()
+  const { classes, isFocused, isDirty, handleSave } = useTextEditor()
 
   const editor = useSlate()
 
@@ -91,21 +90,15 @@ export const ButtonPanel = () => {
       {/* Link Button */}
       <ActionButton
         icon={LinkIcon}
+        isActive={isLinkActive(editor)}
         label="Add Link"
         onMouseDown={event => {
           event.preventDefault()
-          const { selection } = editor
-          setLinkInfo({ selection })
-        }}
-      />
-
-      {/* Divider button */}
-      <ActionButton
-        icon={ViewAgendaIcon}
-        label="Add Divider"
-        onMouseDown={event => {
-          event.preventDefault()
-          insertDivider(editor)
+          if (isLinkActive(editor)) {
+            unwrapLink(editor)
+          } else {
+            setLinkSelection(editor.selection)
+          }
         }}
       />
 
@@ -126,14 +119,9 @@ export const ButtonPanel = () => {
       )}
 
       <LinkDialog
-        isOpen={Boolean(linkInfo)}
-        onSave={(url, text) => {
-          if (!linkInfo?.selection) return
-          insertLink(editor, linkInfo?.selection, url, text)
-          setLinkInfo(null)
-        }}
-        linkInfo={linkInfo}
-        onClose={() => setLinkInfo(null)}
+        isOpen={Boolean(linkSelection)}
+        selection={linkSelection}
+        onClose={() => setLinkSelection(null)}
       />
     </div>
   )

@@ -63,7 +63,7 @@ function validateFile({ file, allowedExtensions, maxFileSize }) {
   }
 }
 
-const Dropzone = ({
+export const Dropzone = ({
   onChange,
   allowedExtensions: allowedExtensionsFromProps = [],
   maxFileSize = '5 M',

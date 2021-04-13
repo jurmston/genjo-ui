@@ -48,8 +48,6 @@ const SnackbarProvider = ({ maxMessages = 3, children }) => {
     }
   }, [reaper, messages])
 
-  console.log(messages)
-
   return (
     <SnackbarContext.Provider
       value={{

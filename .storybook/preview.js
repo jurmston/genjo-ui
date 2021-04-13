@@ -2,6 +2,7 @@ import React from 'react'
 import { useDarkMode } from 'storybook-dark-mode'
 import AdapterLuxon from '@material-ui/lab/AdapterLuxon'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
+import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
 import ThemeProvider from '../src/ThemeProvider'
 import { themeColors, lightTheme, darkTheme } from './theme'
 
@@ -25,11 +26,15 @@ export const decorators = [
     }
 
     return (
-      <LocalizationProvider dateAdapter={AdapterLuxon}>
-        <ThemeProvider theme={muiThemeOptions}>
-          {story()}
-        </ThemeProvider>
-      </LocalizationProvider>
+      <StyledEngineProvider injectFirst>
+
+        <LocalizationProvider dateAdapter={AdapterLuxon}>
+          <ThemeProvider theme={muiThemeOptions}>
+            {story()}
+          </ThemeProvider>
+        </LocalizationProvider>
+
+      </StyledEngineProvider>
     )
   },
 ]

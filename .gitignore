@@ -119,3 +119,4 @@ dist/
 storybook-static/
 build/
 core/
+size-snapshot.js

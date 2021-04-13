@@ -87,12 +87,6 @@ export const DateRangePicker = ({}) => {
   const hoveredStart = hoveredDay?.startOf('day')
   const hoveredEnd = hoveredDay?.endOf('day')
 
-  console.log({
-    start: start?.toLocaleString(DateTime.DATETIME_MED),
-    end: end?.toLocaleString(DateTime.DATETIME_MED),
-    currentSelection,
-  })
-
   function handleChange(newValue) {
     // Case: the first selection.
     if (currentSelection === 'none') {
@@ -164,7 +158,7 @@ export const DateRangePicker = ({}) => {
     const isInHoverRange = isFirstDayHover || isLastDayHover || isBetweenDayHover
 
     return (
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative' }} key={date.toISO()}>
         {isInHoverRange && (
           <div
             className={clsx(

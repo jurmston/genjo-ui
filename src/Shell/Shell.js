@@ -25,7 +25,6 @@ const useStyles = makeStyles({
   },
 })
 
-
 /**
  * Content wrapper for public website.
  */
@@ -74,9 +73,6 @@ export const Shell = ({
     </ShellContext.Provider>
   )
 }
-
-
-
 
 Shell.propTypes = {
   /** Content inside the shell. */

@@ -1,5 +1,4 @@
-import isUrl from 'is-url'
-import { Editor, Transforms, Point, Range, Element, Value } from 'slate'
+import { Editor, Transforms, Element } from 'slate'
 
 /** Returns a new empty slate value */
 export function getEmptyValue() {
@@ -9,45 +8,6 @@ export function getEmptyValue() {
       children: [{ text: '' }],
     },
   ]
-}
-
-/**
- * Adds backspace command to editor
- */
-export const withDeleteBackwards = editor => {
-  const { deleteBackward } = editor
-
-  editor.deleteBackward = (...args) => {
-    const { selection } = editor
-
-    if (selection && Range.isCollapsed(selection)) {
-      const match = Editor.above(editor, {
-        match: n => Editor.isBlock(editor, n),
-      })
-
-      if (match) {
-        const [block, path] = match
-        const start = Editor.start(editor, path)
-
-        if (block.type !== 'paragraph' && Point.equals(selection.anchor, start)) {
-          Transforms.setNodes(editor, { type: 'paragraph' })
-
-          if (block.type === 'list-item') {
-            Transforms.unwrapNodes(editor, {
-              match: n => LIST_TYPES.includes(!Editor.isEditor(n) && Element.isElement(n) && n.type),
-              split: true,
-            })
-          }
-
-          return
-        }
-      }
-
-      deleteBackward(...args)
-    }
-  }
-
-  return editor
 }
 
 const LIST_TYPES = ['numbered-list', 'bulleted-list']
@@ -104,21 +64,6 @@ export function toggleBlock(editor, format) {
   }
 }
 
-/** Adds a new divider block into the editor content. */
-export function insertDivider(editor) {
-  const divider = {
-    type: 'divider',
-    children: [{ text: '' }],
-  }
-
-  const paragraph = {
-    type: 'paragraph',
-    children: [{ text: '' }],
-  }
-
-  Transforms.insertNodes(editor, divider)
-  Transforms.insertNodes(editor, paragraph)
-}
 
 export function getCurrentNodeType(editor) {
   const { selection } = editor
@@ -130,5 +75,3 @@ export function getCurrentWord(editor) {
   const text = Editor.string(editor, [])
   return text.substr(text.lastIndexOf(' ') + 1)
 }
-
-export function insertLink() {}

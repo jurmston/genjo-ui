@@ -91,3 +91,38 @@ export const useStyles = makeStyles(theme => ({
     },
   },
 }))
+
+
+export const useMessageStyles = makeStyles(theme => ({
+  message: {
+    padding: 8,
+    outline: 'none',
+    ...theme.typography.body2,
+
+    '& p': {
+      marginBlockStart: 0,
+      marginBlockEnd: 0,
+    },
+
+    '& blockquote': {
+      position: 'relative',
+      marginLeft: 0,
+      marginRight: 0,
+      paddingLeft: theme.spacing(2),
+      color: theme.palette.text.secondary,
+      borderLeft: `2px solid ${theme.palette.divider}`,
+      '& span': {
+        fontSize: theme.typography.body2.fontSize,
+        fontFamily: '"Vollkorn", serif',
+      },
+    },
+
+    '& strong': {
+      fontWeight: 700,
+    },
+
+    '& h1': {
+
+    },
+  },
+}))

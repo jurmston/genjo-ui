@@ -10,11 +10,14 @@ const useStyles = makeStyles(theme => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
+    position: 'relative',
   },
-  closeButton: {
+  closeButtonContainer: {
     position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
+  },
+  closeButton: {
     color: theme.palette.text.secondary,
   },
 }))
@@ -31,9 +34,11 @@ export const ClosableDialogTitle = ({ children, onClose, ...other }) => {
         {children}
       </Typography>
       {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
-          <CloseIcon />
-        </IconButton>
+        <div className={classes.closeButtonContainer}>
+          <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+            <CloseIcon />
+          </IconButton>
+        </div>
       ) : null}
     </DialogTitle>
   )

@@ -6,20 +6,26 @@ import { withHistory } from 'slate-history'
 
 import isEqual from 'react-fast-compare'
 
-import { compose } from '../utils/functional'
-
-import { Element } from './Element'
-import { Leaf } from './Leaf'
-import { TextEditorContext } from './context'
+import TextEditorContext from './TextEditorContext'
 import { ButtonPanel } from './ButtonPanel'
 import { Input } from './Input'
 import { useStyles } from './styles'
 
-import { withDeleteBackwards, getEmptyValue } from './utils'
+import { getEmptyValue } from './utils'
 
 import { withLinks } from './plugins/links'
+import { withDeleteBackwards } from './plugins/delete-backwards'
+import { Leaf } from './Leaf'
+import { Element } from './Element'
 
-export const TextEditor = ({ readOnly = false, value: valueFromProps = null, onSave, saveOnEnter = false }) => {
+export const TextEditor = ({
+  readOnly = false,
+  value: valueFromProps = null,
+  onSave,
+  resetOnSave,
+  children,
+  variant = 'message',
+}) => {
   const classes = useStyles({ readOnly })
 
   const [value, setValue] = React.useState(getEmptyValue())
@@ -39,6 +45,11 @@ export const TextEditor = ({ readOnly = false, value: valueFromProps = null, onS
 
   function handleSave() {
     onSave?.(value)
+
+    if (resetOnSave) {
+      resetEditor()
+      setValue(getEmptyValue())
+    }
   }
   // React.useEffect(() => {
   //   if (!value) {
@@ -53,6 +64,9 @@ export const TextEditor = ({ readOnly = false, value: valueFromProps = null, onS
     setOriginalValue(valueFromProps || getEmptyValue())
   }, [valueFromProps])
 
+  const renderElement = React.useCallback(props => <Element {...props} />, [])
+  const renderLeaf = React.useCallback(props => <Leaf {...props} />, [])
+
   return (
     <TextEditorContext.Provider
       value={{
@@ -62,6 +76,8 @@ export const TextEditor = ({ readOnly = false, value: valueFromProps = null, onS
         handleSave,
         isDirty,
         value,
+        renderElement,
+        renderLeaf,
       }}
     >
       <Slate editor={editor} value={value} onChange={setValue}>
@@ -78,7 +94,7 @@ TextEditor.propTypes = {
   /** If `true` the content cannot be edited */
   readOnly: PropTypes.bool,
   /** The initial JSON value of the content */
-  value: PropTypes.string,
+  value: PropTypes.any,
   title: PropTypes.string,
   /**
    * Callback fired when the user wants the content .
@@ -86,6 +102,8 @@ TextEditor.propTypes = {
    * @param {string} value The JSON representation of the changed content.
    */
   onSave: PropTypes.func,
+  saveOnEnter: PropTypes.bool,
+  variant: PropTypes.oneOf(['message', 'post']),
 }
 
 export default TextEditor

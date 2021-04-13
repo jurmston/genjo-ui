@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import IconButton from '@material-ui/core/IconButton'
 
-import { useTextEditor } from './context'
+import useTextEditor from './useTextEditor'
 
 export const ActionButton = ({ isActive, icon: IconComponent, label, onMouseDown }) => {
   const { classes } = useTextEditor()

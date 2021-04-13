@@ -3,10 +3,12 @@ import * as React from 'react'
 import isHotkey from 'is-hotkey'
 import { Editable, ReactEditor, useSlate } from 'slate-react'
 
-import { useTextEditor } from './context'
+import useTextEditor from './useTextEditor'
 import { toggleMark } from './utils'
 import { Element } from './Element'
 import { Leaf } from './Leaf'
+
+import { useMessageStyles } from './styles'
 
 const HOTKEYS = {
   'mod+b': 'bold',
@@ -15,7 +17,9 @@ const HOTKEYS = {
 }
 
 export const Input = () => {
-  const { classes, readOnly, setIsFocused } = useTextEditor()
+  const { classes, readOnly, setIsFocused, handleSave } = useTextEditor()
+
+  const messageClasses = useMessageStyles()
 
   const editor = useSlate()
   const renderElement = React.useCallback(props => <Element {...props} />, [])
@@ -23,7 +27,7 @@ export const Input = () => {
 
   return (
     <div
-      className={classes.content}
+      className={messageClasses.message}
       onClick={() => ReactEditor.focus(editor)}
       onKeyPress={() => ReactEditor.focus(editor)}
       role="textbox"
@@ -37,6 +41,11 @@ export const Input = () => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onKeyDown={event => {
+          if (isHotkey('enter', event)) {
+            event.preventDefault()
+            return handleSave()
+          }
+
           for (const hotkey in HOTKEYS) {
             if (isHotkey(hotkey, event)) {
               event.preventDefault()

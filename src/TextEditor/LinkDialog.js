@@ -5,37 +5,40 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import TextField from '@material-ui/core/TextField'
-import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import { useSlate } from 'slate-react'
 
 import ClosableDialogTitle from '../ClosableDialogTitle'
-import { insertLink } from './utils'
+import { insertLink } from './plugins/links'
 
-export const LinkDialog = ({ isOpen, onClose, text: textFromProps = '', url: urlFromProps = '', onSave, linkInfo }) => {
-  const [text, setText] = React.useState('')
+import { Editor } from 'slate'
+
+
+export const LinkDialog = ({ isOpen, onClose, selection }) => {
   const [url, setUrl] = React.useState('')
 
   const editor = useSlate()
 
-  React.useEffect(() => {
-    setText(textFromProps)
-    setUrl(urlFromProps)
-  }, [isOpen, textFromProps, urlFromProps])
+  React.useEffect(
+    () => {
+      if (isOpen && selection) {
+        const newUrl = Editor.string(editor, selection)
+        setUrl(newUrl)
+      }
+    },
+    [isOpen, selection]
+  )
 
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="xs" fullWidth>
       <ClosableDialogTitle onClose={onClose}>Edit Link</ClosableDialogTitle>
       <DialogContent>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField variant="filled" label="Text" value={text} onChange={event => setText(event.target.value)} />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField variant="filled" label="URL" value={url} onChange={event => setUrl(event.target.value)} />
-          </Grid>
-        </Grid>
+        <TextField
+          variant="filled"
+          label="URL"
+          value={url}
+          onChange={event => setUrl(event.target.value)}
+        />
       </DialogContent>
 
       <DialogActions>
@@ -46,7 +49,7 @@ export const LinkDialog = ({ isOpen, onClose, text: textFromProps = '', url: url
           variant="contained"
           color="primary"
           onClick={() => {
-            insertLink(editor, linkInfo?.selection, url, text)
+            insertLink(editor, url, selection)
             onClose()
           }}
         >
@@ -57,4 +60,8 @@ export const LinkDialog = ({ isOpen, onClose, text: textFromProps = '', url: url
   )
 }
 
-LinkDialog.propTypes = {}
+LinkDialog.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  selection: PropTypes.object,
+}

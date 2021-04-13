@@ -53,6 +53,7 @@ module.exports = {
 
   ignorePatterns: [
     'node_modules/',
-    'storybook-static',
+    'storybook-static/',
+    'core/',
   ]
 }

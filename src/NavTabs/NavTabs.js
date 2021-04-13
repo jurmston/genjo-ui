@@ -5,6 +5,7 @@ import Tabs from '@material-ui/core/Tabs'
 const useStyles = makeStyles(theme => ({
   root: {
     minHeight: 48,
+    height: '100%',
   },
   flexContainer: {
     display: 'inline-flex',
@@ -17,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   indicator: {
-    top: 2,
+    top: 0,
     bottom: 0,
     right: 0,
     height: 'auto',
@@ -28,15 +29,15 @@ const useStyles = makeStyles(theme => ({
       position: 'absolute',
       boxSizing: 'border-box',
       top: 0,
-      left: 4,
-      right: 4,
+      left: 0,
+      right: 0,
       bottom: 0,
       borderBottom: `4px solid ${theme.palette.primary.main}`,
-      borderTopLeftRadius: theme.shape.borderRadius,
-      borderTopRightRadius: theme.shape.borderRadius,
+      // borderTopLeftRadius: theme.shape.borderRadius,
+      // borderTopRightRadius: theme.shape.borderRadius,
       // backgroundColor: theme.palette.mode === 'light' ? '#fff' : theme.palette.action.selected,
-      backgroundColor: theme.palette.primary[50],
-      // boxShadow: '0 2px 4px 0 rgba(0,0,0,0.16)',
+      backgroundColor: theme.palette.grey[50],
+      boxShadow: 'inset 1px 0 2px 0 rgba(0,0,0,0.16), inset -1px 0 2px 0 rgba(0,0,0,0.16)',
     },
   },
 }))
