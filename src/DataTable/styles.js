@@ -1,5 +1,4 @@
 import { makeStyles, alpha } from '@material-ui/core/styles'
-import scrollbarSize from 'dom-helpers/scrollbarSize'
 import { colors } from '../styles'
 
 export const useStyles = makeStyles(theme => ({
@@ -17,7 +16,8 @@ export const useStyles = makeStyles(theme => ({
   headerGridContainer: {
     width: '100%',
     position: 'relative',
-
+    boxSizing: 'border-box',
+    overflow: 'hidden',
   },
 
   innerBorder: {
@@ -41,6 +41,8 @@ export const useStyles = makeStyles(theme => ({
     flexDirectin: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    color: theme.palette.text.secondary,
+    fontSize: theme.typography.h6.fontSize,
   },
 
   /** Removes scrollbars from grid containers. */
@@ -89,7 +91,6 @@ export const useStyles = makeStyles(theme => ({
   hoveredColumnCell: {},
   hoveredRowCell: {},
   isSelected: {},
-  isSubtotalTitle: {},
   isSubtotalTotal: {},
   isClickable: {},
   cell: {
@@ -147,10 +148,6 @@ export const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.secondary[50],
     },
 
-    '&$isSubtotalTitle': {
-      borderTop: `3px solid ${theme.palette.primary[100]}`,
-    },
-
     '&$isSubtotalTotal': {
       backgroundColor: theme.palette.primary[50],
       fontWeight: 700,
@@ -160,18 +157,13 @@ export const useStyles = makeStyles(theme => ({
   // --- HEADER
   isSortable: {},
   isHovered: {},
+  isSubtotal: {},
   headerCell: {
     // borderTopLeftRadius: theme.shape.borderRadius,
     // borderTopRightRadius: theme.shape.borderRadius,
     transition: theme.transitions.create('background-color'),
     fontWeight: 700,
     color: colors.blueGrey[500],
-
-    '&:hover': {
-      '& $sortIcon': {
-        opacity: 1,
-      },
-    },
 
     '&$isSortable': {
       cursor: 'pointer',
@@ -184,6 +176,10 @@ export const useStyles = makeStyles(theme => ({
     '&$hoveredColumnCell': {
       backgroundColor: theme.palette.primary[50],
       color: theme.palette.primary[500],
+    },
+
+    '&$isSubtotal': {
+      backgroundColor: theme.palette.secondary[50],
     },
   },
 
@@ -226,11 +222,6 @@ export const useStyles = makeStyles(theme => ({
     },
   },
 
-  sortIcon: {
-    color: theme.palette.primary.main,
-    marginLeft: 4,
-  },
-
   loadingBar: {
     height: 4,
     borderBottomLeftRadius: 4,
@@ -248,6 +239,7 @@ export const useStyles = makeStyles(theme => ({
     backgroundColor: colors.blueGrey[50],
     borderBottomRightRadius: theme.shape.borderRadius,
     borderBottomLeftRadius: theme.shape.borderRadius,
+    overflow: 'hidden',
   },
 
   subtotalTitle: {
@@ -255,13 +247,13 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-end',
+    width: '100%',
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
 
   subtotalTitleText: {
-    padding: 8,
-    backgroundColor: theme.palette.primary[100],
+    paddingLeft: 8,
     // borderTopLeftRadius: theme.shape.borderRadius,
-    borderTopRightRadius: theme.shape.borderRadius,
     ...theme.typography.h6,
   },
 
@@ -271,18 +263,15 @@ export const useStyles = makeStyles(theme => ({
     color: theme.palette.grey[700],
   },
 
-  isFirst: {},
-  isLast: {},
   subtotalCell: {
-    borderTop: `2px solid ${theme.palette.primary[100]}`,
-    backgroundColor: colors.blueGrey[100],
+    borderTop: `1px solid ${theme.palette.divider}`,
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    backgroundColor: colors.blueGrey[50],
+  },
 
-    '&$isFirst': {
-      borderBottomLeftRadius: theme.shape.borderRadius,
-    },
-
-    '&iLast': {
-      borderBottomRightRadius: theme.shape.borderRadius,
-    },
+  actionButton: {
+    color: theme.palette.grey[500],
   },
 }))
+
+export default useStyles

@@ -4,11 +4,16 @@ import clsx from 'clsx'
 
 import Draggable from 'react-draggable'
 
-import useDataTable from '../useDataTable'
+import useDataTable from './useDataTable'
 
 
 export const HeaderDragHandle = ({ style, isHovered, columnIndex }) => {
-  const { classes, handleDragEnd, handleDrag, handleDragStart } = useDataTable()
+  const {
+    classes,
+    startResizing,
+    stopResizing,
+    onResize,
+  } = useDataTable()
 
   // There is an= known issue with Draggable not being complient with
   // strict mode. Here's a recommended fix.
@@ -21,9 +26,9 @@ export const HeaderDragHandle = ({ style, isHovered, columnIndex }) => {
       aria-label="Resize Column"
       position={{ x: 0 }}
       nodeRef={nodeRef}
-      onStart={event => handleDragStart(event, columnIndex - 1)}
-      onStop={handleDragEnd}
-      onDrag={handleDrag}
+      onStart={() => startResizing(columnIndex)}
+      onStop={() => stopResizing()}
+      onDrag={(event, { deltaX }) => onResize(deltaX)}
     >
       <div
         ref={nodeRef}

@@ -1,10 +1,15 @@
 import React from 'react'
+import { addDecorator } from '@storybook/react'
+import { withPerformance } from 'storybook-addon-performance'
 import { useDarkMode } from 'storybook-dark-mode'
 import AdapterLuxon from '@material-ui/lab/AdapterLuxon'
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
 import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
 import ThemeProvider from '../src/ThemeProvider'
 import { themeColors, lightTheme, darkTheme } from './theme'
+
+
+addDecorator(withPerformance)
 
 
 export const parameters = {

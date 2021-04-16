@@ -5,30 +5,32 @@ import { colors } from '../../styles'
 import NumberFormat from 'react-number-format'
 
 
-export function renderCell(field_type, value) {
-  switch (field_type) {
+export function renderCell(type, value) {
+  switch (type) {
     case 'currency': {
-      return (
-        <NumberFormat
-          prefix="$"
-          displayType="text"
-          value={value}
-          thousandSeparator=","
-          fixedDecimalScale
-          decimalScale={2}
-        />
-      )
+      return value
+      // return (
+      //   <NumberFormat
+      //     prefix="$"
+      //     displayType="text"
+      //     value={value}
+      //     thousandSeparator=","
+      //     fixedDecimalScale
+      //     decimalScale={2}
+      //   />
+      // )
     }
 
     case 'number': {
-      return (
-        <NumberFormat
-          displayType="text"
-          value={value}
-          thousandSeparator=","
-          decimalScale={2}
-        />
-      )
+        return value
+      // return (
+      //   <NumberFormat
+      //     displayType="text"
+      //     value={value}
+      //     thousandSeparator=","
+      //     decimalScale={2}
+      //   />
+      // )
     }
 
     case 'datetime': {
@@ -47,8 +49,12 @@ export function renderCell(field_type, value) {
       )
     }
 
+    case 'string': {
+      return value?.toString() ?? ''
+    }
+
     default: {
-      return value
+      return ''
     }
   }
 }

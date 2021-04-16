@@ -1,7 +1,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import useDataTable from '../useDataTable'
+import useDataTable from './useDataTable'
 
 export const SubtotalTitleRow = ({ value = '', count = 0, top = 0, left = 0 }) => {
   const { classes, rowHeight } = useDataTable()
@@ -10,8 +10,8 @@ export const SubtotalTitleRow = ({ value = '', count = 0, top = 0, left = 0 }) =
     <div
       className={classes.subtotalTitle}
       style={{
-        top: top + 0.5 * rowHeight,
-        height: rowHeight * 1.5,
+        top: top,
+        height: rowHeight,
         left: left,
       }}
     >

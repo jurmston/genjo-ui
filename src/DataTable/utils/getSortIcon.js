@@ -10,32 +10,32 @@ import SortGenericDescendingIcon from '../../icons/SortGenericDescendingIcon'
 
 
 /** Get the icon component given sort type and direction. */
-export function getSortIcon({ isSelected = false, type = '', direction = 'ASC' }) {
+export function getSortIcon({ type = '', direction = 'ASC' }) {
   if (!type) {
     return null
   }
 
   if (type === 'string') {
-    return !isSelected
-      ? SortAlphaIcon
-      : direction === 'ASC'
+    return direction === 'ASC'
       ? SortAlphaAscendingIcon
-      : SortAlphaDescendingIcon
+      : direction === 'DESC'
+      ? SortAlphaDescendingIcon
+      : SortAlphaIcon
   }
 
   if (type === 'number') {
-    return !isSelected
-      ? SortNumberIcon
-      : direction === 'ASC'
+    return direction === 'ASC'
       ? SortNumberAscendingIcon
-      : SortNumberDescendingIcon
+      : direction === 'DESC'
+      ? SortNumberDescendingIcon
+      : SortNumberIcon
   }
 
-  return !isSelected
-    ? SortGenericIcon
-    : direction === 'ASC'
+  return direction === 'ASC'
     ? SortGenericAscendingIcon
-    : SortGenericDescendingIcon
+    : direction === 'DESC'
+    ? SortGenericDescendingIcon
+    : SortGenericIcon
 }
 
 export default getSortIcon

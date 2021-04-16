@@ -7,6 +7,7 @@ export function getCellAlignment(field_type) {
       return 'right'
     }
 
+    case 'checkbox':
     case 'bool': {
       return 'center'
     }
