@@ -190,8 +190,8 @@ export class PasswordField extends React.Component {
                 variant="determinate"
                 value={score * 25}
                 style={{
-                  borderBottomLeftRadius: 4,
-                  borderBottomRightRadius: 4,
+                  borderBottomLeftRadius: 8,
+                  borderBottomRightRadius: 8,
                 }}
               />
             </div>

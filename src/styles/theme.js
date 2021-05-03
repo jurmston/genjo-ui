@@ -46,7 +46,7 @@ export const typographyHeadline = {
   letterSpacing: `${round(0.15 / 20)}em`,
 }
 
-export const borderRadius = 4
+export const borderRadius = 8
 
 export const createTheme = ({ mode, primary, secondary }) =>
   createMuiTheme({
@@ -54,6 +54,10 @@ export const createTheme = ({ mode, primary, secondary }) =>
       primary,
       secondary,
       mode,
+    },
+
+    shape: {
+      borderRadius,
     },
 
     // -- Default Props for Mui Components
@@ -219,11 +223,11 @@ export const createTheme = ({ mode, primary, secondary }) =>
             '&:hover': {
               backgroundColor: mode === 'light' ? colors.grey[50] : colors.grey[800],
             },
-            '&$focused': {
-              borderColor: primary.main,
+            '&.Mui-focused': {
+              borderColor: primary[500],
               backgroundColor: '#fff',
             },
-            '&$error': {
+            '&.Mui-error': {
               borderColor: colors.red[500],
             },
           },
@@ -328,8 +332,9 @@ export const createTheme = ({ mode, primary, secondary }) =>
             '&:hover': {
               backgroundColor: mode === 'light' ? colors.grey[200] : colors.grey[800],
             },
-            '&$focused': {
-              borderColor: primary.main,
+            '&.Mui-focused': {
+              backgroundColor: '#fff',
+              borderColor: primary[500],
             },
           },
           formControl: {
@@ -362,6 +367,15 @@ export const createTheme = ({ mode, primary, secondary }) =>
           root: {
             ...typographyText,
             margin: 0,
+            '& .MuiSelect-icon': {
+              top: 'calc(50% - 9px)',
+            },
+
+            // This prevents the input adornment and select field from having
+            // different colors.
+            '& .MuiSelect-select': {
+              backgroundColor: 'transparent !important',
+            }
           },
           formControl: {
             margin: 0,
@@ -508,12 +522,18 @@ export const createTheme = ({ mode, primary, secondary }) =>
             '&:hover': {
               backgroundColor: mode === 'light' ? colors.grey[200] : colors.grey[800],
             },
-            '&$focused': {
-              borderColor: primary.main,
+            '&.Mui-focused': {
+              borderWidth: 1,
+              borderColor: primary[500],
             },
             '&$error': {
               borderColor: colors.red[500],
             },
+            // Hide the nothced outlined. It is designed to accomodate floating
+            // labels which genjo-ui does not use.
+            '& .MuiOutlinedInput-notchedOutline': {
+              display: 'none',
+            }
           },
           adornedStart: {
             paddingLeft: 0,

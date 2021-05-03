@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
+import MenuItem from '@material-ui/core/MenuItem'
 
 import HelpIcon from '@material-ui/icons/Help'
 
@@ -130,6 +131,7 @@ export const Primary = () => {
             variant="filled"
             label="Label"
             helperText="This text helps."
+            error={error}
             placeholder="Give me string..."
             InputProps={{
               startAdornment: (
@@ -137,18 +139,14 @@ export const Primary = () => {
                   $
                 </InputAdornment>
               ),
-
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton>
-                    <HelpIcon />
-                  </IconButton>
-                </InputAdornment>
-              )
             }}
             required={required}
-            error={error}
-          />
+            select
+          >
+            <MenuItem value="1">Item 1</MenuItem>
+            <MenuItem value="2">Item 2</MenuItem>
+            <MenuItem value="3">Item 3</MenuItem>
+          </TextField>
         </Grid>
       </Grid>
     </div>

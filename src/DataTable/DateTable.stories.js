@@ -16,7 +16,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircleOutline'
 import { createDataTableTestData, testColumns } from './storybook-utils'
 
 import createApiClient from './mocks/api'
-const apiClient = createApiClient(100, 'none')
+const apiClient = createApiClient(10000, 'none')
 
 const TEST_DATA = createDataTableTestData(100)
 
