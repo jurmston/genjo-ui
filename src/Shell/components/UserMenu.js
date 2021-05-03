@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   button: {
     display: 'flex',
     alignItems: 'center',
-    height: 48,
+    height: 46,
     backgroundColor: props => props.isOpen
       ? theme.palette.grey[200]
       : theme.palette.common.white,
@@ -31,8 +31,17 @@ const useStyles = makeStyles(theme => ({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
-    maxHeight: 0,
     overflow: 'hidden',
+    width: 256,
+    maxHeight: props => props.isOpen ? 'unset' : 0,
+    boxShadow: 'none',
+    borderStyle: 'solid',
+    borderColor: theme.palette.divider,
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+    borderLeftWidth: 1,
+    // Make sure we don't see the border when the menu is collapsed.
+    borderBottomWidth: props => props.isOpen ? 1 : 0,
   },
 
   avatar: {
@@ -40,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     width: 32,
     fontSize: 18,
     backgroundColor: theme.palette.primary.main,
-  }
+  },
 }))
 
 
@@ -56,7 +65,10 @@ const UserMenu = ({ user, children }) => {
       <ButtonBase
         id="user-menu"
         className={classes.button}
-        onClick={event => setAnchor(anchor ? null : event.currentTarget)}
+        onClick={event => {
+          event.stopPropagation()
+          setAnchor(anchor ? null : event.currentTarget)
+        }}
       >
         <Avatar
           className={classes.avatar}
@@ -65,14 +77,7 @@ const UserMenu = ({ user, children }) => {
         >
           {user?.name?.[0] || 'JU'}
         </Avatar>
-
-          <Paper
-            className={classes.menu}
-            style={{
-              width: 256,
-              maxHeight: isOpen ? 'unset' : 0,
-            }}
-          >
+          <Paper className={classes.menu}>
             {children}
           </Paper>
       </ButtonBase>

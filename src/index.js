@@ -95,6 +95,9 @@ export * from './useSelectionSet'
 export { default as useValues } from './useValues'
 export * from './useValues'
 
+export { default as useStoredState } from './useStoredState'
+export * from './useStoredState'
+
 export * from './utils'
 
 export * from './styles'

@@ -14,7 +14,9 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     backgroundColor: theme.palette.common.white,
     zIndex: theme.zIndex.drawer + 1,
-    boxShadow: theme.shadows[4],
+    boxShadow: 'none',
+    boxSizing: 'border-box',
+    borderBottom: `2px solid ${theme.palette.divider}`,
   },
 
   logoLink: {

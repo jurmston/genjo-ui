@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import List from '@material-ui/core/List'
 import IconButton from '@material-ui/core/IconButton'
 import { makeStyles } from '@material-ui/core/styles'
 
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
 
 
 const DRAWER_CLOSED_WIDTH = 21
@@ -45,13 +45,14 @@ const useStyles = makeStyles(theme => ({
       ? 1
       : 0,
     position: 'fixed',
+    boxSizing: 'border-box',
     top: 48 + 18,
-    left: props => props.isOpen || props.isHovering ? DRAWER_OPEN_WIDTH - 14 : DRAWER_CLOSED_WIDTH - 14,
+    left: props => props.isOpen || props.isHovering ? DRAWER_OPEN_WIDTH - 15 : DRAWER_CLOSED_WIDTH - 15,
     transition: 'left 0.15s ease, opacity 0.15s ease',
     // left: 21 + 56 - 14,
     height: 28,
     width: 28,
-    border: `2px solid ${theme.palette.divider}`,
+    border: `1px solid ${theme.palette.divider}`,
     backgroundColor: theme.palette.mode === 'light'
       ? theme.palette.common.white
       : theme.palette.grey[900],
@@ -64,7 +65,7 @@ const useStyles = makeStyles(theme => ({
     //   opacity: 1,
     // },
     '&:hover': {
-      border: `2px solid ${theme.palette.primary.main}`,
+      border: `1px solid ${theme.palette.primary.main}`,
       opacity: 1,
     },
     // When the menu is in `!isOpen && isHovering` disable the menu button.
@@ -72,7 +73,11 @@ const useStyles = makeStyles(theme => ({
     // hover.
     pointerEvents: props => !props.hasContent || (!props.isOpen && props.isHovering) ? 'none' : 'unset',
 
-
+    // Horizontally and vertically align the icon.
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }))
 
@@ -103,10 +108,11 @@ const MenuPanel = ({ isOpen, setIsOpen, children, hasContent = false, ...listPro
         className={classes.button}
       >
         <IconButton className={classes.iconButton} onClick={toggle}>
-          <KeyboardArrowLeftIcon style={{
-            transition: 'transform 0.15s ease',
-            transform: `rotate(${isOpen ? 0 : '180deg'})`
-          }}/>
+          {isOpen ? (
+            <KeyboardArrowLeftIcon />
+            ) : (
+            <KeyboardArrowRightIcon />
+          )}
         </IconButton>
       </div>
     </>
