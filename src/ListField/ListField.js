@@ -5,10 +5,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import IconButton from '@material-ui/core/IconButton'
-import Typography from '@material-ui/core/Typography'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
-import CloseIcon from '@material-ui/icons/Close'
+import CloseIcon from '@material-ui/icons/CloseRounded'
 
 import CircleLoader from '../CircleLoader'
 
@@ -17,8 +18,8 @@ const useStyles = makeStyles(theme => ({
 
   deleteButton: {
     position: 'absolute',
-    top: 4,
-    right: 4,
+    top: 2,
+    right: 2,
   },
 
   loader: {
@@ -44,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 export const ListField = ({
   items = [],
   label = '',
+  icon = null,
   keyProp = 'id',
   readOnly = false,
   renderItem,
@@ -52,70 +54,84 @@ export const ListField = ({
   onItemAdd,
   noItemText = 'There are no items.',
   isLoading = false,
+  isFetching = false,
   addItemText = '+ Add Item',
 }) => {
 
   const classes = useStyles()
 
   return (
-    <>
+    <List variant="contained">
       {Boolean(label) && (
-        <Typography variant="subtitle2" color="textSecondary">
-          {label}
-        </Typography>
+        <ListItem divider>
+          <ListItemIcon>
+            {icon}
+          </ListItemIcon>
+          <ListItemText
+            primary={label}
+            primaryTypographyProps={{
+              style: {
+                fontSize: 18,
+                fontWeight: 700,
+              },
+            }}
+          />
+        </ListItem>
       )}
 
-      <List variant="filled">
-        {readOnly && items.length === 0 && !isLoading && (
-          <ListItem>
-            <ListItemText primary={noItemText} />
-          </ListItem>
-        )}
+      {readOnly && items.length === 0 && !isLoading && (
+        <ListItem>
+          <ListItemText primary={noItemText} />
+        </ListItem>
+      )}
 
-        {isLoading && (
-          <ListItem className={classes.loader}>
-            <CircleLoader />
-          </ListItem>
-        )}
+      {isLoading && (
+        <ListItem className={classes.loader}>
+          <CircleLoader />
+        </ListItem>
+      )}
 
-        {!isLoading && items.map((item, index) => (
-          <ListItem
-            key={item[keyProp]}
-            style={{ position: 'relative' }}
-            divider={!readOnly || index < items.length - 1}
-            button={!readOnly && Boolean(onItemClick)}
-            onClick={!readOnly && onItemClick
-              ? event => onItemClick(event, item, index)
-              : null
-            }
-          >
-            {renderItem(item, index)}
+      {isFetching && !isLoading && (
+        <LinearProgress />
+      )}
 
-            {!readOnly && Boolean(onItemDelete) && (
-              <IconButton
-                className={classes.deleteButton}
-                onClick={event => {
-                  event.stopPropagation()
-                  onItemDelete(event, item, index)
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            )}
-          </ListItem>
-        ))}
+      {!isLoading && items.map((item, index) => (
+        <ListItem
+          key={item[keyProp]}
+          style={{ position: 'relative' }}
+          divider={!readOnly || index < items.length - 1}
+          button={!readOnly && Boolean(onItemClick)}
+          onClick={!readOnly && onItemClick
+            ? event => onItemClick(event, item, index)
+            : null
+          }
+        >
+          {renderItem(item, index)}
 
-        {!readOnly && Boolean(onItemAdd) && !isLoading && (
-          <ListItem
-            className={classes.addButton}
-            onClick={onItemAdd}
-            button
-          >
-            {addItemText}
-          </ListItem>
-        )}
-      </List>
-    </>
+          {!readOnly && Boolean(onItemDelete) && (
+            <IconButton
+              className={classes.deleteButton}
+              onClick={event => {
+                event.stopPropagation()
+                onItemDelete(event, item, index)
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          )}
+        </ListItem>
+      ))}
+
+      {!readOnly && Boolean(onItemAdd) && !isLoading && (
+        <ListItem
+          className={classes.addButton}
+          onClick={onItemAdd}
+          button
+        >
+          {addItemText}
+        </ListItem>
+      )}
+    </List>
   )
 }
 

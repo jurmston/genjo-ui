@@ -13,6 +13,10 @@ const useStyles = makeStyles(theme => ({
     padding: 0,
     minHeight: 44,
     minWidth: 'unset',
+
+    '&.Mui-selected .MuiTab-wrapper': {
+      color: theme.palette.primary.main,
+    },
   },
   wrapper: {
     color: theme.palette.text.primary,
@@ -20,6 +24,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'row',
     alignItems: 'center',
     padding: `0 16px`,
+
   },
 }))
 

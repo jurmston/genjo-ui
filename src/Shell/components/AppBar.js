@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     zIndex: theme.zIndex.drawer + 1,
     boxShadow: 'none',
     boxSizing: 'border-box',
-    borderBottom: `2px solid ${theme.palette.divider}`,
+    borderBottom: `1px solid ${theme.palette.divider}`,
   },
 
   logoLink: {

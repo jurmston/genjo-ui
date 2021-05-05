@@ -5,7 +5,6 @@ import zxcvbn from 'zxcvbn'
 
 import Typography from '@material-ui/core/Typography'
 import Tooltip from '@material-ui/core/Tooltip'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import TextField from '@material-ui/core/TextField'
 import IconButton from '@material-ui/core/IconButton'
@@ -142,61 +141,44 @@ export class PasswordField extends React.Component {
         title={shouldDetectCapsLock && capsLockOn ? 'Caps lock is ON' : ''}
         open={shouldDetectCapsLock && capsLockOn}
       >
-        <div style={{ width: '100%' }}>
-          <TextField
-            {...textFieldProps}
-            label={label}
-            value={value}
-            error={error}
-            onChange={this.handleChange}
-            type={passwordIsVisible ? 'text' : 'password'}
-            InputProps={{
-              ...textFieldProps.InputProps,
-              endAdornment: (
-                <>
-                  {textFieldProps.InputProps?.endAdornment}
-                  <InputAdornment position="end">
-                    {detectPasswordStrength && !!value.length && (
-                      <Typography variant="caption" noWrap color="textSecondary">
-                        {passwordIsTooShort ? tooShortMessage : scoreMessages[score]}
-                      </Typography>
-                    )}
-                    <IconButton onClick={this.togglePasswordVisibility} tabIndex={-1}>
-                      {passwordIsVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                </>
-              ),
-              style: detectPasswordStrength && {
-                borderBottomLeftRadius: 0,
-                borderBottomRightRadius: 0,
-              },
-            }}
-          />
-          {detectPasswordStrength && (
-            <div style={{ width: '100%', marginTop: 0 }}>
-              <LinearProgress
-                color={
-                  score >= 3
-                    ? 'success'
-                    : score === 2
-                    ? 'info'
-                    : score === 1
-                    ? 'warning'
-                    : value.length
-                    ? 'error'
-                    : 'primary'
-                }
-                variant="determinate"
-                value={score * 25}
-                style={{
-                  borderBottomLeftRadius: 8,
-                  borderBottomRightRadius: 8,
-                }}
-              />
-            </div>
-          )}
-        </div>
+        <TextField
+          {...textFieldProps}
+          label={label}
+          value={value}
+          error={error}
+          onChange={this.handleChange}
+          type={passwordIsVisible ? 'text' : 'password'}
+          InputProps={{
+            ...textFieldProps.InputProps,
+            endAdornment: (
+              <>
+                {textFieldProps.InputProps?.endAdornment}
+                <InputAdornment position="end">
+                  {detectPasswordStrength && !!value.length && (
+                    <Typography
+                      variant="caption"
+                      noWrap
+                      color={score >= 3
+                        ? 'primary'
+                        : score === 2
+                        ? 'secondary'
+                        : value.length
+                        ? 'error'
+                        : 'textPrimary'
+                      }
+                    >
+                      {passwordIsTooShort ? tooShortMessage : scoreMessages[score]}
+                    </Typography>
+                  )}
+                  <IconButton onClick={this.togglePasswordVisibility} tabIndex={-1}>
+                    {passwordIsVisible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </InputAdornment>
+              </>
+            ),
+          }}
+          inputProps
+        />
       </Tooltip>
     )
   }

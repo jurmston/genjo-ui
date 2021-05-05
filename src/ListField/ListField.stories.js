@@ -11,6 +11,8 @@ import { v4 as uuid } from 'uuid'
 
 import { titleCase } from '../utils/text'
 
+import TaskAltIcon from '@material-ui/icons/TaskAltRounded'
+
 
 export default {
   title: 'Components/ListField',
@@ -21,6 +23,7 @@ export const Primary = () => {
   const [items, setItems] = React.useState([])
 
   const [isLoading, setIsLoading] = React.useState(false)
+  const [isFetching, setIsFetching] = React.useState(false)
   const [readOnly, setReadOnly] = React.useState(false)
 
   function createItem() {
@@ -40,6 +43,7 @@ export const Primary = () => {
       <ListField
         readOnly={readOnly}
         label="List Field"
+        icon={<TaskAltIcon />}
         items={items}
         onItemAdd={createItem}
         onItemClick={() => {}}
@@ -51,6 +55,7 @@ export const Primary = () => {
           />
         )}
         isLoading={isLoading}
+        isFetching={isFetching}
       />
 
       <div style={{ marginTop: 32 }} />
@@ -60,6 +65,13 @@ export const Primary = () => {
         onClick={() => setIsLoading(!isLoading)}
       >
         Loading
+      </Button>
+
+      <Button
+        variant={isFetching ? 'contained' : 'standard'}
+        onClick={() => setIsFetching(!isFetching)}
+      >
+        Fetching
       </Button>
 
       <div style={{ marginRight: 16 }} />

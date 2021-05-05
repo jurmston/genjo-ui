@@ -5,7 +5,7 @@ import Tabs from '@material-ui/core/Tabs'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.mode === 'light' ? '#eee' : theme.palette.divider,
+    backgroundColor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.divider,
     borderRadius: theme.shape.borderRadius,
     border: `1px solid ${theme.palette.divider}`,
     minHeight: 'unset',

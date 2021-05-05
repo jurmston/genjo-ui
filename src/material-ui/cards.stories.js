@@ -14,6 +14,9 @@ import Typography from '@material-ui/core/Typography'
 import ChecklistIcon from '@material-ui/icons/PlaylistAddRounded'
 
 
+import mountainsImage from '../media/mountains.jpg'
+
+
 export default {
   title: 'Material-UI/Cards',
 }
@@ -23,11 +26,16 @@ export const Primary = () => {
   const [error, setError] = React.useState(false)
 
   return (
-    <div style={{ width: 300 }}>
+    <div style={{ width: 500 }}>
       <Grid container spacing={2}>
 
         <Grid item xs={12}>
-          <Card>
+          <Card variant="contained">
+            <CardMedia
+              style={{ height: 300 }}
+              image={mountainsImage}
+            />
+
             <CardHeader
               avatar={
                 <ChecklistIcon style={{ fontSize: 28 }} />
@@ -37,7 +45,17 @@ export const Primary = () => {
                   Widget Card
                 </Typography>
               }
+              action={
+                <Button variant="contained">
+                  + Add
+                </Button>
+              }
             />
+
+            <CardContent>
+              <Typography>Lorem ipsum</Typography>
+            </CardContent>
+
           </Card>
         </Grid>
 

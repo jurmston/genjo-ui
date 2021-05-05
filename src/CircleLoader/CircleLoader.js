@@ -29,14 +29,17 @@ const useStyles = makeStyles(theme => ({
 export function CircleLoader(props) {
   const classes = useStyles()
 
-  const { className, ...restProps } = props
+  const { className, size = 40, ...restProps } = props
 
   return (
-    <div className={clsx(classes.root, className)}>
+    <div
+      className={clsx(classes.root, className)}
+      style={{ width: size, height: size }}
+    >
       <CircularProgress
         variant="determinate"
         className={classes.bottom}
-        size={40}
+        size={size}
         thickness={4}
         {...restProps}
         value={100}
@@ -48,7 +51,7 @@ export function CircleLoader(props) {
         classes={{
           circle: classes.circle,
         }}
-        size={40}
+        size={size}
         thickness={4}
         {...restProps}
       />
@@ -58,6 +61,7 @@ export function CircleLoader(props) {
 
 CircleLoader.propTypes = {
   className: PropTypes.string,
+  size: PropTypes.number,
 }
 
 export default CircleLoader

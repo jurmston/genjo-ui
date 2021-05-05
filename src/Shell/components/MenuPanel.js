@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     left: 0,
     width: props => !props.hasContent ? 0 : props.isOpen || props.isHovering ? DRAWER_OPEN_WIDTH : DRAWER_CLOSED_WIDTH,
     backgroundColor: theme.palette.mode === 'light'
-      ? theme.palette.grey[100]
+      ? theme.palette.grey[50]
       : theme.palette.grey[800],
     borderRight: `1px solid ${theme.palette.divider}`,
     overflowX: 'visible',

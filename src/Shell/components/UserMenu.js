@@ -26,22 +26,17 @@ const useStyles = makeStyles(theme => ({
   menu: {
     zIndex: theme.zIndex.drawer + 2,
     position: 'fixed',
-    top: 48,
-    right: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
+    top: 48 + 8,
+    right: 8,
+    borderRadius: theme.shape.borderRadius,
     overflow: 'hidden',
     width: 256,
     maxHeight: props => props.isOpen ? 'unset' : 0,
     boxShadow: 'none',
     borderStyle: 'solid',
     borderColor: theme.palette.divider,
-    borderRightWidth: 0,
-    borderTopWidth: 0,
-    borderLeftWidth: 1,
+    borderWidth: props => props.isOpen ? 1 : 0,
     // Make sure we don't see the border when the menu is collapsed.
-    borderBottomWidth: props => props.isOpen ? 1 : 0,
   },
 
   avatar: {

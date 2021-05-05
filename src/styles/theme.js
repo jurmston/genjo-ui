@@ -149,6 +149,20 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
+      MuiCard: {
+        variants: [
+          {
+            props: { variant: 'contained' },
+            style: {
+              boxShadow: 'none',
+              borderWidth: 1,
+              borderStyle: 'solid',
+              borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500]
+            }
+          },
+        ],
+      },
+
       // --- CHIP
       MuiChip: {
         defaultProps: {
@@ -436,13 +450,13 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
         variants: [
           {
-            props: { variant: 'filled' },
+            props: { variant: 'contained' },
             style: {
               borderRadius,
               borderWidth: 1,
               borderStyle: 'solid',
               borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
-              backgroundColor: mode === 'light' ? colors.grey[50] : colors.grey[800],
+              // backgroundColor: mode === 'light' ? colors.grey[50] : colors.grey[800],
             },
           }
         ],
