@@ -10,6 +10,8 @@ import Typography from '@material-ui/core/Typography'
 const useStyles = makeStyles({
   root: {
     paddingBottom: props => props.disablePadding ? 4 : 12,
+    // Adds a margin to match the list's default padding-bottom.
+    marginBottom: props => props.disablePadding ? 0 : 8,
     overflow: 'hidden',
     alignItems: 'center',
   },
