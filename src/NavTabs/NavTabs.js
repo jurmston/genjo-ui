@@ -4,7 +4,7 @@ import Tabs from '@material-ui/core/Tabs'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    minHeight: 48,
+    minHeight: 56,
     height: '100%',
   },
   flexContainer: {

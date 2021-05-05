@@ -42,6 +42,7 @@ const useStyles = makeStyles(theme => ({
       borderRadius: theme.shape.borderRadius,
       backgroundColor: theme.palette.mode === 'light' ? '#fff' : theme.palette.action.selected,
       // boxShadow: '0 4px 12px 0 rgba(0,0,0,0.16)',
+      boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
     },
   },
 }))

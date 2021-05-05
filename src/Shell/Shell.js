@@ -10,7 +10,7 @@ import { UserMenu } from './components/UserMenu'
 
 const MENU_CLOSED_WIDTH = 21
 const MENU_OPEN_WIDTH = 256
-const APP_BAR_HEIGHT = 48
+const APP_BAR_HEIGHT = 56
 
 const useStyles = makeStyles({
   main: {

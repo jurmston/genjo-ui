@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
   button: {
     display: 'flex',
     alignItems: 'center',
-    height: 46,
+    height: 55,
     backgroundColor: props => props.isOpen
       ? theme.palette.grey[200]
       : theme.palette.common.white,
@@ -23,16 +23,17 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: 24,
     paddingRight: 24,
   },
+
   menu: {
     zIndex: theme.zIndex.drawer + 2,
     position: 'fixed',
-    top: 48 + 8,
-    right: 8,
+    top: 56 + 4,
+    right: 4,
     borderRadius: theme.shape.borderRadius,
     overflow: 'hidden',
     width: 256,
     maxHeight: props => props.isOpen ? 'unset' : 0,
-    boxShadow: 'none',
+    boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
     borderStyle: 'solid',
     borderColor: theme.palette.divider,
     borderWidth: props => props.isOpen ? 1 : 0,

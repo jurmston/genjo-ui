@@ -7,7 +7,7 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     position: 'fixed',
     top: 0,
-    height: 48,
+    height: 56,
     left: 0,
     right: 0,
     display: 'flex',
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   tabContainer: {
     position: 'fixed',
     zIndex: theme.zIndex.drawer,
-    top: 48,
+    top: 56,
     left: 0,
     right: 0,
     height: 32,

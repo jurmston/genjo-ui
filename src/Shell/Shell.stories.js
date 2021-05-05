@@ -20,6 +20,13 @@ import Shell from './Shell'
 import useShell from './useShell'
 import story_logo from './story_logo.svg'
 
+import HomeIcon from '@material-ui/icons/HomeRounded'
+import ProjectsIcon from '@material-ui/icons/SquareFootRounded'
+import PeopleIcon from '@material-ui/icons/PersonRounded'
+import ContractsIcon from '@material-ui/icons/ArticleRounded'
+import AddressBookIcon from '@material-ui/icons/ContactMailRounded'
+import SettingsIcon from '@material-ui/icons/SettingsRounded'
+
 export default {
   title: 'Widgets/Shell',
   component: Shell,
@@ -93,9 +100,9 @@ export const Main = () => {
       }
       appBarContent={
         <NavTabs value={tab} onChange={(event, newTab) => setTab(newTab)}>
-          <NavTab label="Projects" />
-          <NavTab label="People" />
-          <NavTab label="Settings" />
+          <NavTab label="Projects" icon={<ProjectsIcon />} />
+          <NavTab label="People" icon={<PeopleIcon />} />
+          <NavTab label="Settings" icon={<SettingsIcon />} />
         </NavTabs>
       }
     >

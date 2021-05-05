@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Tab from '@material-ui/core/Tab'
 
@@ -11,21 +12,22 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-    minHeight: 44,
+    minHeight: 56,
     minWidth: 'unset',
 
     '&.Mui-selected .MuiTab-wrapper': {
       color: theme.palette.primary.main,
     },
   },
+
   wrapper: {
-    color: theme.palette.text.primary,
+    color: theme.palette.text.secondary,
     textTransform: 'initial',
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     padding: `0 16px`,
-
   },
+
 }))
 
 export const NavTab = props => {
@@ -36,6 +38,7 @@ export const NavTab = props => {
       classes={{
         root: classes.root,
         wrapper: classes.wrapper,
+        labelIcon: classes.labelIcon,
       }}
       {...props}
     />

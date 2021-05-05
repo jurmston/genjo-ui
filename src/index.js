@@ -49,6 +49,9 @@ export * from './Dropzone'
 export { default as GoogleMapsProvider } from './GoogleMapsProvider'
 export * from './GoogleMapsProvider'
 
+export { default as ListTitle } from './ListTitle'
+export * from './ListTitle'
+
 export { default as LoaderProvider } from './LoaderProvider'
 export * from './LoaderProvider'
 
@@ -78,9 +81,6 @@ export * from './SnackbarProvider'
 
 export { default as TextEditor } from './TextEditor'
 export * from './TextEditor'
-
-export { default as ListField } from './ListField'
-export * from './ListField'
 
 // Hooks
 export { default as useDebounce } from './useDebounce'

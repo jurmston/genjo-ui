@@ -154,10 +154,14 @@ export const createTheme = ({ mode, primary, secondary }) =>
           {
             props: { variant: 'contained' },
             style: {
-              boxShadow: 'none',
-              borderWidth: 1,
-              borderStyle: 'solid',
-              borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500]
+              boxShadow: '0 1px 4px 0 rgb(21 27 38 / 8%)',
+              boxSizing: 'border-box',
+              '&:hover': {
+                boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
+                borderWidth: 1,
+                borderStyle: 'solid',
+                borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500]
+              },
             }
           },
         ],
@@ -445,7 +449,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
       MuiList: {
         defaultProps: {
           dense: true,
-          disablePadding: true,
         },
 
         variants: [

@@ -8,6 +8,19 @@ import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
 import ThemeProvider from '../src/ThemeProvider'
 import { themeColors, lightTheme, darkTheme } from './theme'
 
+// This fixes an issue related to a warning when using "first-child"
+// selector. More about this here:
+// https://github.com/mui-org/material-ui/issues/24894
+import { CacheProvider } from '@emotion/react'
+import createCache from '@emotion/cache'
+
+const cache = createCache({
+  key: 'css',
+  prepend: true,
+})
+
+cache.compat = true
+
 
 addDecorator(withPerformance)
 
@@ -31,15 +44,15 @@ export const decorators = [
     }
 
     return (
-      <StyledEngineProvider injectFirst>
+      <CacheProvider value={cache}>
 
-        <LocalizationProvider dateAdapter={AdapterLuxon}>
-          <ThemeProvider theme={muiThemeOptions}>
-            {story()}
-          </ThemeProvider>
-        </LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterLuxon}>
+            <ThemeProvider theme={muiThemeOptions}>
+              {story()}
+            </ThemeProvider>
+          </LocalizationProvider>
 
-      </StyledEngineProvider>
+      </CacheProvider>
     )
   },
 ]
