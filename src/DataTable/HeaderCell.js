@@ -59,10 +59,6 @@ export const HeaderCell = React.memo(
       )
     }
 
-    if (type === 'actions') {
-      return ''
-    }
-
     const [isHovered, setIsHovered] = React.useState(false)
 
     function handleHoverOn() {
@@ -86,6 +82,10 @@ export const HeaderCell = React.memo(
 
     if (hasSubtotals) {
       clickProps.onDoubleClick = () => subtotals?.setSubtotalKey(dataKey)
+    }
+
+    if (type === 'actions') {
+      return ''
     }
 
     return (

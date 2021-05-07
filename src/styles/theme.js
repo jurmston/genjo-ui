@@ -1,3 +1,5 @@
+import * as React from 'react'
+
 import {
   // Material-UI uses findDOMNode which is deprecated in React.StrictMode
   // See https://github.com/mui-org/material-ui/issues/13394
@@ -9,7 +11,8 @@ function round(value) {
   return Math.round(value * 1e5) / 1e5
 }
 
-const fontFamily = '"Roboto", "Helvetica", "Arial", sans-serif'
+// const fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
+const fontFamily = '"Montserrat", "Helvetica", "Arial", sans-serif'
 
 // Default for normal text. Based on `body2`.
 export const typographyText = {
@@ -48,12 +51,18 @@ export const typographyHeadline = {
 
 export const borderRadius = 8
 
+
+
 export const createTheme = ({ mode, primary, secondary }) =>
   createMuiTheme({
     palette: {
       primary,
       secondary,
       mode,
+    },
+
+    typography: {
+      fontFamily,
     },
 
     shape: {
@@ -535,7 +544,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
             borderRadius,
             borderWidth: 1,
             borderStyle: 'solid',
-            borderColor: mode === 'light' ? 'rgba(0, 0, 0, 0.54)' : 'rgba(255, 255, 255, 0.7)',
+            borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
             '&:hover': {
               backgroundColor: mode === 'light' ? colors.grey[200] : colors.grey[800],
             },
@@ -594,7 +603,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
-      // --- SVG ICON
+      // SVG ICON
       MuiSvgIcon: {
         styleOverrides: {
           root: {

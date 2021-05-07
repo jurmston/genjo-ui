@@ -1,19 +1,12 @@
 import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import Button from '@material-ui/core/Button'
-import MenuItem from '@material-ui/core/MenuItem'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Switch from '@material-ui/core/Switch'
-import Checkbox from '@material-ui/core/Checkbox'
-import Radio from '@material-ui/core/Radio'
 
-import HelpIcon from '@material-ui/icons/Help'
 
+import Switch from '../Switch'
+import Radio from '../Radio'
+import Checkbox from '../Checkbox'
 
 export default {
   title: 'Material-UI/FormControls',

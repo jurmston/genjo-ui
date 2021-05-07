@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { areEqual } from 'react-window'
 
-import Checkbox from '@material-ui/core/Checkbox'
+import Checkbox from '../Checkbox'
 import Skeleton from '@material-ui/core/Skeleton'
 
 import renderCell from './utils/renderCell'
@@ -35,6 +35,7 @@ export const DataCell = React.memo(
       align,
     } =  columns[columnIndex]
 
+    const row = rows?.[rowIndex]
     const value = rows?.[rowIndex]?.[dataKey]
 
     const {
@@ -68,7 +69,7 @@ export const DataCell = React.memo(
     ) : (
       <span>
         {customRenderers[type]
-          ? customRenderers[type](value)
+          ? customRenderers[type](row)
           : renderCell(type, value)
         }
       </span>

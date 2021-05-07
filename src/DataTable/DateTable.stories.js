@@ -267,7 +267,9 @@ const PrimaryInner = () => {
 
   const debouncedOnItemsRendered = React.useCallback(debounce(onItemsRendered), [rows, fetchNextPage])
 
-  function renderPerson(value) {
+  function renderPerson(row) {
+    const value = row?.primary_contact
+
     if (!value) {
       return ''
     }
