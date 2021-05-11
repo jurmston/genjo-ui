@@ -11,8 +11,7 @@ function round(value) {
   return Math.round(value * 1e5) / 1e5
 }
 
-// const fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
-const fontFamily = '"Montserrat", "Helvetica", "Arial", sans-serif'
+const fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
 
 // Default for normal text. Based on `body2`.
 export const typographyText = {
@@ -266,6 +265,12 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
           input: {
             padding: 6,
+            '&:-webkit-autofill': {
+              borderTopLeftRadius: 'inherit',
+              borderTopRightRadius: 'inherit',
+              borderBottomLeftRadius: 'inherit',
+              borderBottomRightRadius: 'inherit',
+            },
           },
           inputAdornedStart: {
             paddingLeft: 4,

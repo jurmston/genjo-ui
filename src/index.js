@@ -107,6 +107,9 @@ export * from './useValues'
 export { default as useStoredState } from './useStoredState'
 export * from './useStoredState'
 
+export { default as useOpenable } from './useOpenable'
+export * from './useOpenable'
+
 export * from './utils'
 
 export * from './styles'

@@ -100,7 +100,7 @@ export const DataTable = ({
   // Synchronize the react-window grids to the calculated column widths
   React.useEffect(() => {
     updateGrid()
-  }, [containerWidth, widths, updateGrid])
+  }, [containerWidth, widths, updateGrid, columns])
 
   const { getColumnWidth, widths } = useColumnWidths({
     containerWidth,
