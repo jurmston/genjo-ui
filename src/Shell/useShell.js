@@ -1,7 +1,7 @@
 import * as React from 'react'
 import ShellContext from './ShellContext'
 
-export const useShell = ({ title = '', menuContent = null }) => {
+export const useShell = ({ title = '', menuContent = null, deps = [] }) => {
   const { setMenuContent, setTitle } = React.useContext(ShellContext)
 
   React.useEffect(
@@ -9,9 +9,7 @@ export const useShell = ({ title = '', menuContent = null }) => {
       setMenuContent(menuContent)
       setTitle(title)
     },
-    // This effect should only be calld once.
-    // eslint-disable-next-linee
-    []
+    [...deps]
   )
 }
 

@@ -33,9 +33,19 @@ export default {
 }
 
 const PageWithMenu = ({ setPage }) => {
-  const menuContent = <MenuPanelItem icon={<ArrowBackIcon />} title="Back to Dashboard" isSelected={false} />
+  const [contentKey, setContentKey] = React.useState('Apple')
+  const menuContent = (
+    <>
+      <MenuPanelItem icon={<ArrowBackIcon />} title="Back to Dashboard" isSelected={false} />
+      <MenuPanelItem title={contentKey} />
+    </>
+  )
 
-  useShell({ menuContent })
+  useShell({ menuContent, deps: [contentKey] })
+
+  function toggleContent() {
+    setContentKey(contentKey === 'Apple' ? 'Banana' : 'Apple')
+  }
 
   return (
     <Container>
@@ -45,6 +55,12 @@ const PageWithMenu = ({ setPage }) => {
 
       <Button variant="contained" color="primary" onClick={() => setPage('no-menu')}>
         Without Menu
+      </Button>
+
+      <div style={{ margin: 16 }} />
+
+      <Button variant="contained" color="primary" onClick={toggleContent}>
+        Change menu content
       </Button>
     </Container>
   )
