@@ -84,13 +84,9 @@ const useStyles = makeStyles(theme => ({
 /**
  * Menu panel.
  */
-const MenuPanel = ({ isOpen, setIsOpen, children, hasContent = false, ...listProps }) => {
+const MenuPanel = ({ isOpen, toggle, children, hasContent = false, ...listProps }) => {
   const [isHovering, setIsHovering] = React.useState(false)
   const classes = useStyles({ isOpen, isHovering, hasContent })
-
-  function toggle() {
-    setIsOpen(!isOpen)
-  }
 
   return (
     <>

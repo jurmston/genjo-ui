@@ -2,11 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 
+import useStoredState from '../useStoredState'
 import ShellContext from './ShellContext'
 
 import { AppBar } from './components/AppBar'
 import { MenuPanel } from './components/MenuPanel'
 import { UserMenu } from './components/UserMenu'
+
 
 const MENU_CLOSED_WIDTH = 21
 const MENU_OPEN_WIDTH = 256
@@ -38,7 +40,11 @@ export const Shell = ({
   appBarContent,
   defaultMenuContent,
 }) => {
-  const [menuIsOpen, setMenuIsOpen] = React.useState(false)
+  const [menuIsOpen, setMenuIsOpen] = useStoredState({
+    key: 'shell-menu-is-open',
+    initialValue: 'true',
+  })
+
   const [menuContent, setMenuContent] = React.useState(null)
   const [title, setTitle] = React.useState(defaultTitle)
 
@@ -59,13 +65,18 @@ export const Shell = ({
     }
   }, [defaultMenuContent])
 
+  function toggleMenu() {
+    const newState = menuIsOpen === 'true' ? 'false' : 'true'
+    setMenuIsOpen(newState)
+  }
+
   return (
     <ShellContext.Provider value={{ setMenuContent, setTitle }}>
       <AppBar logo={logo} brandName={brandName} userMenu={<UserMenu user={user}>{userMenuContent}</UserMenu>}>
         {appBarContent}
       </AppBar>
 
-      <MenuPanel isOpen={menuIsOpen} setIsOpen={setMenuIsOpen} hasContent={Boolean(menuContent)}>
+      <MenuPanel isOpen={menuIsOpen === 'true'} toggle={toggleMenu} hasContent={Boolean(menuContent)}>
         {menuContent}
       </MenuPanel>
 

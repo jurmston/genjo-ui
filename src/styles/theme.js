@@ -244,14 +244,14 @@ export const createTheme = ({ mode, primary, secondary }) =>
             borderRadius,
             borderWidth: 1,
             borderStyle: 'solid',
-            borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
-            backgroundColor: mode === 'light' ? colors.grey[100] : colors.grey[500],
+            borderColor: mode === 'light' ? colors.grey[300] : colors.grey[600],
+            backgroundColor: mode === 'light' ? colors.grey[100] : colors.grey[900],
             '&:hover': {
-              backgroundColor: mode === 'light' ? colors.grey[50] : colors.grey[800],
+              backgroundColor: mode === 'light' ? colors.grey[50] : 'rgba(0, 0, 0, 0.8)',
             },
             '&.Mui-focused': {
               borderColor: primary[500],
-              backgroundColor: '#fff',
+              backgroundColor: mode === 'light' ? '#fff' : '#000',
             },
             '&.Mui-error': {
               borderColor: colors.red[500],
