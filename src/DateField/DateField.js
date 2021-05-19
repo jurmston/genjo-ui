@@ -4,8 +4,10 @@ import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Dialog from '@material-ui/core/Dialog'
 import Paper from '@material-ui/core/Paper'
 import CalendarPicker from '@material-ui/lab/CalendarPicker'
+import DatePicker from '@material-ui/lab/DatePicker'
 import { DateTime } from 'luxon'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 
@@ -85,6 +87,7 @@ export const DateField = ({
   value,
   onChange,
   disablePicker = false,
+  hasDialog = false,
   ...textFieldProps
 }) => {
   const [isEditing, setIsEditing] = React.useState(false)
@@ -158,7 +161,21 @@ export const DateField = ({
         }}
       />
 
-      {pickerIsOpen && (
+      {pickerIsOpen && hasDialog && (
+        <DatePicker
+          open
+          onClose={() => setPickerIsOpen(false)}
+          allowKeyboardControl
+          date={value}
+          onChange={newValue => {
+            onChange(newValue)
+            setPickerIsOpen(false)
+          }}
+          renderInput={() => ""}
+        />
+      )}
+
+      {pickerIsOpen && !hasDialog && (
         <ClickAwayListener onClickAway={() => setPickerIsOpen(false)}>
           <Paper
             style={{
@@ -194,6 +211,8 @@ DateField.propTypes = {
   onChange: PropTypes.func,
   /** If `true`, the picker element will be hidden. */
   disablePicker: PropTypes.bool,
+  /** If `true` the picker element will be displayed in a Dialog component. */
+  hasDialog: PropTypes.bool,
 }
 
 export default DateField
