@@ -1,7 +1,7 @@
 import * as React from 'react'
 import isEqual from 'react-fast-compare'
 
-export function useValues(initialValues = {}) {
+export function useValues(initialValues = {}, deps = []) {
   const [values, setValues] = React.useState({})
   const [originalValues, setOriginalValues] = React.useState({})
 
@@ -18,7 +18,7 @@ export function useValues(initialValues = {}) {
   React.useEffect(() => {
     setValues({ ...initialValues })
     setOriginalValues({ ...initialValues })
-  }, [initialValues])
+  }, deps)
 
   return {
     values,

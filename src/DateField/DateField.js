@@ -5,7 +5,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Paper from '@material-ui/core/Paper'
-import DayPicker from '@material-ui/lab/DayPicker'
+import CalendarPicker from '@material-ui/lab/CalendarPicker'
 import { DateTime } from 'luxon'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 
@@ -167,7 +167,7 @@ export const DateField = ({
               top: dim.height + 8,
             }}
           >
-            <DayPicker
+            <CalendarPicker
               allowKeyboardControl
               date={value}
               onChange={newValue => {

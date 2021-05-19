@@ -67,17 +67,11 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const DateRangePicker = ({}) => {
-  const [state, setState] = React.useState({
-    start: null,
-    end: null,
-    currentSelection: 'none',
-  })
+export const DateRangePicker = ({ start = null, end = null, onChange }) => {
+  const [currentSelection, setCurrentSelection] = React.useState('none')
   const [hoveredDay, setHoveredDay] = React.useState(null)
 
   const classes = useStyles()
-
-  const { start, end, currentSelection } = state
 
   // Create all the datetime points for the hover and selection comparisons.
   const startStart = start?.startOf('day')
@@ -90,42 +84,27 @@ export const DateRangePicker = ({}) => {
   function handleChange(newValue) {
     // Case: the first selection.
     if (currentSelection === 'none') {
-      return setState({
-        start: newValue,
-        end: newValue,
-        currentSelection: 'start',
-      })
+      setCurrentSelection('start')
+      return onChange({ start: newValue, end: newValue })
     }
 
     if (currentSelection === 'start' && newValue < startStart) {
-      return setState({
-        start: newValue,
-        end: newValue,
-        currentSelection: 'start',
-      })
+      setCurrentSelection('start')
+      return onChange({ start: newValue, end: newValue })
     }
 
     if (currentSelection === 'start') {
-      return setState({
-        start,
-        end: newValue,
-        currentSelection: 'end',
-      })
+      setCurrentSelection('end')
+      return onChange({ start, end: newValue })
     }
 
     if (currentSelection === 'end' && newValue < endStart) {
-      return setState({
-        start: newValue,
-        end,
-        currentSelection: 'start',
-      })
+      setCurrentSelection('start')
+      onChange({ start: newValue, end })
     }
 
-    return setState({
-      start: newValue,
-      end: newValue,
-      currentSelection: 'start',
-    })
+    setCurrentSelection('start')
+    return onChange({ start: newValue, end: newValue })
   }
 
   const renderWeekPickerDay = (date, _selectedDates, PickersDayComponentProps) => {
@@ -199,7 +178,7 @@ export const DateRangePicker = ({}) => {
 
   return (
     <StaticDatePicker
-      openTo="date"
+      openTo="day"
       value={start}
       onChange={handleChange}
       renderDay={renderWeekPickerDay}

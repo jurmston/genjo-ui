@@ -699,6 +699,13 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
       },
 
+      // TOGGLE BUTTON
+      MuiToggleButton: {
+        styleOverrides: {
+
+        },
+      },
+
       // TYPOGRAPHY
       MuiTypography: {
         defaultProps: {

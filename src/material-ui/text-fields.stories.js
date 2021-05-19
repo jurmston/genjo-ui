@@ -7,6 +7,8 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
+import ToggleButton from '@material-ui/core/ToggleButton'
+import Stack from '@material-ui/core/Stack'
 
 import HelpIcon from '@material-ui/icons/Help'
 
@@ -127,26 +129,43 @@ export const Primary = () => {
         </Grid>
 
         <Grid item xs={12}>
-          <TextField
-            variant="filled"
-            label="Label"
-            helperText="This text helps."
-            error={error}
-            placeholder="Give me string..."
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  $
-                </InputAdornment>
-              ),
-            }}
-            required={required}
-            select
-          >
-            <MenuItem value="1">Item 1</MenuItem>
-            <MenuItem value="2">Item 2</MenuItem>
-            <MenuItem value="3">Item 3</MenuItem>
-          </TextField>
+
+            <TextField
+              variant="filled"
+              label="Label"
+              helperText="This text helps."
+              error={error}
+              placeholder="Give me string..."
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    $
+                  </InputAdornment>
+                ),
+              }}
+              required={required}
+              select
+            >
+              <MenuItem value="1">Item 1</MenuItem>
+              <MenuItem value="2">Item 2</MenuItem>
+              <MenuItem value="3">Item 3</MenuItem>
+            </TextField>
+
+
+        </Grid>
+
+        <Grid item xs={12}>
+          <Stack direction="row" spacing={1}>
+
+            <TextField
+              variant="filled"
+              placeholder="With help..."
+            />
+
+            <ToggleButton variant="filled">
+              <HelpIcon />
+            </ToggleButton>
+          </Stack>
         </Grid>
       </Grid>
     </div>
