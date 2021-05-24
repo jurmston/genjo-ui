@@ -4,7 +4,6 @@ import {
   createDataSet,
   calculateTotals,
 } from './data'
-import getRandomUser from '../../../.storybook/utils/getRandomUser'
 
 
 async function stall(latency) {

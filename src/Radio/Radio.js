@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { styled, darken } from '@material-ui/core/styles'
+import { experimentalStyled as styled, darken } from '@material-ui/core/styles'
 import MuiRadio from '@material-ui/core/Radio'
 
 
@@ -25,7 +25,7 @@ const RadioIcon = styled('span')({
 })
 
 const RadioCheckedIcon = styled(RadioIcon)(({ theme }) => ({
-  animation: 'radio-bounce 0.15s 1 ease-in-out',
+  // animation: 'radio-bounce 0.15s 1 ease-in-out',
   backgroundColor: theme.palette.secondary.main,
   backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
   '&:before': {
@@ -47,17 +47,6 @@ export function Radio(props) {
     <MuiRadio
       sx={{
         '&:hover': { bgcolor: 'transparent' },
-        '@keyframes radio-bounce': {
-          '0%': {
-            transform: 'scale(0)',
-          },
-          '75%': {
-            transform: 'scale(1.25)',
-          },
-          '100%': {
-            transform: 'scale(1)',
-          },
-        },
       }}
       disableRipple
       color="default"

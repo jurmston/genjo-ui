@@ -1,5 +1,4 @@
 import React from 'react'
-import getRandomUser from '../../.storybook/utils/getRandomUser'
 import { useQuery, useInfiniteQuery, QueryClient, QueryClientProvider } from 'react-query'
 
 import DataTable from './DataTable'
@@ -74,7 +73,8 @@ const PrimaryInner = () => {
 
   const [columns, setColumns] = React.useState([])
 
-  const { selected, toggleAll, toggle } = useSelectionSet('', rowCount, [sortBy, columns])
+  const { selected, mode, toggle, selectAll, unselectAll } = useSelectionSet([sortBy, columns])
+  console.log({ selected, mode })
 
   const [excludedIds, setExcludedIds] = React.useState(new Set())
 
@@ -392,8 +392,11 @@ const PrimaryInner = () => {
 
           selector={{
             selected,
-            toggleAll,
+            selectAll,
+            unselectAll,
+            mode,
             toggle,
+            key: 'id',
           }}
 
           sorting={{

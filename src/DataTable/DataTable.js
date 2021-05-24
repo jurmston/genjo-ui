@@ -100,7 +100,7 @@ export const DataTable = ({
   // Synchronize the react-window grids to the calculated column widths
   React.useEffect(() => {
     updateGrid()
-  }, [containerWidth, widths, updateGrid, columns])
+  }, [containerWidth, widths, updateGrid])
 
   const { getColumnWidth, widths } = useColumnWidths({
     containerWidth,
@@ -402,10 +402,13 @@ DataTable.propTypes = {
    * (Optional) Plugin for allowing selectable rows.
    */
   selector: PropTypes.shape({
+    mode: PropTypes.oneOf(['include', 'exclude']),
     /** A set containing the currently selected indexes. */
     selected: PropTypes.any, // TODO: find the proper type for sets.
-    toggleAll: PropTypes.func,
+    selectAll: PropTypes.func,
+    unselectAll: PropTypes.func,
     toggle: PropTypes.func,
+    key: PropTypes.string,
   }),
 
   /**

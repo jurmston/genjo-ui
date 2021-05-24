@@ -55,8 +55,11 @@ export const DataCell = React.memo(
 
     const cellContent = type === 'checkbox' ? (
       <Checkbox
-        checked={selector.selected.has(rowIndex)}
-        onChange={() => selector.toggle(rowIndex)}
+        checked={selector.mode === 'include'
+          ? selector.selected.has(row[selector.key])
+          : !selector.selected.has(row[selector.key])
+        }
+        onChange={() => selector.toggle(row[selector.key])}
         onClick={event => {
           // Prevent propagation to `onRowClick` event.
           event.stopPropagation()
@@ -100,7 +103,7 @@ export const DataCell = React.memo(
           role="button"
           tabIndex={0}
           className={clsx(classes.cell, {
-            [classes.isSelected]: selector?.selected.has(rowIndex),
+            [classes.isSelected]: selector?.selected.has(row[selector.key]),
             [classes.hoveredRowCell]: hoveredState[0] === rowIndex,
             [classes.hoveredColumnCell]: hoveredState[1] === columnIndex,
             [classes.isClickable]: Boolean(onRowClick),

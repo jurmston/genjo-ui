@@ -1,4 +1,4 @@
-import { styled, darken } from '@material-ui/core/styles'
+import { experimentalStyled as styled } from '@material-ui/core/styles'
 
 import MuiSwitch from '@material-ui/core/Switch'
 

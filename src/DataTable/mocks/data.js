@@ -2,6 +2,7 @@ import randomWords from 'random-words'
 import { DateTime } from 'luxon'
 import getRandomUser from '../../../.storybook/utils/getRandomUser'
 
+
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min)
   max = Math.floor(max)
@@ -27,7 +28,7 @@ export function createDataSet(recordCount = 1000, contactsCount = 100) {
     })
 
     const record = {
-      id: i + 1,
+      id: `Company:${i + 1}`,
       name: names[i],
       discipline: TEST_DISCIPLINES[getRandomIntInclusive(0, 7)] ?? '',
       website: 'https://www.exmaple.com',

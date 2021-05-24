@@ -1,36 +1,27 @@
 import * as React from 'react'
 
-export function useSelectionSet(key = '', rowCount = 0, deps = []) {
+export function useSelectionSet(deps = []) {
+  // Mode = include | exclude
+  const [mode, setMode] = React.useState('include')
+
   const [selected, setSelected] = React.useState(new Set())
 
+  // Converts the mode to `include`
   const unselectAll = React.useCallback(
     () => {
+      setMode('include')
       setSelected(new Set())
     },
     [],
   )
 
+  // Converts the mode to `exclude`
   const selectAll = React.useCallback(
     () => {
-      setSelected(new Set(Array.from({ length: rowCount }).map((_, index) => index)))
+      setMode('exclude')
+      setSelected(new Set())
     },
-    [rowCount]
-  )
-
-  /**
-   * If either no items, or some but not all, are selected, all of the items
-   * will be selected. If all the items are selected, then all of them will be
-   * unselected.
-   */
-  const toggleAll = React.useCallback(
-    () => {
-      if (selected.size < rowCount) {
-        selectAll()
-      } else {
-        unselectAll()
-      }
-    },
-    [selectAll, unselectAll, selected, rowCount],
+    []
   )
 
   const toggle = React.useCallback(
@@ -50,12 +41,13 @@ export function useSelectionSet(key = '', rowCount = 0, deps = []) {
 
   // Reset the selected set any time the key or row count changes.
   React.useEffect(() => {
+    setMode('include')
     setSelected(new Set())
-  }, [key, rowCount, ...deps])
+  }, [...deps])
 
   return {
+    mode,
     selected,
-    toggleAll,
     toggle,
     selectAll,
     unselectAll,

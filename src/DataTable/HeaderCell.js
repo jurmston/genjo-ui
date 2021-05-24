@@ -48,13 +48,16 @@ export const HeaderCell = React.memo(
         <CheckboxHeader
           classes={classes}
           style={style}
-          status={selector.selected.size === rowCount
-            ? 'checked'
-            : selector.selected.size > 0
+          status={selector.selected.size
             ? 'indeterminate'
+            : selector.mode === 'exclude'
+            ? 'checked'
             : 'empty'
           }
-          onChange={selector.toggleAll}
+          onChange={selector.mode === 'include'
+            ? selector.selectAll
+            : selector.unselectAll
+          }
         />
       )
     }

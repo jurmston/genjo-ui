@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { styled, darken } from '@material-ui/core/styles'
+import { experimentalStyled as styled, darken } from '@material-ui/core/styles'
 
 import MuiCheckbox from '@material-ui/core/Checkbox'
 
@@ -29,7 +29,7 @@ const CheckboxIcon = styled('span')({
 
 
 const CheckboxCheckedIcon = styled(CheckboxIcon)(({ theme }) => ({
-  animation: 'checkbox-bounce 0.15s 1 ease-in-out',
+  // animation: 'checkbox-bounce 75ms 1',
   backgroundColor: theme.palette.secondary.main,
   backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
   '&:before': {
@@ -54,17 +54,6 @@ export function Checkbox(props) {
     <MuiCheckbox
       sx={{
         '&:hover': { bgcolor: 'transparent' },
-        '@keyframes checkbox-bounce': {
-          '0%': {
-            transform: 'scale(0)',
-          },
-          '75%': {
-            transform: 'scale(1.25)',
-          },
-          '100%': {
-            transform: 'scale(1)',
-          },
-        },
       }}
       disableRipple
       color="default"
