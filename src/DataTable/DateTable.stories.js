@@ -74,7 +74,6 @@ const PrimaryInner = () => {
   const [columns, setColumns] = React.useState([])
 
   const { selected, mode, toggle, selectAll, unselectAll } = useSelectionSet([sortBy, columns])
-  console.log({ selected, mode })
 
   const [excludedIds, setExcludedIds] = React.useState(new Set())
 
@@ -385,7 +384,7 @@ const PrimaryInner = () => {
           onItemsRendered={debouncedOnItemsRendered}
           isLoading={isLoading || isLoadingTotals || isLoadingSubtotal}
           isFetching={isFetching}
-          overscanRowCount={10}
+          overscanRowCount={50}
 
           onRowSelect={onRowSelect}
           onRowClick={onRowClick}

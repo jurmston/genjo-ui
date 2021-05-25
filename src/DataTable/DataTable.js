@@ -19,6 +19,8 @@ import useHovering from './useHovering'
 import useResizing from './useResizing'
 import useStyles from './styles'
 
+// import './style.css'
+
 
 const ROW_HEIGHT = 36
 const TOTAL_HEIGHT = 56
@@ -187,8 +189,12 @@ export const DataTable = ({
         subtotals,
       }}
     >
-      <div className={classes.root}>
-        {isFetching && !isLoading && <LinearProgress />}
+      <div className={clsx(classes.root, 'datatable__root')}>
+        {isFetching && !isLoading && (
+          <div className={classes.progressContainer}>
+            <LinearProgress />
+          </div>
+        )}
 
         {/* HEADER */}
         <div className={classes.headerGridContainer} onMouseLeave={() => onHover(-1, -1)}>

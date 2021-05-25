@@ -272,6 +272,13 @@ export const useStyles = makeStyles(theme => ({
   actionButton: {
     color: theme.palette.grey[500],
   },
+
+  progressContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  }
 }))
 
 export default useStyles
