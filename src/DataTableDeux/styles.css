@@ -1,0 +1,173 @@
+:root {
+  --border-radius: 8px;
+  --main-border-color: rgba(0, 0, 0, 0.12);
+  --inner-border-color: #90a4ae;
+  --totals-bg-color: #eceff1;
+  --row-hover-bg-color: #e1f5fe;
+  --header-cell-text-color: #607d8b;
+  --resize-handle-bg-color: #455a64;
+  --drag-boundry-bg-color: rgb(255,179,0, 0.2);
+  --drag-boundry-border-color: #ffb300;
+  --row-selected-bg-color: #fff8e1;
+}
+
+.GenjoDataTable__root {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--main-border-color);
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: var(--border-radius);
+}
+
+.GenjoDataTable__section {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.GenjoDataTable__column {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.GenjoDataTable__row {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-y: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.GenjoDataTable__header-row {
+  overflow-x: auto;
+  border-bottom: 2px solid var(--inner-border-color);
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+}
+
+.GenjoDataTable__header-cell {
+  position: relative;
+  font-weight: 700;
+  color: var(--header-cell-text-color);
+  padding-right: 8px;
+}
+
+/* .GenjoDataTable__header-cell:hover {
+  background-color: var(--header-cell-hover-bg-color);
+} */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.GenjoDataTable__header-row::-webkit-scrollbar {
+  display: none;
+}
+
+.GenjoDataTable__cell {
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.GenjoDataTable__cell > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.GenjoDataTable__fetch-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.GenjoDataTable__data-grid {
+  /* display: flex;
+  flex-direction: column; */
+  overflow-y: auto;
+}
+
+.GenjoDataTable__scroll-container {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.GenjoDataTable__data-row {
+  position: absolute;
+}
+
+/* .GenjoDataTable__data-row { */
+.GenjoDataTable__data-row:hover {
+  background-color: var(--row-hover-bg-color);
+}
+
+.GenjoDataTable__data-row.is-selected {
+  background-color: var(--row-selected-bg-color);
+}
+
+.GenjoDataTable__data-row:not(:last-child) {
+  border-bottom: 1px solid var(--main-border-color);
+}
+
+
+.GenjoDataTable__totals {
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-top: 2px solid var(--inner-border-color);
+  background-color: var(--totals-bg-color);
+}
+
+.GenjoDataTable__actions {
+  display: flex;
+  align-items: center;
+}
+
+.GenjoDataTable__title {
+  overflow: hidden;
+}
+
+.GenjoDataTable__resize-handle {
+  /* transition: theme.transitions.create('opacity'), */
+  position: absolute;
+  top: 12px;
+  right: 0;
+  bottom: 12px;
+  opacity: 1;
+  width: 3px;
+  border-radius: 3px;
+  background-color: var(--main-border-color);
+  cursor: col-resize;
+  transition: background-color 200ms ease-in;
+}
+
+.GenjoDataTable__header-cell:hover .GenjoDataTable__resize-handle{
+  background-color: var(--resize-handle-bg-color);
+}
+
+.GenjoDataTable__drag-boundry {
+  position: absolute;
+  background-color: var(--drag-boundry-bg-color);
+  border-right: 2px solid var(--drag-boundry-border-color);
+  top: 0;
+  bottom: 0;
+  z-index: 9999;
+}
+
+.GenjoDataTable__loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}

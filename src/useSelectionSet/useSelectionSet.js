@@ -39,6 +39,14 @@ export function useSelectionSet(deps = []) {
     [selected]
   )
 
+  const toggleMode = React.useCallback(
+    () => {
+      setSelected(new Set())
+      setMode(mode === 'include' ? 'exclude' : 'include')
+    },
+    [mode]
+  )
+
   // Reset the selected set any time the key or row count changes.
   React.useEffect(() => {
     setMode('include')
@@ -51,6 +59,7 @@ export function useSelectionSet(deps = []) {
     toggle,
     selectAll,
     unselectAll,
+    toggleMode,
   }
 }
 

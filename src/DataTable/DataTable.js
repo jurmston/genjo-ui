@@ -284,7 +284,7 @@ export const DataTable = ({
         {/* DRAG BOUNDRY */}
         {dragInfo.columnIndex > -1 && (
           <div
-            className={classes.dragBoundry}
+            className="GenjoDataTable__drag-boundy"
             style={{
               left: dragInfo?.left,
               width: dragInfo?.currentWidth,

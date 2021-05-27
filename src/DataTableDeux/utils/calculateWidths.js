@@ -1,0 +1,54 @@
+import { minMax, safeDivide } from '../../utils/math'
+
+
+export function calculateWidths({
+  widths,
+  containerWidth,
+  actionsWidth,
+  checkboxWidth,
+  minWidth,
+  maxWidth,
+}) {
+  const count = widths.length
+
+  // Divide the containerWidth into equal parts.
+  const netContainerWidth = containerWidth
+    // - scrollbarWidth
+    // - 1
+    - actionsWidth
+    - checkboxWidth
+
+  const partitionWidth = safeDivide(netContainerWidth, count)
+
+  const actualMinColumnWidth = Math.min(minWidth, partitionWidth)
+
+  // After accounting for the minimum possible width, this value tracks the
+  // remaining width left to redistribute.
+  let slack = netContainerWidth - count * actualMinColumnWidth
+
+  const newWidths = widths.map((value, index) => {
+    // Handle `type === 'checkbox'` seperately to make sure it's width is
+    // fixed. This will lead to a little extra slack on most screens since
+    // the checkbox width is smaller than the min width.
+    const targetWidth = minMax(
+      actualMinColumnWidth,
+      value ?? partitionWidth,
+      maxWidth
+    )
+
+    const slackNeeded = targetWidth - actualMinColumnWidth
+    const slackAvailable = Math.min(slackNeeded, slack)
+
+    slack -= slackAvailable
+
+    // If there are actions, the slack remaining should be applied to the
+    // second to last column.
+    const lastColumnIndex = count - 1
+
+    const remainder = index === lastColumnIndex ? slack : 0
+
+    return actualMinColumnWidth + slackAvailable + remainder
+  })
+
+  return newWidths
+}
