@@ -3,41 +3,32 @@ import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import IconButton from '@material-ui/core/IconButton'
 
-import EditIcon from '@material-ui/icons/EditRounded'
-import RemoveIcon from '@material-ui/icons/RemoveCircleRounded'
-import FavoriteIcon from '@material-ui/icons/FavoriteRounded'
-
-import getCellAlignment from '../DataTable/utils/getCellAlignment'
-import getSortIcon from '../DataTable/utils/getSortIcon'
+import getCellAlignment from './utils/getCellAlignment'
+import getSortIcon from './utils/getSortIcon'
 
 import useDebounce from '../useDebounce'
 
-import Checkbox from '../Checkbox'
 import CircleLoader from '../CircleLoader'
-import { HeaderCell } from './HeaderCell'
 import { DragBoundry } from './DragBoundry'
 import { DataWindow } from './DataWindow'
+import { Header } from './Header'
+import { Totals } from './Totals'
 
 import './styles.css'
 import { calculateWidths } from './utils/calculateWidths'
-import debounce from '@material-ui/utils/debounce'
+import { safeDivide } from '../utils/math'
+
+import scrollbarSize from 'dom-helpers/scrollbarSize'
+
 
 export const DataTableContext = React.createContext()
 export const useDataTable = () => React.useContext(DataTableContext)
 
-const ROW_HEIGHT = 36
 const HEADER_HEIGHT = 48
 const TOTALS_HEIGHT = 56
-const COL_MIN_WIDTH = 50
-const COL_MAX_WIDTH = 500
 const HEIGHT_BUFFER = 7
 const INNER_BORDER_WIDTH = 2
-const COL_DEFAULT_WIDTH = 100
-const DATA_GRID_OUTER_BORDERS = 2
-
-const ACTIONS_WIDTH = 100
 
 
 export const DataTableDeux = ({
@@ -54,33 +45,83 @@ export const DataTableDeux = ({
   selectionMode,
   toggleSelected,
   toggleSelectionMode,
+  selectMany,
+  unselectMany,
+  onColumnResize,
+  sortBy,
+  setSortBy,
+  totals,
+  customRenderers,
+  renderActions,
+  actionsWidth = 0,
+  maxColumnWidth = 500,
+  minColumnWidth = 50,
 }) => {
   const [columns, setColumns] = React.useState([])
-  const [rowWindow, setRowWindow] = React.useState({ top: 0, bottom: 0 })
+  const [rowWindow, setRowWindow] = React.useState({ top: 0, bottom: 0, visibleCount: 0 })
 
+  // --- Dimesions
   const dataGridHeight = containerHeight - HEADER_HEIGHT - TOTALS_HEIGHT - HEIGHT_BUFFER - 2 * INNER_BORDER_WIDTH
+  const [rowDensity, setRowDensity] = React.useState('dense')
+  const rowHeight = rowDensity === 'dense' ? 36 : 52
+  const hasScrollbar = rowCount >= rowWindow.visibleCount
+  const scrollbarWidth = hasScrollbar ? scrollbarSize() : 0
+
+  // --- Selections
+  const [lastSelection, setLastSelection] = React.useState(null)
+  const toggleSelectRow = React.useCallback(
+    (event, value, index) => {
+      const isSelected = selectionMode === 'include'
+        ? selected.has(value)
+        : !selected.has(value)
+
+      if (event.shiftKey && lastSelection !== null) {
+        const bottom = Math.min(lastSelection.index, index)
+        const top = Math.max(lastSelection.index, index)
+
+        const values = []
+        for (let i = bottom; i <= top; i += 1) {
+          if (rows[i]?.id) {
+            values.push(rows[i].id)
+          }
+        }
+
+        if (lastSelection.isSelected) {
+          selectMany(values)
+        } else {
+          unselectMany(values)
+        }
+        setLastSelection(null)
+        return
+      }
+
+      toggleSelected(value)
+      setLastSelection({ index, isSelected: selectionMode === 'include' ? !isSelected : isSelected })
+    },
+    [selected, lastSelection, selectionMode]
+  )
 
   const calculateRowWindow = React.useCallback(
     scrollPosition => {
-      const visibleTopRow = Math.ceil(scrollPosition / ROW_HEIGHT)
+      const visibleTopRow = Math.ceil(scrollPosition / rowHeight)
       const topRow = Math.max(0, visibleTopRow - overscanCount)
 
-      const visibleRowsCount = Math.floor(dataGridHeight / ROW_HEIGHT)
+      const visibleCount = Math.floor(dataGridHeight / rowHeight)
 
-      const visibleBottomRow = visibleTopRow + visibleRowsCount
+      const visibleBottomRow = visibleTopRow + visibleCount
       const bottomRow = Math.min(rowCount - 1, visibleBottomRow + overscanCount)
 
       onItemsRendered?.({ topRow, bottomRow })
-      setRowWindow({ topRow, bottomRow })
+      setRowWindow({ topRow, bottomRow, visibleCount })
     },
-    [dataGridHeight, rowCount, onItemsRendered]
+    [dataGridHeight, rowCount, onItemsRendered, rowHeight]
   )
 
   React.useEffect(
     () => {
       calculateRowWindow(0)
     },
-    []
+    [isLoading]
   )
 
   // --- Scrolling
@@ -100,34 +141,38 @@ export const DataTableDeux = ({
 
   const debouncedRowWindow = useDebounce(rowWindow, 50)
 
-  const sorting = null
-
 
   // Synchronize changes in the columns from props.
   // Additionally: add alignment and sorting info onto the columns.
   React.useEffect(() => {
     const widths = calculateWidths({
-      widths: columns.map(column => column?.width ?? 0),
-      minWidth: 100,
-      maxWidth: 500,
+      widths: columnsFromProps.map(column => column?.width ?? 0),
+      minWidth: minColumnWidth,
+      maxWidth: maxColumnWidth,
       containerWidth,
-      actionsWidth: ACTIONS_WIDTH,
-      checkboxWidth: ROW_HEIGHT,
+      actionsWidth: actionsWidth,
+      checkboxWidth: rowHeight,
     })
 
     setColumns(columnsFromProps.map((column, index) => ({
       ...column,
       align: getCellAlignment(column.type),
       width: widths[index],
-      sortIcon: column.isSortable ? getSortIcon({
-        type: column.type,
-        direction: sorting?.key === column.dataKey
-          ? sorting?.direction
-          : '',
-      }) : null,
+      sortIcon: getSortIcon({ sortBy, column }),
     })))
-  }, [columnsFromProps, containerWidth])
+  }, [columnsFromProps, containerWidth, sortBy])
 
+  const autoSizeColumns = React.useCallback(
+    () => {
+      const newWidth = Math.max(
+        0,
+        safeDivide(containerWidth - rowHeight - actionsWidth, columns.length)
+      )
+
+      onColumnResize('__ALL__', newWidth)
+    },
+    [containerWidth, columns]
+  )
 
   const [dragInfo, setDragInfo] = React.useState(null)
 
@@ -135,9 +180,10 @@ export const DataTableDeux = ({
     (event, columnIndex) => {
       const left = columns
         .slice(0, columnIndex)
-        .reduce((total, column) => total + column.width, ROW_HEIGHT)
+        .reduce((total, column) => total + column.width, rowHeight)
 
       setDragInfo({
+        columnIndex,
         left,
         initialX: event.clientX,
         width: columns?.[columnIndex]?.width ?? 0,
@@ -147,10 +193,22 @@ export const DataTableDeux = ({
   )
 
   const stopResizing = React.useCallback(
-    () => {
-      setDragInfo(null)
+    currentX => {
+      if (dragInfo) {
+        const { width, initialX } = dragInfo
+        const newWidth = Math.min(
+          maxColumnWidth,
+          Math.max(
+            minColumnWidth,
+            width + (currentX - initialX)
+          )
+        )
+
+        onColumnResize(dragInfo.columnIndex, newWidth)
+        setDragInfo(null)
+      }
     },
-    []
+    [dragInfo]
   )
 
   return (
@@ -164,46 +222,29 @@ export const DataTableDeux = ({
         selectionMode,
         toggleSelected,
         toggleSelectionMode,
+        toggleSelectRow,
+        sortBy,
+        setSortBy,
+        customRenderers,
+        renderActions,
       }}
     >
       <div className="GenjoDataTable__root">
 
-        {/* HEADER */}
-        <div
-          className={clsx(
-            'GenjoDataTable__row',
-            'GenjoDataTable__header-row',
-          )}
-          style={{ height: HEADER_HEIGHT }}
-        >
-          {/* FIXED HEADER */}
-          <div
-            className="GenjoDataTable__cell"
-            style={{ width: ROW_HEIGHT, maxWidth: ROW_HEIGHT, minWidth: ROW_HEIGHT }}
-          >
-            <Checkbox
-              checked={selectionMode === 'exclude'}
-              onClick={toggleSelectionMode}
-            />
-          </div>
-
-          {columns.map((column, index) => (
-            <HeaderCell
-              index={index}
-              key={column.dataKey}
-              column={column}
-            />
-          ))}
-
-          <div
-            style={{
-              height: HEADER_HEIGHT,
-            }}
-          />
-        </div>
+        <Header
+          isLoading={isLoading}
+          columns={columns}
+          selected={selected}
+          selectionMode={selectionMode}
+          toggleSelectionMode={toggleSelectionMode}
+          rowDensity={rowDensity}
+          setRowDensity={setRowDensity}
+          autoSizeColumns={autoSizeColumns}
+          actionsWidth={actionsWidth}
+        />
 
         {isFetching && !isLoading && (
-          <div className="GenjoDataTable__fetch-bar" style={{ top: ROW_HEIGHT }}>
+          <div className="GenjoDataTable__fetch-bar">
             <LinearProgress />
           </div>
         )}
@@ -234,15 +275,16 @@ export const DataTableDeux = ({
           >
             <DataWindow
               rowCount={rowCount}
+              rowHeight={rowHeight}
               height={dataGridHeight}
+              actionsWidth={actionsWidth}
+              scrollbarWidth={scrollbarWidth}
               {...debouncedRowWindow}
             />
           </div>
         )}
 
-        <div className="GenjoDataTable__totals" style={{ height: TOTALS_HEIGHT }}>
-          Totals
-        </div>
+        <Totals columns={columns} totals={totals} actionsWidth={actionsWidth} />
 
         {/* DRAG BOUNDRY */}
         {Boolean(dragInfo) && (
@@ -251,16 +293,6 @@ export const DataTableDeux = ({
             onMouseUp={stopResizing}
           />
         )}
-        {/*dragInfo.columnIndex > -1 && (
-          <div
-            className="GenjoDataTable__drag-boundry"
-            style={{
-              left: dragInfo?.left,
-              width: dragInfo?.currentWidth,
-              zIndex: 9999,
-            }}
-          />
-          )*/}
       </div>
     </DataTableContext.Provider>
   )

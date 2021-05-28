@@ -4,22 +4,26 @@ import { useQuery, useInfiniteQuery, QueryClient, QueryClientProvider } from 're
 
 import useDimensions from '../useDimensions'
 import { DataTableDeux } from './DataTableDeux'
-import { createDataTableTestData } from '../DataTable/storybook-utils'
 import createApiClient from '../DataTable/mocks/api'
 import useSelectionSet from '../useSelectionSet'
+import Avatar from '@material-ui/core/Avatar'
+import IconButton from '@material-ui/core/IconButton'
 
+import EditIcon from '@material-ui/icons/Edit'
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutline'
+import FavoriteIcon from '@material-ui/icons/FavoriteBorderRounded'
 
 export default {
   title: 'Components/DataTableDeux',
   component: DataTableDeux,
 }
 
-const apiClient = createApiClient(100, 'none')
+const apiClient = createApiClient({ recordCount: 10000, latency: 'none' })
 
 // const TEST_DATA = createDataTableTestData(100)
 
 
-const columns = [
+const columnData = [
   {
     dataKey: 'name',
     type: 'string',
@@ -90,9 +94,9 @@ export const PrimaryInner = () => {
   const [sortBy, setSortBy] = React.useState('')
 
 
-  // const [columns, setColumns] = React.useState([])
+  const [columns, setColumns] = React.useState(columnData)
 
-  const { selected, mode, toggle, toggleMode } = useSelectionSet([sortBy, columns])
+  const { selected, mode, toggle, toggleMode, selectMany, unselectMany } = useSelectionSet([sortBy, columns])
 
   const excludeRecord = idToExclude => {
     const newExcludedIds = new Set(excludedIds)
@@ -139,7 +143,7 @@ export const PrimaryInner = () => {
     return results?.data
   }
 
-  const { isLoading: isLoadingTotals } = useQuery(
+  const { isLoading: isLoadingTotals, isFetching: isFetchingTotals } = useQuery(
     ['totals', excludedIdsKey, hiddenIdsKey],
     mockTotalsApi,
     {
@@ -172,6 +176,39 @@ export const PrimaryInner = () => {
     }
   )
 
+  function renderPerson(value) {
+    if (!value) {
+      return ''
+    }
+
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar
+          style={{
+            height: 24,
+            width: 24,
+            backgroundColor: value?.color ?? 'unset',
+            fontSize: 14,
+            marginRight: 8,
+          }}
+          src={value?.avatar}
+        >
+          {value?.fullName?.[0]}
+        </Avatar>
+
+        <a href="https://www.example.com">
+          {value?.fullName ?? ''}
+        </a>
+      </div>
+    )
+  }
+
+
   function onItemsRendered({ topRow, bottomRow }) {
     let minUnloadedRecord = Infinity
     let maxUnloadedRecord = -1
@@ -193,6 +230,24 @@ export const PrimaryInner = () => {
     }
   }
 
+  function renderActions(row) {
+    return (
+      <>
+        <IconButton>
+          <EditIcon />
+        </IconButton>
+
+        <IconButton>
+          <FavoriteIcon />
+        </IconButton>
+
+        <IconButton>
+          <RemoveCircleIcon />
+        </IconButton>
+      </>
+    )
+  }
+
   return (
     <div
       ref={tableContainerRef}
@@ -203,18 +258,36 @@ export const PrimaryInner = () => {
       }}
     >
       <DataTableDeux
-        isFetching={isFetching}
-        isLoading={isLoading}
+        isFetching={isFetching || isFetchingTotals}
+        isLoading={isLoading || isLoadingTotals}
         rowCount={rowCount}
         rows={rows}
         containerHeight={tableContainerHeight}
         containerWidth={tableContainerDimensions.width}
         columns={columns}
+        totals={totals}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
         onItemsRendered={onItemsRendered}
         selected={selected}
         selectionMode={mode}
         toggleSelected={toggle}
         toggleSelectionMode={toggleMode}
+        selectMany={selectMany}
+        unselectMany={unselectMany}
+        customRenderers={{
+          person: renderPerson,
+        }}
+        actionsWidth={200}
+        renderActions={renderActions}
+        onColumnResize={(indexToChange, newWidth) => {
+          setColumns(
+            columns.map((column, index) => indexToChange === '__ALL__' || index === indexToChange
+              ? { ...column, width: newWidth }
+              : column
+            )
+          )
+        }}
       />
     </div>
   )

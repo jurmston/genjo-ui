@@ -3,10 +3,15 @@ import PropTypes from 'prop-types'
 
 import { Row } from './Row'
 
-const ROW_HEIGHT = 36
 
-
-export const DataWindow = ({ rowCount, topRow, bottomRow }) => {
+export const DataWindow = ({
+  rowCount,
+  topRow,
+  bottomRow,
+  rowHeight,
+  actionsWidth,
+  scrollbarWidth,
+}) => {
 
   const rows = []
   for (let index = topRow; index <= bottomRow; index += 1) {
@@ -14,12 +19,15 @@ export const DataWindow = ({ rowCount, topRow, bottomRow }) => {
       <Row
         key={index}
         rowIndex={index}
-        top={index * ROW_HEIGHT}
+        top={index * rowHeight}
+        rowHeight={rowHeight}
+        actionsWidth={actionsWidth}
+        scrollbarWidth={scrollbarWidth}
       />
     )
   }
 
-  const totalHeight = rowCount * ROW_HEIGHT
+  const totalHeight = rowCount * rowHeight
 
   return (
     <div

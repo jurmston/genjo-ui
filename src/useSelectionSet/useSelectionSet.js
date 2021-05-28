@@ -25,16 +25,33 @@ export function useSelectionSet(deps = []) {
   )
 
   const toggle = React.useCallback(
-    index => {
+    value => {
       const newSelected = new Set(selected)
 
-      if (newSelected.has(index)) {
-        newSelected.delete(index)
+      if (newSelected.has(value)) {
+        newSelected.delete(value)
       } else {
-        newSelected.add(index)
+        newSelected.add(value)
       }
 
       return setSelected(newSelected)
+    },
+    [selected]
+  )
+
+  const selectMany = React.useCallback(
+    values => {
+      const newSelected = new Set([ ...selected, ...values ])
+      setSelected(newSelected)
+    },
+    [selected]
+  )
+
+  const unselectMany = React.useCallback(
+    values => {
+      const newSelected = new Set(selected)
+      values.forEach(value => newSelected.delete(value))
+      setSelected(newSelected)
     },
     [selected]
   )
@@ -60,6 +77,8 @@ export function useSelectionSet(deps = []) {
     selectAll,
     unselectAll,
     toggleMode,
+    selectMany,
+    unselectMany,
   }
 }
 

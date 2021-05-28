@@ -15,18 +15,21 @@ export const DragBoundry = React.memo(
       setCurrentX(event.clientX)
     }
 
+    function handleMouseUp() {
+      onMouseUp(currentX)
+    }
+
     React.useEffect(
       () => {
-        console.log('Called')
         window.addEventListener('mousemove', onMouseMove)
-        window.addEventListener('mouseup', onMouseUp)
+        window.addEventListener('mouseup', handleMouseUp)
 
         return () => {
           window.removeEventListener('mousemove', onMouseMove)
-          window.removeEventListener('mouseup', onMouseUp)
+          window.removeEventListener('mouseup', handleMouseUp)
         }
       },
-      [onMouseUp]
+      [handleMouseUp]
     )
 
     const resizeWidth = Math.min(

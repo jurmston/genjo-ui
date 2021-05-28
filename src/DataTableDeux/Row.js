@@ -12,12 +12,16 @@ import Checkbox from '../Checkbox'
 
 import Cell from './Cell'
 
-const ROW_HEIGHT = 36
-const HEADER_HEIGHT = 48
 
-
-export const Row = ({ rowIndex, top }) => {
-  const { columns, rows, selected, selectionMode, toggleSelected } = useDataTable()
+export const Row = ({ rowIndex, top, rowHeight, actionsWidth, scrollbarWidth }) => {
+  const {
+    columns,
+    rows,
+    selected,
+    selectionMode,
+    toggleSelectRow,
+    renderActions,
+  } = useDataTable()
 
   const row = rows?.[rowIndex]
   const isSelected = !row?.id
@@ -26,10 +30,26 @@ export const Row = ({ rowIndex, top }) => {
     ? selected.has(row?.id)
     : !selected.has(row?.id)
 
+  function handleKeyPress(event) {
+    if (event.key === 'Enter' || event.key === " ") {
+      toggleSelectRow(event, row?.id, rowIndex)
+    }
+  }
+
   return (
     <div
       role="row"
-      onClick={() => toggleSelected(row.id)}
+      tabIndex={0}
+      onClick={event => toggleSelectRow(event, row?.id, rowIndex)}
+      onKeyPress={handleKeyPress}
+      onMouseDown={event => {
+        // If there are selected elements we need to prevent the mouseDown
+        // event from selecting text because this interfere's with the shift-
+        // click to select functionality.
+        if (selected.size && event.shiftKey) {
+          event.preventDefault()
+        }
+      }}
       className={clsx(
         'GenjoDataTable__row',
         'GenjoDataTable__data-row',
@@ -38,20 +58,19 @@ export const Row = ({ rowIndex, top }) => {
         }
       )}
       style={{
-        height: ROW_HEIGHT,
-        maxHeight: ROW_HEIGHT,
-        minHeight: ROW_HEIGHT,
+        height: rowHeight,
+        maxHeight: rowHeight,
+        minHeight: rowHeight,
         top,
       }}
     >
       <div
         className="GenjoDataTable__cell"
-        style={{ width: ROW_HEIGHT, maxWidth: ROW_HEIGHT, minWidth: ROW_HEIGHT }}
+        style={{ width: rowHeight, maxWidth: rowHeight, minWidth: rowHeight }}
       >
         {Boolean(row?.id) && (
           <Checkbox
             checked={isSelected}
-            onClick={() => toggleSelected(row.id)}
           />
         )}
       </div>
@@ -66,18 +85,21 @@ export const Row = ({ rowIndex, top }) => {
         />
       ))}
 
-      <div
-        className="GenjoDataTable__cell"
-        style={{
-          height: HEADER_HEIGHT,
-        }}
-      >
-        <div className="GenjoDataTable__actions">
-          <IconButton><EditIcon /></IconButton>
-          <IconButton><FavoriteIcon /></IconButton>
-          <IconButton><RemoveIcon /></IconButton>
+      {actionsWidth > 0 && (
+        <div
+          className="GenjoDataTable__cell"
+          style={{
+            height: rowHeight,
+            width: actionsWidth - scrollbarWidth,
+            maxWidth: actionsWidth - scrollbarWidth,
+            minWidth: actionsWidth - scrollbarWidth,
+          }}
+        >
+          <div className="GenjoDataTable__actions">
+            {renderActions?.(row)}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

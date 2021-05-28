@@ -27,9 +27,6 @@ export function calculateWidths({
   let slack = netContainerWidth - count * actualMinColumnWidth
 
   const newWidths = widths.map((value, index) => {
-    // Handle `type === 'checkbox'` seperately to make sure it's width is
-    // fixed. This will lead to a little extra slack on most screens since
-    // the checkbox width is smaller than the min width.
     const targetWidth = minMax(
       actualMinColumnWidth,
       value ?? partitionWidth,
@@ -37,9 +34,9 @@ export function calculateWidths({
     )
 
     const slackNeeded = targetWidth - actualMinColumnWidth
-    const slackAvailable = Math.min(slackNeeded, slack)
+    const actualSlackUsed = Math.min(slackNeeded, slack)
 
-    slack -= slackAvailable
+    slack -= actualSlackUsed
 
     // If there are actions, the slack remaining should be applied to the
     // second to last column.
@@ -47,7 +44,7 @@ export function calculateWidths({
 
     const remainder = index === lastColumnIndex ? slack : 0
 
-    return actualMinColumnWidth + slackAvailable + remainder
+    return actualMinColumnWidth + actualSlackUsed + remainder
   })
 
   return newWidths

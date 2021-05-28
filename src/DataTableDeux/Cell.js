@@ -6,13 +6,13 @@ import { areEqual } from 'react-window'
 import Checkbox from '../Checkbox'
 import Skeleton from '@material-ui/core/Skeleton'
 
-import renderCell from '../DataTable/utils/renderCell'
 
+import renderCell from './utils/renderCell'
 import { useDataTable } from './DataTableDeux'
 
 
 export const Cell = React.memo(
-  ({ width, rowIndex, columnIndex, value }) => {
+  ({ width, columnIndex, value }) => {
 
     function onRowClick() {}
 

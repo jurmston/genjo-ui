@@ -9,6 +9,8 @@
   --drag-boundry-bg-color: rgb(255,179,0, 0.2);
   --drag-boundry-border-color: #ffb300;
   --row-selected-bg-color: #fff8e1;
+  --header-selected-color: #3d5afe;
+  --header-selected-bg-color: #e8eaf6;
 }
 
 .GenjoDataTable__root {
@@ -58,6 +60,15 @@
   padding-right: 8px;
 }
 
+.GenjoDataTable__header-cell:hover {
+  background-color: var(--totals-bg-color);
+}
+
+.GenjoDataTable__header-cell.is-selected {
+  background-color: var(--header-selected-bg-color);
+}
+
+
 /* .GenjoDataTable__header-cell:hover {
   background-color: var(--header-cell-hover-bg-color);
 } */
@@ -84,6 +95,7 @@
 
 .GenjoDataTable__fetch-bar {
   position: absolute;
+  top: 0;
   left: 0;
   right: 0;
 }
@@ -103,6 +115,8 @@
 
 .GenjoDataTable__data-row {
   position: absolute;
+  outline: none;
+  overflow: hidden;
 }
 
 /* .GenjoDataTable__data-row { */
@@ -126,22 +140,47 @@
   overflow: hidden;
   border-top: 2px solid var(--inner-border-color);
   background-color: var(--totals-bg-color);
+  display: flex;
+  align-items: center;
 }
 
 .GenjoDataTable__actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
 }
 
 .GenjoDataTable__title {
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.GenjoDataTable__title-container {
+  display: flex;
+  align-items: center;
+}
+
+.GenjoDataTable__sort-icon {
+  margin-left: 4px;
+  margin-right: 2px;
+  display: none;
+}
+
+.GenjoDataTable__header-cell:hover .GenjoDataTable__sort-icon {
+  display: unset;
+}
+
+.GenjoDataTable__header-cell.is-selected .GenjoDataTable__sort-icon {
+  display: unset;
 }
 
 .GenjoDataTable__resize-handle {
   /* transition: theme.transitions.create('opacity'), */
   position: absolute;
   top: 12px;
-  right: 0;
+  right: 4px;
   bottom: 12px;
   opacity: 1;
   width: 3px;
@@ -151,7 +190,7 @@
   transition: background-color 200ms ease-in;
 }
 
-.GenjoDataTable__header-cell:hover .GenjoDataTable__resize-handle{
+.GenjoDataTable__resize-handle:hover {
   background-color: var(--resize-handle-bg-color);
 }
 
@@ -170,4 +209,14 @@
   align-items: center;
   justify-content: center;
   font-size: 24px;
+}
+
+.GenjoDataTable__total-label {
+  color: var(--header-cell-text-color);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.GenjoDataTable__auto-size-icon {
+  transform: rotate(90deg);
 }
