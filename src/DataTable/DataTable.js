@@ -1,295 +1,295 @@
-import React from 'react'
+  import * as React from 'react'
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
-import { VariableSizeGrid } from 'react-window'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Typography from '@material-ui/core/Typography'
 
-import CircleLoader from '../CircleLoader'
-
-import DataCell from './DataCell'
-import DataTableContext from './DataTableContext'
 import getCellAlignment from './utils/getCellAlignment'
 import getSortIcon from './utils/getSortIcon'
-import HeaderCell from './HeaderCell'
-import TotalCell from './TotalCell'
-import useColumnWidths from './useColumnWidths'
-import useHovering from './useHovering'
-import useResizing from './useResizing'
-import useStyles from './styles'
 
-// import './style.css'
+import useDebounce from '../useDebounce'
+
+import CircleLoader from '../CircleLoader'
+import { DragBoundry } from './DragBoundry'
+import { DataWindow } from './DataWindow'
+import { Header } from './Header'
+import { Totals } from './Totals'
+
+import './styles.css'
+import { calculateWidths } from './utils/calculateWidths'
+import { safeDivide } from '../utils/math'
+
+import scrollbarSize from 'dom-helpers/scrollbarSize'
+
+import { DataTableContext } from './DataTableContext'
 
 
-const ROW_HEIGHT = 36
-const TOTAL_HEIGHT = 56
-const COL_MIN_WIDTH = 50
-const COL_MAX_WIDTH = 500
+const HEADER_HEIGHT = 48
+const TOTALS_HEIGHT = 56
 const HEIGHT_BUFFER = 7
 const INNER_BORDER_WIDTH = 2
-const COL_DEFAULT_WIDTH = 100
-const DATA_GRID_OUTER_BORDERS = 2
 
 
 export const DataTable = ({
-  customRenderers = {},
-  headerHeight = ROW_HEIGHT,
-  containerHeight = 0,
+  rowCount,
+  rows = {},
+  overscanCount = 30,
   isFetching = false,
   isLoading = false,
-  minColumnWidth = COL_MIN_WIDTH,
-  maxColumnWidth = COL_MAX_WIDTH,
-  defaultColumnWidth = COL_DEFAULT_WIDTH,
-  onItemsRendered,
-  onRowClick,
-  overscanRowCount = 10,
-  rowCount,
-  rowHeight = ROW_HEIGHT,
-  selector,
-  sorting,
-  totalHeight = TOTAL_HEIGHT,
+  containerHeight = 0,
   containerWidth = 0,
-  actions = [],
-
-  columnData,
-  rowData,
-  subtotalData,
-  isLoadingTotals = false,
-  hasTotals = false,
-  totalData,
-  subtotals,
-
-  onRowSelect,
+  columns: columnsFromProps = [],
+  onItemsRendered,
+  selected,
+  selectionMode,
+  toggleSelected,
+  toggleSelectionMode,
+  selectMany,
+  unselectMany,
+  onColumnResize,
+  sortBy,
+  setSortBy,
+  totals,
+  customRenderers,
+  renderActions,
+  actionsWidth = 0,
+  maxColumnWidth = 500,
+  minColumnWidth = 50,
 }) => {
   const [columns, setColumns] = React.useState([])
+  const [rowWindow, setRowWindow] = React.useState({ top: 0, bottom: 0, visibleCount: 0 })
+
+  // --- Dimesions
+  const dataGridHeight = containerHeight - HEADER_HEIGHT - TOTALS_HEIGHT - HEIGHT_BUFFER - 2 * INNER_BORDER_WIDTH
+  const [rowDensity, setRowDensity] = React.useState('dense')
+  const rowHeight = rowDensity === 'dense' ? 36 : 52
+  const hasScrollbar = rowCount >= rowWindow.visibleCount
+  const scrollbarWidth = hasScrollbar ? scrollbarSize() : 0
+
+  // --- Selections
+  const [lastSelection, setLastSelection] = React.useState(null)
+  const toggleSelectRow = React.useCallback(
+    (event, value, index) => {
+      const isSelected = selectionMode === 'include'
+        ? selected.has(value)
+        : !selected.has(value)
+
+      if (event.shiftKey && lastSelection !== null) {
+        const bottom = Math.min(lastSelection.index, index)
+        const top = Math.max(lastSelection.index, index)
+
+        const values = []
+        for (let i = bottom; i <= top; i += 1) {
+          if (rows[i]?.id) {
+            values.push(rows[i].id)
+          }
+        }
+
+        if (lastSelection.isSelected) {
+          selectMany(values)
+        } else {
+          unselectMany(values)
+        }
+        setLastSelection(null)
+        return
+      }
+
+      toggleSelected(value)
+      setLastSelection({ index, isSelected: selectionMode === 'include' ? !isSelected : isSelected })
+    },
+    [selected, lastSelection, selectionMode]
+  )
+
+  const calculateRowWindow = React.useCallback(
+    scrollPosition => {
+      const visibleTopRow = Math.ceil(scrollPosition / rowHeight)
+      const topRow = Math.max(0, visibleTopRow - overscanCount)
+
+      const visibleCount = Math.floor(dataGridHeight / rowHeight)
+
+      const visibleBottomRow = visibleTopRow + visibleCount
+      const bottomRow = Math.min(rowCount - 1, visibleBottomRow + overscanCount)
+
+      onItemsRendered?.({ topRow, bottomRow })
+      setRowWindow({ topRow, bottomRow, visibleCount })
+    },
+    [dataGridHeight, rowCount, onItemsRendered, rowHeight]
+  )
+
+  React.useEffect(
+    () => {
+      calculateRowWindow(0)
+    },
+    [isLoading]
+  )
+
+  // --- Scrolling
+  const onScroll = React.useCallback(
+    (event) => {
+      const { clientHeight, scrollHeight, scrollTop } = event.currentTarget
+
+      const scrollPosition = Math.max(
+        0,
+        Math.min(scrollTop, scrollHeight - clientHeight),
+      )
+
+      calculateRowWindow(scrollPosition)
+    },
+    [calculateRowWindow]
+  )
+
+  const debouncedRowWindow = useDebounce(rowWindow, 50)
+
 
   // Synchronize changes in the columns from props.
   // Additionally: add alignment and sorting info onto the columns.
   React.useEffect(() => {
-    setColumns(columnData.map(column => ({
+    const widths = calculateWidths({
+      widths: columnsFromProps.map(column => column?.width ?? 0),
+      minWidth: minColumnWidth,
+      maxWidth: maxColumnWidth,
+      containerWidth,
+      actionsWidth: actionsWidth,
+      checkboxWidth: rowHeight,
+    })
+
+    setColumns(columnsFromProps.map((column, index) => ({
       ...column,
       align: getCellAlignment(column.type),
-      sortIcon: column.isSortable ? getSortIcon({
-        type: column.type,
-        direction: sorting?.key === column.dataKey
-          ? sorting?.direction
-          : '',
-      }) : null,
+      width: widths[index],
+      sortIcon: getSortIcon({ sortBy, column }),
     })))
-  }, [columnData])
+  }, [columnsFromProps, containerWidth, sortBy])
 
-  // Compute the basic dimensions for the grids.
-  const hasScrollbar = (containerHeight - 2 * rowHeight) / rowHeight < rowCount
-  const dataGridHeight = containerHeight - headerHeight - totalHeight - HEIGHT_BUFFER - 2 * INNER_BORDER_WIDTH
+  const autoSizeColumns = React.useCallback(
+    () => {
+      const newWidth = Math.max(
+        0,
+        safeDivide(containerWidth - rowHeight - actionsWidth, columns.length)
+      )
 
-  // Initialize styles based on the calculated dimensions
-  const classes = useStyles()
-
-  const dataGridRef = React.useRef()
-  const headerGridRef = React.useRef()
-  const totalGridRef = React.useRef()
-
-  /**
-   * Callback to recompute the react-window grids.
-   */
-  function updateGrid() {
-    dataGridRef?.current?.resetAfterColumnIndex(0, true)
-    headerGridRef?.current?.resetAfterColumnIndex(0, true)
-    totalGridRef?.current?.resetAfterColumnIndex(0, true)
-  }
-
-  // Synchronize the react-window grids to the calculated column widths
-  React.useEffect(() => {
-    updateGrid()
-  }, [containerWidth, widths, updateGrid])
-
-  const { getColumnWidth, widths } = useColumnWidths({
-    containerWidth,
-    columns,
-    minColumnWidth,
-    maxColumnWidth,
-    defaultColumnWidth,
-    hasScrollbar,
-    actionsWidth: actions?.length * 28,
-  })
-
-  const { hoveredState, onHover } = useHovering()
-
-  const { dragInfo, startResizing, stopResizing, onResize } = useResizing({
-    getColumnWidth,
-    widths,
-    columns,
-    setColumns,
-    minColumnWidth,
-    maxColumnWidth,
-  })
-
-  const getItemKey = React.useCallback(
-    ({ columnIndex, rowIndex, data }) => {
-      const item = data[rowIndex]
-
-      return `${item?.id ?? rowIndex}-${columnIndex}`
+      onColumnResize('__ALL__', newWidth)
     },
-    [],
+    [containerWidth, columns]
   )
 
-  const itemData = React.useMemo(
-    () => ({
-      rows: rowData,
-      subtotals: subtotalData,
-      columns,
-      classes,
-      onHover,
-      hoveredState,
-      rowHeight,
-      selector,
-      customRenderers,
-      onRowSelect,
-    }),
-    [rowData, subtotalData, columns, classes, onHover, hoveredState, rowHeight, selector, customRenderers, onRowSelect],
+  const [dragInfo, setDragInfo] = React.useState(null)
+
+  const startResizing = React.useCallback(
+    (event, columnIndex) => {
+      const left = columns
+        .slice(0, columnIndex)
+        .reduce((total, column) => total + column.width, rowHeight)
+
+      setDragInfo({
+        columnIndex,
+        left,
+        initialX: event.clientX,
+        width: columns?.[columnIndex]?.width ?? 0,
+      })
+    },
+    [columns]
   )
 
-  /**
-   * Getter for the data grid row height.
-   * @param {number} rowIndex The index of the row.
-   */
-  function getRowHeight(rowIndex) {
-    const { subtotalType } = subtotalData?.[rowIndex] ?? {}
+  const stopResizing = React.useCallback(
+    currentX => {
+      if (dragInfo) {
+        const { width, initialX } = dragInfo
+        const newWidth = Math.min(
+          maxColumnWidth,
+          Math.max(
+            minColumnWidth,
+            width + (currentX - initialX)
+          )
+        )
 
-    return subtotalType === 'title'
-      ? 2 * rowHeight
-      : subtotalType === 'value'
-      ? 3 * rowHeight
-      : rowHeight
-  }
+        onColumnResize(dragInfo.columnIndex, newWidth)
+        setDragInfo(null)
+      }
+    },
+    [dragInfo]
+  )
 
   return (
     <DataTableContext.Provider
       value={{
-        classes,
-        columns,
-        isDragging: Boolean(dragInfo),
-        getColumnWidth,
-        onResize,
         startResizing,
-        stopResizing,
-        containerWidth,
-        headerHeight,
-        hoveredState,
-        onHover,
-        rowCount,
-        rowHeight,
-        containerHeight,
-        onRowClick,
-        selector,
-        sorting,
+        isResizing: Boolean(dragInfo),
+        columns,
+        rows,
+        selected,
+        selectionMode,
+        toggleSelected,
+        toggleSelectionMode,
+        toggleSelectRow,
+        sortBy,
+        setSortBy,
         customRenderers,
-        actions,
-        subtotals,
+        renderActions,
       }}
     >
-      <div className={clsx(classes.root, 'datatable__root')}>
+      <div className="GenjoDataTable__root">
+
+        <Header
+          isLoading={isLoading}
+          columns={columns}
+          selected={selected}
+          selectionMode={selectionMode}
+          toggleSelectionMode={toggleSelectionMode}
+          rowDensity={rowDensity}
+          setRowDensity={setRowDensity}
+          autoSizeColumns={autoSizeColumns}
+          actionsWidth={actionsWidth}
+        />
+
         {isFetching && !isLoading && (
-          <div className={classes.progressContainer}>
+          <div className="GenjoDataTable__fetch-bar">
             <LinearProgress />
           </div>
         )}
 
-        {/* HEADER */}
-        <div className={classes.headerGridContainer} onMouseLeave={() => onHover(-1, -1)}>
-          <VariableSizeGrid
-            className={clsx(classes.noScrollbars)}
-            columnCount={columns.length}
-            columnWidth={getColumnWidth}
-            height={headerHeight}
-            rowCount={1}
-            rowHeight={() => headerHeight}
-            width={containerWidth}
-            ref={headerGridRef}
-          >
-            {HeaderCell}
-          </VariableSizeGrid>
-        </div>
-
-        <div className={classes.innerBorder} />
-
-        {/* DATA GRID */}
-        <div
-          className={classes.dataGridContainer}
-          style={{ height: dataGridHeight }}
-          onMouseLeave={() => onHover(-1, -1)}
-        >
-          {isLoading ? (
-            <div
-              className={classes.loadingContainer}
-              style={{ height: dataGridHeight }}
-            >
-              <CircleLoader size={64} />
-            </div>
-          ) : rowCount === 0 ? (
-            <div
-              className={classes.loadingContainer}
-              style={{ height: dataGridHeight }}
-            >
-              No results found
-            </div>
-          ) : (
-            <VariableSizeGrid
-              columnCount={columns.length}
-              columnWidth={getColumnWidth}
-              height={dataGridHeight}
-              rowCount={rowCount}
-              rowHeight={getRowHeight}
-              width={containerWidth - DATA_GRID_OUTER_BORDERS}
-              ref={dataGridRef}
-              onItemsRendered={onItemsRendered}
-              overscanRowCount={overscanRowCount}
-              itemData={itemData}
-              itemKey={getItemKey}
-            >
-              {DataCell}
-            </VariableSizeGrid>
-          )}
-        </div>
-
-        <div className={classes.innerBorder} />
-
-        {/* TOTALS */}
-        {hasTotals && (
+        {isLoading ? (
           <div
-            className={classes.totalGridContainer}
-            style={{ height: totalHeight }}
+            className="GenjoDataTable__loading-container"
+            style={{ height: dataGridHeight, minHeight: dataGridHeight, maxHeight: dataGridHeight }}
           >
-            {isLoadingTotals ? (
-              <LinearProgress />
-            ) : (
-              <VariableSizeGrid
-                className={clsx(classes.noScrollbars)}
-                columnCount={columns.length}
-                columnWidth={getColumnWidth}
-                rowCount={1}
-                height={totalHeight}
-                rowHeight={() => totalHeight}
-                width={containerWidth}
-                ref={totalGridRef}
-                itemData={totalData}
-              >
-                {TotalCell}
-              </VariableSizeGrid>
-            )}
+            <CircleLoader size={64} />
+          </div>
+        ) : rowCount === 0 ? (
+          <div
+            className="GenjoDataTable__loading-container"
+            style={{ height: dataGridHeight, minHeight: dataGridHeight, maxHeight: dataGridHeight }}
+          >
+            <span>No results found</span>
+          </div>
+        ) : (
+          <div
+            className="GenjoDataTable__data-grid"
+            style={{
+              height: dataGridHeight,
+              maxHeight: dataGridHeight,
+              minHeight: dataGridHeight,
+            }}
+            onScroll={onScroll}
+          >
+            <DataWindow
+              rowCount={rowCount}
+              rowHeight={rowHeight}
+              height={dataGridHeight}
+              actionsWidth={actionsWidth}
+              scrollbarWidth={scrollbarWidth}
+              {...debouncedRowWindow}
+            />
           </div>
         )}
 
+        <Totals columns={columns} totals={totals} actionsWidth={actionsWidth} />
+
         {/* DRAG BOUNDRY */}
-        {dragInfo.columnIndex > -1 && (
-          <div
-            className="GenjoDataTable__drag-boundy"
-            style={{
-              left: dragInfo?.left,
-              width: dragInfo?.currentWidth,
-              zIndex: 9999,
-            }}
+        {Boolean(dragInfo) && (
+          <DragBoundry
+            {...dragInfo}
+            onMouseUp={stopResizing}
           />
         )}
       </div>
@@ -297,150 +297,8 @@ export const DataTable = ({
   )
 }
 
-
-
 DataTable.propTypes = {
-  /** A list of action schemas for action buttons. */
-  actions: PropTypes.arrayOf(PropTypes.shape({
-    /** The icon node for the button. */
-    icon: PropTypes.node,
-    /**
-     * Callback when the action button is clicked
-     * @param {object} event The callback event.
-     * @param {number} rowIndex The index of the clicked row.
-     */
-    onClick: PropTypes.func,
-    /** THe title of the action button. */
-    title: PropTypes.string,
-  })),
 
-  /** Schema for the columns */
-  columns: PropTypes.arrayOf(PropTypes.shape({
-    /** A unique identifier for the column. */
-    dataKey: PropTypes.string,
-    /** The data type of the column value. */
-    type: PropTypes.string,
-    /** The title of the column. */
-    title: PropTypes.string,
-    /** If `true` the column will be sortable. */
-    isSortable: PropTypes.bool,
-    /** If `true` the column will render subtotals. */
-    hasSubtotals: PropTypes.bool,
-    /** The value of the total in the footer row. */
-    totalValue: PropTypes.any,
-    /** The label of the total in the footer row. */
-    totalLabel: PropTypes.string,
-    /**
-     * (Optional) Override for the column type if the total type is different.
-     * Example: is_active is a 'bool' column, but the total value is the count
-     * of active users (i.e. type = 'number')
-     */
-    totalType: PropTypes.string,
-    /**
-     * The desired width of the column. The column may not render to this width
-     * if there is not enough available space.
-     */
-    width: PropTypes.number,
-  })),
-
-  /** The height of the container element. */
-  containerHeight: PropTypes.number,
-
-  /** The width of the container element. */
-  containerWidth: PropTypes.number,
-
-  /**
-   * (Optinal) key-value pair of customer column types and a render function.
-   *
-   * example: { person: value => value?.fullName ?? '' }
-   */
-   customRenderers: PropTypes.objectOf(
-    PropTypes.func,
-  ),
-
-  /** The default desired width of the columns. */
-  defaultColumnWidth: PropTypes.number,
-
-  /** The height of the header row. */
-  headerHeight: PropTypes.number,
-
-  /**
-   * If `true` a loading progress bar will be shown with any cached data.
-   * See react-query for the difference isLoading and isFetching:
-   * https://react-query.tanstack.com/reference/useQuery
-  */
-  isFetching: PropTypes.bool,
-
-  /** If `true` the data rows will be replaced by a loading spinner. */
-  isLoading: PropTypes.bool,
-
-
-  /** The maximum width of the columns. */
-  maxColumnWidth: PropTypes.number,
-
-  /** The minimum desired width of the columns. */
-  minColumnWidth: PropTypes.number,
-
-  /**
-   * Callback when a row in the table window has been rendered.
-   * See: https://react-window.vercel.app/#/api/FixedSizeGrid
-   */
-  onItemsRendered: PropTypes.func,
-
-  /**
-   * Optional callback when a row in clicked.
-   *
-   * @param {object} event The click event.
-   * @param {number} rowIndex The index of the row clicked.
-   */
-  onRowClick: PropTypes.func,
-
-  /** The number of rows to overscan for smoother react-window rendering */
-  overscanRowCount: PropTypes.number,
-
-  /** The total count of rows in the data set. */
-  rowCount: PropTypes.number,
-
-  /** The height of the data rows. */
-  rowHeight: PropTypes.number,
-
-  /**
-   * (Optional) Plugin for allowing selectable rows.
-   */
-  selector: PropTypes.shape({
-    mode: PropTypes.oneOf(['include', 'exclude']),
-    /** A set containing the currently selected indexes. */
-    selected: PropTypes.any, // TODO: find the proper type for sets.
-    selectAll: PropTypes.func,
-    unselectAll: PropTypes.func,
-    toggle: PropTypes.func,
-    key: PropTypes.string,
-  }),
-
-  /**
-   * (Optional) Plugin for allowing sortable columns.
-   */
-  sorting: PropTypes.shape({
-    /** The current column dataKay that is being sorted. */
-    key: PropTypes.string,
-    /** The direction of the sort. 'ASC' for ascending. 'DESC' for descending. */
-    direction: PropTypes.oneOf(['', 'ASC', 'DESC']),
-    /** Setter for the sorting key */
-    setSortingKey: PropTypes.func,
-  }),
-
-  /**
-   * (Optional) Plugin for allowing subtotal summaries.
-   */
-  subtotals: PropTypes.shape({
-    /** The current column data key that is being summarized. */
-    key: PropTypes.key,
-    /** Setter for the subtotal key. */
-    setSubtotalKey: PropTypes.func,
-  }),
-
-  /** The height of the total row. */
-  totalHeight: PropTypes.number,
 }
 
 export default DataTable

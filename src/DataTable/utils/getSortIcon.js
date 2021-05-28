@@ -10,10 +10,20 @@ import SortGenericDescendingIcon from '../../icons/SortGenericDescendingIcon'
 
 
 /** Get the icon component given sort type and direction. */
-export function getSortIcon({ type = '', direction = 'ASC' }) {
+export function getSortIcon({ sortBy, column }) {
+  const { type, dataKey } = column
+
   if (!type) {
     return null
   }
+
+  const normalizedSortBy = sortBy[0] === '-' ? sortBy.slice(1) : sortBy
+
+  const direction = normalizedSortBy !== dataKey
+  ? ''
+  : sortBy[0] === '-'
+  ? 'DESC'
+  : 'ASC'
 
   if (type === 'string') {
     return direction === 'ASC'

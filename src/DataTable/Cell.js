@@ -8,20 +8,16 @@ import Skeleton from '@material-ui/core/Skeleton'
 
 
 import renderCell from './utils/renderCell'
-import { useDataTable } from './DataTableDeux'
+import { useDataTable } from './useDataTable'
 
 
 export const Cell = React.memo(
-  ({ width, columnIndex, value }) => {
-
-    function onRowClick() {}
+  ({ width, rowIndex, columnIndex, value, row }) => {
 
     const { customRenderers, columns } = useDataTable()
 
     const {
       type,
-      totalType,
-      dataKey,
       align,
     } =  columns[columnIndex]
 
@@ -30,7 +26,7 @@ export const Cell = React.memo(
     ) : (
       <span>
         {customRenderers?.[type]
-          ? customRenderers[type](value)
+          ? customRenderers[type](rowIndex, row)
           : renderCell(type, value)
         }
       </span>

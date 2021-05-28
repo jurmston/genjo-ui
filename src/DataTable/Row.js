@@ -7,7 +7,7 @@ import EditIcon from '@material-ui/icons/EditRounded'
 import RemoveIcon from '@material-ui/icons/RemoveCircleRounded'
 import FavoriteIcon from '@material-ui/icons/FavoriteRounded'
 
-import { useDataTable } from './DataTableDeux'
+import { useDataTable } from './useDataTable'
 import Checkbox from '../Checkbox'
 
 import Cell from './Cell'
@@ -80,6 +80,7 @@ export const Row = ({ rowIndex, top, rowHeight, actionsWidth, scrollbarWidth }) 
           key={column.dataKey}
           rowIndex={rowIndex}
           columnIndex={columnIndex}
+          row={row}
           value={row?.[column.dataKey]}
           width={column.width}
         />
@@ -96,7 +97,7 @@ export const Row = ({ rowIndex, top, rowHeight, actionsWidth, scrollbarWidth }) 
           }}
         >
           <div className="GenjoDataTable__actions">
-            {renderActions?.(row)}
+            {renderActions?.(rowIndex, row)}
           </div>
         </div>
       )}

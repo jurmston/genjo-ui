@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import babel from '@rollup/plugin-babel'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import deletebuild from 'rollup-plugin-delete'
+import postcss from 'rollup-plugin-postcss'
 import packageJson from './package.json'
 
 const path = require('path')
@@ -30,7 +31,7 @@ function getSubmodules() {
 
 const babelOptions = {
     exclude: /node_modules/,
-    extensions: ['.js'],
+    // extensions: ['.js'],
     configFile: path.resolve(__dirname, './babel.config.js')
 }
 
@@ -40,7 +41,7 @@ const commonjsOptions = {
 }
 
 const nodeOptions = {
-  extensions: ['.js', '.tsx', '.ts'],
+  extensions: ['.css', '.js', '.tsx', '.ts'],
 }
 
 export default {
@@ -56,8 +57,14 @@ export default {
     // multiEntry(),
     peerDepsExternal(),
     commonjs(commonjsOptions),
+    nodeResolve(/*nodeOptions*/),
     babel(babelOptions),
-    nodeResolve(nodeOptions),
+    postcss({
+      extensions: ['.css'],
+      extract: 'styles.css',
+      // modules: true,
+      // sour
+    }),
     // sizeSnapshot({ snapshotPath: 'size-snapshot.json' }),
     // terser(),
     deletebuild(({ targets: ['core/*'] })),

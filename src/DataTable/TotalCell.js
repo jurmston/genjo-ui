@@ -1,68 +1,52 @@
-import React from 'react'
+import * as React from 'react'
 import PropTypes from 'prop-types'
-import { areEqual } from 'react-window'
 import clsx from 'clsx'
-import useDataTable from './useDataTable'
+
+import ButtonBase from '@material-ui/core/ButtonBase'
+import ArrowDownIcon from '@material-ui/icons/ArrowBack'
+
+import { useDataTable } from './useDataTable'
+import { Button } from '@material-ui/core'
+
 import renderCell from './utils/renderCell'
 
 
-export const TotalCell = React.memo(
-  ({ columnIndex, style, data }) => {
-
-    const {
-      classes,
-      columns,
-      onHover,
-      hoveredState,
-    } = useDataTable()
+const ROW_HEIGHT = 36
 
 
-    // Render a placeholder cell if `columnIndex === 0`, i.e. the checkbox
-    // column.
-    if (columnIndex === 0) {
-      return (
-        <div
-        className={clsx(classes.totalCell, classes.isFirst)}
-        style={style}
-        onMouseOver={() => onHover(-1, columnIndex)}
-        onFocus={() => onHover(-1, columnIndex)}
-        />
-        )
-      }
+export const TotalCell = ({ type, label, value, column }) => {
 
-    const { align, dataKey } = columns[columnIndex]
-    const isLast = columnIndex === columns.length
-    const { type, value, label } = data?.[dataKey] ?? {}
+  const {
+    width = 0,
+    align = 'left',
+  } = column
 
-    return (
-      <div
-        className={clsx(classes.cell, classes.totalCell, {
-          [classes.isLast]: isLast,
-          [classes.hoveredColumnCell]: hoveredState[1] === columnIndex,
-          [classes.hasContent]: Boolean(label),
-        })}
-        style={{
-          ...style,
-          textAlign: align,
-        }}
-        onMouseOver={() => onHover(-1, columnIndex)}
-        onFocus={() => onHover(-1, columnIndex)}
-      >
-        <span className={classes.totalLabel}>{label}</span>
-        <span>{renderCell(type, value)}</span>
-      </div>
-    )
-  },
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      className={clsx(
+        "GenjoDataTable__cell",
+        "GenjoDataTable__total-cell",
+      )}
+      style={{
+        width: width,
+        maxWidth: width,
+        minWidth: width,
+        textAlign: align,
+      }}
+    >
+      <span className="GenjoDataTable__total-label">
+        {label}
+      </span>
 
-  //
-  areEqual,
-)
-
-TotalCell.propTypes = {
-  columnIndex: PropTypes.number,
-  style: PropTypes.object,
+      <span>
+        {renderCell(type, value)}
+      </span>
+    </div>
+  )
 }
 
-TotalCell.displayName = 'TotalCell'
+TotalCell.propTypes = {
 
-export default TotalCell
+}

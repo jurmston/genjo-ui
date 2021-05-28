@@ -9,29 +9,27 @@ import NumberFormat from 'react-number-format'
 export function renderCell(type, value) {
   switch (type) {
     case 'currency': {
-      return value
-      // return (
-      //   <NumberFormat
-      //     prefix="$"
-      //     displayType="text"
-      //     value={value}
-      //     thousandSeparator=","
-      //     fixedDecimalScale
-      //     decimalScale={2}
-      //   />
-      // )
+      return (
+        <NumberFormat
+          prefix="$"
+          displayType="text"
+          value={value}
+          thousandSeparator=","
+          fixedDecimalScale
+          decimalScale={2}
+        />
+      )
     }
 
     case 'number': {
-        return value
-      // return (
-      //   <NumberFormat
-      //     displayType="text"
-      //     value={value}
-      //     thousandSeparator=","
-      //     decimalScale={2}
-      //   />
-      // )
+      return (
+        <NumberFormat
+          displayType="text"
+          value={value}
+          thousandSeparator=","
+          decimalScale={2}
+        />
+      )
     }
 
     case 'datetime': {

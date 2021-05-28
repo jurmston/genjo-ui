@@ -7,8 +7,8 @@ export * from './ButtonTabs'
 export { default as ClosableDialogTitle } from './ClosableDialogTitle'
 export * from './ClosableDialogTitle'
 
-export { default as DataTable } from './DataTableDeux'
-export * from './DataTableDeux'
+export { default as DataTable } from './DataTable'
+export * from './DataTable'
 
 export { default as DateField } from './DateField'
 export * from './DateField'

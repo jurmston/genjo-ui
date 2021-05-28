@@ -1,149 +1,99 @@
-import React from 'react'
+import * as React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
-import ViewListIcon from '@material-ui/icons/ViewList'
+import ButtonBase from '@material-ui/core/ButtonBase'
+import ArrowDownIcon from '@material-ui/icons/ArrowBack'
 
-import useDataTable from './useDataTable'
-
-import HeaderDragHandle from './HeaderDragHandle'
-import CheckboxHeader from './CheckboxHeader'
+import { useDataTable } from './useDataTable'
+import { Button } from '@material-ui/core'
 
 
-export const HeaderCell = React.memo(
-  ({ style, columnIndex }) => {
+const ROW_HEIGHT = 36
 
-    const {
-      classes,
-      columns,
-      isResizing,
-      hoveredState,
-      onHover,
-      rowCount,
-      selector,
-      sorting,
-      subtotals,
-    } = useDataTable()
 
-    const {
-      dataKey,
-      title,
-      type,
-      align,
-      isSortable,
-      hasSubtotals,
-      sortIcon: SortIcon,
-    } = columns[columnIndex]
+export const HeaderCell = ({ index, column }) => {
 
-    if (type === 'checkbox') {
-      if (columnIndex !== 0) {
-        throw new Error(`Checkbox columns must come first.`)
-      }
+  const {
+    isResizing,
+    startResizing,
+    columns,
+    sortBy = '',
+    setSortBy,
+  } = useDataTable()
 
-      if (!selector) {
-        throw new Error(`Tables with checkbox columns must have a valid selector.`)
-      }
+  const {
+    dataKey,
+    width = 0,
+    align = 'left',
+    title = '',
+    sortIcon: SortIcon,
+    isSortable = false,
+    hasSubtotals,
+  } = columns[index]
 
-      return (
-        <CheckboxHeader
-          classes={classes}
-          style={style}
-          status={selector?.selected.size
-            ? 'indeterminate'
-            : selector?.mode === 'exclude'
-            ? 'checked'
-            : 'empty'
-          }
-          onChange={selector?.mode === 'include'
-            ? selector.selectAll
-            : selector.unselectAll
-          }
-        />
-      )
-    }
+  const clickProps = {}
 
-    const [isHovered, setIsHovered] = React.useState(false)
+  const isClickable = isSortable || hasSubtotals
 
-    function handleHoverOn() {
-      setIsHovered(true)
-      onHover(-1, columnIndex)
-    }
+  const isSelected = sortBy.startsWith('-')
+    ? sortBy.slice(1) === dataKey
+    : sortBy === dataKey
 
-    function handleHoverOff() {
-      setIsHovered(false)
-    }
+  if (isSortable) {
+    clickProps.onClick = () => isSelected
+      ? setSortBy(sortBy.startsWith('-') ? dataKey : `-${dataKey}`)
+      : setSortBy(dataKey)
+  }
 
-    const clickProps = {}
+  return (
+    <div
+      role="button"
+      tabIndex={0}
+      className={clsx(
+        "GenjoDataTable__cell",
+        "GenjoDataTable__header-cell",
+        {
+          "is-selected": isSelected,
+        }
+      )}
+      style={{
+        width: width,
+        maxWidth: width,
+        minWidth: width,
+        pointerEvents: isResizing ? 'none' : 'unset',
+        cursor: isClickable ? 'pointer' : 'unset',
+      }}
+      {...clickProps}
+    >
+      <div
+        className="GenjoDataTable__title-container"
+        style={{
+          justifyContent: column.align === 'left'
+            ? 'flex-start'
+            : column.align === 'right'
+            ? 'flex-end'
+            : 'center',
+          width: width - 16,
+        }}
+      >
+        <span className="GenjoDataTable__title">
+          {column.title}
+        </span>
 
-    const isClickable = isSortable || hasSubtotals
+        {isSortable && Boolean(SortIcon) && (
+          <SortIcon className={"GenjoDataTable__sort-icon"} />
+        )}
+      </div>
 
-    const isSelected = sorting?.key === dataKey
-
-    if (isSortable) {
-      clickProps.onClick = () => sorting?.setSortingKey(dataKey)
-    }
-
-    if (hasSubtotals) {
-      clickProps.onDoubleClick = () => subtotals?.setSubtotalKey(dataKey)
-    }
-
-    if (type === 'actions') {
-      return ''
-    }
-
-    return (
-      <>
-        <div
-          role="button"
-          tabIndex={0}
-          style={{
-            ...style,
-            pointerEvents: isResizing ? 'none' : 'unset',
-          }}
-          className={clsx(classes.cell, classes.headerCell, {
-            [classes.isSortable]: isSortable,
-            [classes.isSelected]: isSelected,
-            [classes.hoveredColumnCell]: hoveredState[1] === columnIndex,
-            [classes.isClickable]: isClickable,
-            [classes.isSubtotal]: subtotals?.key === dataKey,
-          })}
-          onMouseOver={handleHoverOn}
-          onFocus={handleHoverOn}
-          onMouseLeave={handleHoverOff}
-          onBlur={handleHoverOff}
-          {...clickProps}
-        >
-          <div className={classes.titleContainer} style={{ width: style.width - 16 }}>
-            {subtotals?.key === dataKey && (
-              <ViewListIcon style={{ marginRight: 8 }} />
-            )}
-
-            <span style={{ flex: 1, textAlign: align }}>{title}</span>
-
-            {isSortable && (isHovered || isSelected) && Boolean(SortIcon) && (
-              <SortIcon />
-            )}
-
-          </div>
-        </div>
-
-        <HeaderDragHandle
-          style={style}
-          isHovered={isHovered}
-          columnIndex={columnIndex}
-        />
-
-      </>
-    )
-  },
-)
-
-HeaderCell.propTypes = {
-  style: PropTypes.object,
-  columnIndex: PropTypes.number,
+      <ButtonBase
+        onMouseDown={event => startResizing(event, index)}
+        className="GenjoDataTable__resize-handle"
+      />
+    </div>
+  )
 }
 
-HeaderCell.displayName = 'HeaderCell'
+HeaderCell.propTypes = {
 
-
-export default HeaderCell
+}

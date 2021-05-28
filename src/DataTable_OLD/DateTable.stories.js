@@ -20,7 +20,7 @@ const apiClient = createApiClient(10000, 'none')
 const TEST_DATA = createDataTableTestData(100)
 
 export default {
-  title: 'Widgets/DataTable',
+  title: 'Widgets/DataTableOLD',
   component: DataTable,
 }
 

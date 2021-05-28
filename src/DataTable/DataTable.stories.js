@@ -3,8 +3,8 @@ import React from 'react'
 import { useQuery, useInfiniteQuery, QueryClient, QueryClientProvider } from 'react-query'
 
 import useDimensions from '../useDimensions'
-import { DataTableDeux } from './DataTableDeux'
-import createApiClient from '../DataTable/mocks/api'
+import { DataTable } from './DataTable'
+import createApiClient from '../DataTable_OLD/mocks/api'
 import useSelectionSet from '../useSelectionSet'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
@@ -14,8 +14,8 @@ import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutline'
 import FavoriteIcon from '@material-ui/icons/FavoriteBorderRounded'
 
 export default {
-  title: 'Components/DataTableDeux',
-  component: DataTableDeux,
+  title: 'Widgets/DataTable',
+  component: DataTable,
 }
 
 const apiClient = createApiClient({ recordCount: 10000, latency: 'none' })
@@ -82,7 +82,7 @@ const columnData = [
   },
 ]
 
-export const PrimaryInner = () => {
+const PrimaryInner = () => {
   const [tableContainerRef, tableContainerDimensions] = useDimensions()
   const tableContainerHeight = window.innerHeight - tableContainerDimensions.top - 16
 
@@ -176,8 +176,8 @@ export const PrimaryInner = () => {
     }
   )
 
-  function renderPerson(value) {
-    if (!value) {
+  function renderPerson(rowIndex, row) {
+    if (!row?.primary_contact) {
       return ''
     }
 
@@ -192,17 +192,17 @@ export const PrimaryInner = () => {
           style={{
             height: 24,
             width: 24,
-            backgroundColor: value?.color ?? 'unset',
+            backgroundColor: row?.primary_contact?.color ?? 'unset',
             fontSize: 14,
             marginRight: 8,
           }}
-          src={value?.avatar}
+          src={row?.primary_contact?.avatar}
         >
-          {value?.fullName?.[0]}
+          {row?.primary_contact?.fullName?.[0]}
         </Avatar>
 
         <a href="https://www.example.com">
-          {value?.fullName ?? ''}
+          {row?.primary_contact?.fullName ?? ''}
         </a>
       </div>
     )
@@ -230,18 +230,18 @@ export const PrimaryInner = () => {
     }
   }
 
-  function renderActions(row) {
+  function renderActions(rowIndex, rowData) {
     return (
       <>
-        <IconButton>
+        <IconButton onClick={event => { event.stopPropagation() }}>
           <EditIcon />
         </IconButton>
 
-        <IconButton>
+        <IconButton onClick={event => { event.stopPropagation() }}>
           <FavoriteIcon />
         </IconButton>
 
-        <IconButton>
+        <IconButton onClick={event => { event.stopPropagation() }}>
           <RemoveCircleIcon />
         </IconButton>
       </>
@@ -257,7 +257,7 @@ export const PrimaryInner = () => {
         overflowY: 'hidden',
       }}
     >
-      <DataTableDeux
+      <DataTable
         isFetching={isFetching || isFetchingTotals}
         isLoading={isLoading || isLoadingTotals}
         rowCount={rowCount}
@@ -265,6 +265,7 @@ export const PrimaryInner = () => {
         containerHeight={tableContainerHeight}
         containerWidth={tableContainerDimensions.width}
         columns={columns}
+        setColumns={setColumns}
         totals={totals}
         sortBy={sortBy}
         setSortBy={setSortBy}
