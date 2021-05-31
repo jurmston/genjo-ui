@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import Slide from '@material-ui/core/Slide'
 import Collapse from '@material-ui/core/Collapse'
-import Alert from '@material-ui/lab/Alert'
+import Alert from '@material-ui/core/Alert'
 
 const MAX_DURATION = 7000
 const MIN_DURATION = 2000
