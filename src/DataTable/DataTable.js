@@ -31,30 +31,30 @@ const INNER_BORDER_WIDTH = 2
 
 
 export const DataTable = ({
-  rowCount,
-  rows = {},
-  overscanCount = 30,
-  isFetching = false,
-  isLoading = false,
+  actionsWidth = 0,
+  columns: columnsFromProps = [],
   containerHeight = 0,
   containerWidth = 0,
-  columns: columnsFromProps = [],
-  onItemsRendered,
-  selected,
-  selectionMode,
-  toggleSelected,
-  toggleSelectionMode,
-  selectMany,
-  unselectMany,
-  onColumnResize,
-  sortBy,
-  setSortBy,
-  totals,
   customRenderers,
-  renderActions,
-  actionsWidth = 0,
+  isFetching = false,
+  isLoading = false,
   maxColumnWidth = 500,
   minColumnWidth = 50,
+  onColumnResize,
+  onItemsRendered,
+  overscanCount = 30,
+  renderActions,
+  rowCount,
+  rows = {},
+  selected,
+  selectionMode,
+  selectMany,
+  setSortBy,
+  sortBy,
+  toggleSelected,
+  toggleSelectionMode,
+  totals,
+  unselectMany,
 }) => {
   const [columns, setColumns] = React.useState([])
   const [rowWindow, setRowWindow] = React.useState({ top: 0, bottom: 0, visibleCount: 0 })
@@ -234,6 +234,7 @@ export const DataTable = ({
           isLoading={isLoading}
           columns={columns}
           selected={selected}
+          rowHeight={rowHeight}
           selectionMode={selectionMode}
           toggleSelectionMode={toggleSelectionMode}
           rowDensity={rowDensity}
