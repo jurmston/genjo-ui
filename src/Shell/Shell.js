@@ -49,7 +49,7 @@ export const Shell = ({
   const [title, setTitle] = React.useState(defaultTitle)
 
   const hasMenu = Boolean(menuContent)
-  const classes = useStyles({ hasMenu, menuIsOpen })
+  const classes = useStyles({ hasMenu, menuIsOpen: menuIsOpen === 'true' })
 
   // Synchronize document title
   React.useEffect(() => {
