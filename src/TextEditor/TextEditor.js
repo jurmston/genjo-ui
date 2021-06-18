@@ -25,6 +25,8 @@ export const TextEditor = ({
   resetOnSave,
   children,
   variant = 'message',
+  minHeight,
+  maxHeight,
 }) => {
   const classes = useStyles({ readOnly })
 
@@ -82,7 +84,7 @@ export const TextEditor = ({
     >
       <Slate editor={editor} value={value} onChange={setValue}>
         <div className={classes.editor}>
-          <Input />
+          <Input minHeight={minHeight} maxHeight={maxHeight} />
           <ButtonPanel />
         </div>
       </Slate>

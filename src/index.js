@@ -64,6 +64,9 @@ export * from './MenuPanelLoader'
 export { default as MenuPanelTitle } from './MenuPanelTitle'
 export * from './MenuPanelTitle'
 
+export { default as Message } from './Message'
+export * from './Message'
+
 export { default as MiniLoader } from './MiniLoader'
 export * from './MiniLoader'
 

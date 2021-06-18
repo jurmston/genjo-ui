@@ -97,6 +97,10 @@ export const useMessageStyles = makeStyles(theme => ({
   message: {
     padding: 8,
     outline: 'none',
+    overflow: 'auto',
+    position: 'relative',
+    minHeight: props => props.minHeight ?? 'unset',
+    maxHeight: props => props.maxHeight ?? 'unset',
     ...theme.typography.body2,
 
     '& p': {

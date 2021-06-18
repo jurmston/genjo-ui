@@ -40,6 +40,8 @@ export const Messages = () => {
         value={null}
         onSave={onSave}
         resetOnSave
+        minHeight={200}
+        maxHeight={200}
       />
 
       <div style={{ marginBottom: 32 }} />
