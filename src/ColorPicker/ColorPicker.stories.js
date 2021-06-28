@@ -1,7 +1,9 @@
 import React from 'react'
 
 import { ColorPicker } from './ColorPicker'
-import { colors, colorsLight } from '../styles/colors'
+import { colors, colorsLight } from '../ThemeProvider/colors'
+
+import { StorybookTheme } from '../../.storybook/components/StorybookTheme'
 
 export default {
   title: 'Components/ColorPicker',
@@ -11,11 +13,19 @@ export default {
 export const Primary = () => {
   const [color, setColor] = React.useState(colors.blue[500])
 
-  return <ColorPicker value={color} onChange={setColor} />
+  return (
+    <StorybookTheme>
+      <ColorPicker value={color} onChange={setColor} />
+    </StorybookTheme>
+  )
 }
 
 export const Secondary = () => {
   const [color, setColor] = React.useState(colors.blue[200])
 
-  return <ColorPicker value={color} onChange={setColor} colors={colorsLight} />
+  return (
+    <StorybookTheme>
+      <ColorPicker value={color} onChange={setColor} colors={colorsLight} />
+    </StorybookTheme>
+  )
 }

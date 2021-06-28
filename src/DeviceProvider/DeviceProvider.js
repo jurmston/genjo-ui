@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useTheme } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
+import { DeviceContext } from './DeviceContext'
 
 /**
  * Given the current size of the screen and the isMobile flag, determines which
@@ -10,8 +11,6 @@ import useMediaQuery from '@material-ui/core/useMediaQuery'
 function getMode({ width, isMobile }) {
   return isMobile && ['xs', 'sm'].includes(width) ? 'mobile' : 'desktop'
 }
-
-export const DeviceContext = React.createContext()
 
 export const DeviceProvider = ({ children }) => {
   const theme = useTheme()
@@ -58,10 +57,6 @@ export const DeviceProvider = ({ children }) => {
   )
 }
 
-export const useDevice = () => React.useContext(DeviceContext)
-
 DeviceProvider.propTypes = {
   children: PropTypes.node,
 }
-
-export default DeviceProvider

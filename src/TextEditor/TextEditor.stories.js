@@ -9,8 +9,19 @@ import Grid from '@material-ui/core/Grid'
 import { DateTime } from 'luxon'
 
 import Message from '../Message'
+import ThemeProvider from '../ThemeProvider'
 
 import getRandomUser from '../../.storybook/utils/getRandomUser'
+import { CacheProvider } from '@emotion/react'
+import createCache from '@emotion/cache'
+import { colors } from '../ThemeProvider/colors'
+
+const cache = createCache({
+  key: 'css',
+  prepend: true,
+})
+
+cache.compat = true
 
 
 export default {
@@ -19,40 +30,31 @@ export default {
 }
 
 export const Messages = () => {
-  const [messages, setMessages] = React.useState([])
+  const [value, setValue] = React.useState()
 
-  async function onSave(value) {
-    const user = await getRandomUser()
-
-    const message = {
-      id: uuid(),
-      value: JSON.stringify(value),
-      user,
-      created: DateTime.now().toISO(),
-    }
-
-    setMessages(messages.concat(message))
-  }
+  const ref = React.useRef()
 
   return (
-    <>
-      <TextEditor
-        value={null}
-        onSave={onSave}
-        resetOnSave
-        minHeight={200}
-        maxHeight={200}
-      />
+    <CacheProvider value={cache}>
 
-      <div style={{ marginBottom: 32 }} />
+      <ThemeProvider theme={{ mode: 'light', primary: colors.indigo, secondary: colors.orange }}>
+        <TextEditor
+          value={null}
+          onSave={setValue}
+          resetOnSave
+          minHeight={200}
+          maxHeight={200}
+          />
 
-      <List variant="filled">
-        {messages.map((message, index) => (
-          <ListItem key={message.id} divider={index < messages.length - 1}>
-            <Message {...message} />
-          </ListItem>
-        ))}
-      </List>
-    </>
+        <div style={{ marginBottom: 32 }} />
+
+        <TextEditor
+          value={value}
+          ref={ref}
+          minHeight={200}
+          maxHeight={200}
+          />
+      </ThemeProvider>
+    </CacheProvider>
   )
 }

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 import StaticDatePicker from '@material-ui/lab/StaticDatePicker'
 import PickersDay from '@material-ui/lab/PickersDay'
 import TextField from '@material-ui/core/TextField'

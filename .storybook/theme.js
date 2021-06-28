@@ -1,10 +1,6 @@
-import {
-  // Material-UI uses findDOMNode which is deprecated in React.StrictMode
-  // See https://github.com/mui-org/material-ui/issues/13394
-  unstable_createMuiStrictModeTheme as createMuiTheme
-} from '@material-ui/core/styles'
+import { createTheme as createMuiTheme } from '@material-ui/core/styles'
 import { create } from '@storybook/theming/create'
-import { colors } from '../src/styles'
+import { colors } from '../src/ThemeProvider'
 
 
 const createThemeFromMUITheme = (name, theme) => {

@@ -1,16 +1,18 @@
 import * as React from 'react'
 
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 import Tabs from '@material-ui/core/Tabs'
+import { useTheme } from '@material-ui/core/styles'
+import { styled } from '@material-ui/core/styles'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    backgroundColor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.divider,
-    borderRadius: theme.shape.borderRadius,
-    border: `1px solid ${theme.palette.divider}`,
-    minHeight: 'unset',
-  },
-  flexContainer: {
+
+export const ButtonTabs = styled(Tabs)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.divider,
+  borderRadius: theme.shape.borderRadius,
+  border: `1px solid ${theme.palette.divider}`,
+  minHeight: 'unset',
+
+  '& .MuiTabs-flexContainer': {
     // display: 'inline-flex',
     position: 'relative',
     zIndex: 1,
@@ -20,12 +22,13 @@ const useStyles = makeStyles(theme => ({
   //     padding: '0 8px',
   //   },
   // },
-  scrollButtons: {
+  '& .MuiTabs-scrollButtons': {
     '&.Mui-disabled': {
       opacity: '0.3 !important',
     },
   },
-  indicator: {
+
+  '& .MuiTabs-indicator': {
     top: 3,
     bottom: 3,
     // right: 3,
@@ -47,21 +50,23 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const ButtonTabs = props => {
-  const classes = useStyles()
+// export const ButtonTabs = props => {
+//   const theme = useTheme()
+//   console.log({ theme })
+//   const classes = useStyles(theme)
 
-  return (
-    <Tabs
-      {...props}
-      classes={{
-        root: classes.root,
-        flexContainer: classes.flexContainer,
-        scroller: classes.scroller,
-        indicator: classes.indicator,
-        scrollButtons: classes.scrollButtons,
-      }}
-    />
-  )
-}
+//   return (
+//     <Tabs
+//       {...props}
+//       classes={{sses.root,
+//         flexContainer: classes.flexContainer,
+//         scroller: classes.scroller,
+//         indicator: classes.indicator,
+//         scrollButtons: classes.scrollB
+//         root: clauttons,
+//       }}
+//     />
+//   )
+// }
 
 export default ButtonTabs

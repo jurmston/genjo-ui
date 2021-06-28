@@ -4,13 +4,13 @@ import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/core/Autocomplete'
 import Typography from '@material-ui/core/Typography'
 import InputAdornment from '@material-ui/core/InputAdornment'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 
 import SearchIcon from '@material-ui/icons/Search'
 
 import { usePlacesAutocomplete, useGeocoder } from '../GoogleMapsProvider'
 
-import { colors } from '../styles'
+import { colors } from '../ThemeProvider'
 import useDebounce from '../useDebounce'
 import { parseGeocoderResults } from '../utils/geo'
 

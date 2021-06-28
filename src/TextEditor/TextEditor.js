@@ -22,11 +22,12 @@ export const TextEditor = ({
   readOnly = false,
   value: valueFromProps = null,
   onSave,
-  resetOnSave,
   children,
+  resetOnSave,
   variant = 'message',
   minHeight,
   maxHeight,
+  ref,
 }) => {
   const classes = useStyles({ readOnly })
 
@@ -51,6 +52,14 @@ export const TextEditor = ({
     if (resetOnSave) {
       resetEditor()
       setValue(getEmptyValue())
+    }
+  }
+
+  function handleChange(newValue) {
+    setValue(newValue)
+
+    if (ref?.current) {
+      ref.current = newValue
     }
   }
   // React.useEffect(() => {
@@ -80,9 +89,10 @@ export const TextEditor = ({
         value,
         renderElement,
         renderLeaf,
+        hasSaveButton: Boolean(onSave),
       }}
     >
-      <Slate editor={editor} value={value} onChange={setValue}>
+      <Slate editor={editor} value={value} onChange={handleChange}>
         <div className={classes.editor}>
           <Input minHeight={minHeight} maxHeight={maxHeight} />
           <ButtonPanel />
@@ -104,6 +114,7 @@ TextEditor.propTypes = {
    * @param {string} value The JSON representation of the changed content.
    */
   onSave: PropTypes.func,
+  onChange: PropTypes.func,
   saveOnEnter: PropTypes.bool,
   variant: PropTypes.oneOf(['message', 'post']),
 }

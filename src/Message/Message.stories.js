@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Message } from './Message'
-import { colors } from '../styles/colors'
 import { DateTime } from 'luxon'
 
 import getRandomUser from '../../.storybook/utils/getRandomUser'

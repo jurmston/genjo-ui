@@ -1,10 +1,4 @@
-import * as React from 'react'
-
-import {
-  // Material-UI uses findDOMNode which is deprecated in React.StrictMode
-  // See https://github.com/mui-org/material-ui/issues/13394
-  unstable_createMuiStrictModeTheme as createMuiTheme,
-} from '@material-ui/core/styles'
+import { createTheme as createMuiTheme } from '@material-ui/core/styles'
 import { colors } from './colors'
 
 function round(value) {

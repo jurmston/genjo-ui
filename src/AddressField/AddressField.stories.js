@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
+import { useTheme } from '@material-ui/core/styles'
 import AddressField from './AddressField'
 import GoogleMapsWrapper from '../../.storybook/components/GoogleMapsWrapper'
 
@@ -11,6 +12,9 @@ export default {
 export const Primary = () => {
   const [value, setValue] = React.useState('')
   const [components, setComponents] = React.useState({})
+
+  const theme = useTheme()
+  console.log({ theme })
 
   return (
     <GoogleMapsWrapper>

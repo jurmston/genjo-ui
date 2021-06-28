@@ -51,7 +51,7 @@ const BLOCK_FORMATS = [
 export const ButtonPanel = () => {
   const [linkSelection, setLinkSelection] = React.useState(null)
 
-  const { classes, isFocused, isDirty, handleSave } = useTextEditor()
+  const { classes, isFocused, isDirty, handleSave, hasSaveButton } = useTextEditor()
 
   const editor = useSlate()
 
@@ -104,7 +104,7 @@ export const ButtonPanel = () => {
 
       <div style={{ flex: 1 }} />
 
-      {Boolean(isDirty) && (
+      {Boolean(isDirty) && Boolean(hasSaveButton) && (
         <Button
           variant="contained"
           color="primary"

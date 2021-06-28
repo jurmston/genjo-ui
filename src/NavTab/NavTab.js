@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 import Tab from '@material-ui/core/Tab'
 
 const useStyles = makeStyles(theme => ({
