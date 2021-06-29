@@ -1,13 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
-
 import useStoredState from '../useStoredState'
-import ShellContext from './ShellContext'
 
-import { AppBar } from './components/AppBar'
-import { MenuPanel } from './components/MenuPanel'
-import { UserMenu } from './components/UserMenu'
+import ShellContext from './ShellContext'
+import { AppBar } from './AppBar'
+import { MenuPanel } from './MenuPanel'
+import { UserMenu } from './UserMenu'
 
 
 const MENU_CLOSED_WIDTH = 21
@@ -31,14 +30,18 @@ const useStyles = makeStyles({
  * Content wrapper for public website.
  */
 export const Shell = ({
-  children,
-  defaultTitle = '',
-  logo,
-  brandName,
-  user,
-  userMenuContent,
   appBarContent,
+  avatar,
+  brandName,
+  children,
+  color,
   defaultMenuContent,
+  defaultTitle = '',
+  homeLink,
+  initials,
+  logo,
+  name,
+  userMenuItems,
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useStoredState({
     key: 'shell-menu-is-open',
@@ -72,7 +75,21 @@ export const Shell = ({
 
   return (
     <ShellContext.Provider value={{ setMenuContent, setTitle }}>
-      <AppBar logo={logo} brandName={brandName} userMenu={<UserMenu user={user}>{userMenuContent}</UserMenu>}>
+      <AppBar
+        logo={logo}
+        homeLink={homeLink}
+        brandName={brandName}
+        userMenu={(
+          <UserMenu
+            initials={initials}
+            color={color}
+            name={name}
+            avatar={avatar}
+          >
+            {userMenuItems}
+          </UserMenu>
+        )}
+      >
         {appBarContent}
       </AppBar>
 
@@ -86,15 +103,20 @@ export const Shell = ({
 }
 
 Shell.propTypes = {
+  appBarContent: PropTypes.node,
+  avatar: PropTypes.string,
+  brandName: PropTypes.string,
   /** Content inside the shell. */
   children: PropTypes.node,
+  color: PropTypes.string,
   defaultMenuContent: PropTypes.node,
   defaultTitle: PropTypes.string,
+  homeLink: PropTypes.string,
+  initials: PropTypes.string,
   logo: PropTypes.string,
-  brandName: PropTypes.string,
+  name: PropTypes.string,
   user: PropTypes.object,
-  userMenuContent: PropTypes.node,
-  appBarContent: PropTypes.node,
+  userMenuItems: PropTypes.node,
 }
 
 export default Shell

@@ -48,7 +48,7 @@ export default {
   input: ['src/index.js', ...getSubmodules()],
   output: {
     dir: 'core',
-    format: 'esm',
+    format: 'cjs',
     name: 'GenjoUI',
     preserveModulesRoot: 'src',
     preserveModules: true,

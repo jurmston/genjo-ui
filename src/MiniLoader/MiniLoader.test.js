@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { render } from '@testing-library/react'
+import { renderWithCustomTheme } from '../test-utils'
 
 import { MiniLoader } from './MiniLoader'
 
 describe('Testing <MiniLoader />...', () => {
   it('should not explode', () => {
-    render(<MiniLoader />)
+    renderWithCustomTheme(<MiniLoader />)
   })
 })

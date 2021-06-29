@@ -1,9 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { areEqual } from 'react-window'
-
-import Checkbox from '../Checkbox'
 import Skeleton from '@material-ui/core/Skeleton'
 
 

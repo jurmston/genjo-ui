@@ -89,31 +89,33 @@ export const Main = () => {
   return (
     <Shell
       logo={story_logo}
-      brandName="Trensite"
-      userMenuContent={
-        <List>
-          <MenuItem>
-            <ListItemIcon>
-              <ContactSupportIcon />
-            </ListItemIcon>
-            <ListItemText primary="Support" />
-          </MenuItem>
+      brandName="Genjo UI"
+      color="red"
+      initials="JU"
+      homeLink="https://www.example.com"
+      name="jeff@example.com"
+      userMenuItems={[
+        <MenuItem key="support">
+          <ListItemIcon>
+            <ContactSupportIcon />
+          </ListItemIcon>
+          <ListItemText primary="Support" />
+        </MenuItem>,
 
-          <MenuItem divider>
-            <ListItemIcon>
-              <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary="My profile" />
-          </MenuItem>
+        <MenuItem divider key="profile">
+          <ListItemIcon>
+            <AccountCircleIcon />
+          </ListItemIcon>
+          <ListItemText primary="My profile" />
+        </MenuItem>,
 
-          <MenuItem>
-            <ListItemIcon>
-              <PowerSettingsNewIcon />
-            </ListItemIcon>
-            <ListItemText primary="Log out" />
-          </MenuItem>
-        </List>
-      }
+        <MenuItem key="logout">
+          <ListItemIcon>
+            <PowerSettingsNewIcon />
+          </ListItemIcon>
+          <ListItemText primary="Log out" />
+        </MenuItem>,
+      ]}
       appBarContent={
         <NavTabs value={tab} onChange={(event, newTab) => setTab(newTab)}>
           <NavTab label="Projects" icon={<ProjectsIcon />} />

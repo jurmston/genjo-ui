@@ -44,6 +44,54 @@ export const typographyHeadline = {
 
 export const borderRadius = 8
 
+export const dividerColor = 'rgba(255, 255, 255, 0.12)'
+export const spacingBaseUnit = 8
+
+
+
+const shadowKeyUmbraOpacity = 0.05
+const shadowKeyPenumbraOpacity = 0.1
+const shadowAmbientShadowOpacity = 0.05
+
+export function createShadow(...px) {
+  return [
+    `rgb(255, 255, 255) 0px 0px 0px 0px`,
+    `${px[0]}px ${px[1]}px ${px[2]}px ${px[3]}px rgba(0,0,0,${shadowKeyUmbraOpacity})`,
+    `${px[4]}px ${px[5]}px ${px[6]}px ${px[7]}px rgba(0,0,0,${shadowKeyPenumbraOpacity})`,
+    `${px[8]}px ${px[9]}px ${px[10]}px ${px[11]}px rgba(0,0,0,${shadowAmbientShadowOpacity})`,
+  ].join(',')
+}
+
+'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px'
+
+
+const shadows = [
+  'none',
+  createShadow(0, 0, 0, 1, 0, 2, 5, -1, 0, 1, 2, -1), // 1
+  createShadow(0, 0, 0, 1, 0, 4, 8, -1, 0, 1, 3, -1), // 2
+  createShadow(0, 0, 0, 1, 0, 4, 8, -1, 0, 1, 3, -1),
+  createShadow(0, 0, 0, 1, 0, 6, 12, -2, 0, 2, 2, -1), // 4
+  createShadow(0, 0, 0, 1, 0, 6, 12, -2, 0, 2, 2, -1),
+  createShadow(0, 0, 0, 1, 0, 6, 12, -2, 0, 2, 2, -1),
+  createShadow(0, 0, 0, 1, 0, 6, 12, -2, 0, 2, 2, -1),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2), // 8
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 10, 15, -3, 0, 4, 5, -2),
+  createShadow(0, 0, 0, 1, 0, 15, 20, -4, 0, 5, 7, -3), // 24
+]
 
 
 export const createTheme = ({ mode, primary, secondary }) =>
@@ -61,6 +109,10 @@ export const createTheme = ({ mode, primary, secondary }) =>
     shape: {
       borderRadius,
     },
+
+    spacing: spacingBaseUnit,
+
+    shadows,
 
     // -- Default Props for Mui Components
     components: {

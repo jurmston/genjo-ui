@@ -4,7 +4,7 @@ import { useQuery, useInfiniteQuery, QueryClient, QueryClientProvider } from 're
 
 import useDimensions from '../useDimensions'
 import { DataTable } from './DataTable'
-import createApiClient from '../DataTable_OLD/mocks/api'
+import createApiClient from './mocks/api'
 import useSelectionSet from '../useSelectionSet'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'

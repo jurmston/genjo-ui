@@ -46,7 +46,7 @@ export const decorators = [
     }
 
     return (
-      <StyledEngineProvider injectFirst>
+      <CacheProvider value={cache}>
 
 
           <ThemeProvider theme={muiThemeOptions}>
@@ -56,7 +56,7 @@ export const decorators = [
           </ThemeProvider>
 
 
-      </StyledEngineProvider>
+      </CacheProvider>
     )
   },
 ]

@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   logoLink: {
-    height: 38,
+    height: 52,
     marginLeft: 24,
     cursor: 'pointer',
   },

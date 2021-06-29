@@ -1,6 +1,7 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography'
-import { DeviceProvider, useDevice } from './DeviceProvider'
+import { DeviceProvider } from './DeviceProvider'
+import { useDevice } from './useDevice'
 
 export default {
   title: 'Providers/DeviceProvider',
