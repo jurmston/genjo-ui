@@ -29,7 +29,7 @@ export const ClosableDialogTitle = ({ children, onClose, ...other }) => {
   const classes = useStyles()
 
   return (
-    <DialogTitle disableTypography className={classes.root} {...other}>
+    <DialogTitle className={classes.root} {...other}>
       <Typography variant="h6" component="div">
         {children}
       </Typography>
