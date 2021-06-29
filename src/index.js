@@ -94,6 +94,9 @@ export * from './Radio'
 export { default as Switch } from './Switch'
 export * from './Switch'
 
+export { default as UserMenu } from './UserMenu'
+export * from './UserMenu'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'

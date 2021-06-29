@@ -6,7 +6,6 @@ import useStoredState from '../useStoredState'
 import ShellContext from './ShellContext'
 import { AppBar } from './AppBar'
 import { MenuPanel } from './MenuPanel'
-import { UserMenu } from './UserMenu'
 
 
 const MENU_CLOSED_WIDTH = 21
@@ -41,7 +40,7 @@ export const Shell = ({
   initials,
   logo,
   name,
-  userMenuItems,
+  userMenu,
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useStoredState({
     key: 'shell-menu-is-open',
@@ -79,16 +78,7 @@ export const Shell = ({
         logo={logo}
         homeLink={homeLink}
         brandName={brandName}
-        userMenu={(
-          <UserMenu
-            initials={initials}
-            color={color}
-            name={name}
-            avatar={avatar}
-          >
-            {userMenuItems}
-          </UserMenu>
-        )}
+        userMenu={userMenu}
       >
         {appBarContent}
       </AppBar>
@@ -116,7 +106,7 @@ Shell.propTypes = {
   logo: PropTypes.string,
   name: PropTypes.string,
   user: PropTypes.object,
-  userMenuItems: PropTypes.node,
+  userMenu: PropTypes.node,
 }
 
 export default Shell
