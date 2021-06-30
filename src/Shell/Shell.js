@@ -30,16 +30,12 @@ const useStyles = makeStyles({
  */
 export const Shell = ({
   appBarContent,
-  avatar,
   brandName,
   children,
-  color,
   defaultMenuContent,
   defaultTitle = '',
   homeLink,
-  initials,
   logo,
-  name,
   userMenu,
 }) => {
   const [menuIsOpen, setMenuIsOpen] = useStoredState({
@@ -94,17 +90,13 @@ export const Shell = ({
 
 Shell.propTypes = {
   appBarContent: PropTypes.node,
-  avatar: PropTypes.string,
   brandName: PropTypes.string,
   /** Content inside the shell. */
   children: PropTypes.node,
-  color: PropTypes.string,
   defaultMenuContent: PropTypes.node,
   defaultTitle: PropTypes.string,
   homeLink: PropTypes.string,
-  initials: PropTypes.string,
   logo: PropTypes.string,
-  name: PropTypes.string,
   user: PropTypes.object,
   userMenu: PropTypes.node,
 }

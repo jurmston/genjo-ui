@@ -5,38 +5,35 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Paper from '@material-ui/core/Paper'
-import CalendarPicker from '@material-ui/lab/CalendarPicker'
-import DatePicker from '@material-ui/lab/DatePicker'
+import ClockPicker from '@material-ui/lab/ClockPicker'
+import TimePicker from '@material-ui/lab/TimePicker'
 import { DateTime } from 'luxon'
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
+import TimeIcon from '@material-ui/icons/AccessTimeRounded'
 
 import useDimensions from '../useDimensions'
 
-const monthFirstFormats = [
-  'M/d/yy',
-  'M/d/yyyy',
-  'M/dd/yy',
-  'M/dd/yyyy',
-  'MM/d/yy',
-  'MM/d/yyyy',
-  'MM/dd/yy',
-  'MM/dd/yyyy',
+const validFormats = [
+  'h:mm a',
+  'hh:mm a',
+  'h:mma',
+  'hh:mma',
+  'H:mm',
+  'HH:mm',
 ]
 
-const dayFirstFormats = ['d/M/yy', 'd/M/yyyy', 'dd/M/yy', 'dd/M/yyyy', 'd/MM/yy', 'd/M/yyyy', 'dd/MM/yy', 'dd/MM/yyyy']
-
 /** Convert an input string to a DateTime value */
-function parseInputValue(inputValue, inputFormat) {
+function parseInputValue(inputValue) {
   if (!inputValue) {
     return null
   }
 
-  const formats = inputFormat === 'month-first' ? monthFirstFormats : dayFirstFormats
+  console.log('Parsing', inputValue)
 
-  for (let format of formats) {
+  for (let format of validFormats) {
     const parsedValue = DateTime.fromFormat(inputValue, format)
 
     if (!parsedValue.invalid) {
+      console.log(format)
       return parsedValue
     }
   }
@@ -44,19 +41,19 @@ function parseInputValue(inputValue, inputFormat) {
   return null
 }
 
-/** Convert a DateTime value to an input string */
+/** Convert a Time value to an input string */
 function getInputValue(value, inputFormat) {
   if (!value) {
     return ''
   }
 
-  const format = inputFormat === 'month-first' ? 'M/d/yyyy' : 'd/M/yyyy'
+  const format = inputFormat === 'ampm' ? 'h:mm a' : 'H:mm'
 
   return value.toFormat(format)
 }
 
-function maskInputValue(inputValue = '') {
-  const sections = inputValue.split('/').slice(0, 3)
+function maskInputValue(inputValue = '', isDeleting = false) {
+  const sections = inputValue.split(':').slice(0, 2)
 
   // If the user types an extra digit we will assume they want
   // to continue typing to the next section without wanting to
@@ -73,25 +70,44 @@ function maskInputValue(inputValue = '') {
   })
 
   // Only add the carryOver if we are on the month or day sections.
-  if (carryOver && parsedSections.length < 3) {
+  if (carryOver && parsedSections.length < 2) {
     parsedSections.push(carryOver)
   }
 
-  return parsedSections.join('/')
+  let time = parsedSections.join(':')
+
+  console.log({ inputValue, isDeleting })
+
+  if (!isDeleting) {
+    if (inputValue.endsWith('a') || inputValue.endsWith('am') || inputValue.endsWith('A') || inputValue.endsWith('AM')) {
+      time = `${time} AM`
+    }
+
+    if (inputValue.endsWith('p') || inputValue.endsWith('pm') || inputValue.endsWith('P') || inputValue.endsWith('PM')) {
+      time = `${time} PM`
+    }
+  }
+
+  if (inputValue.endsWith(' ') && parsedSections.length === 2) {
+    time = `${time} `
+  }
+
+  return time
 }
 
-export const DateField = ({
-  inputFormat = 'month-first',
-  displayFormat = DateTime.DATE_MED,
+export const TimeField = ({
+  inputFormat = 'ampm',
+  displayFormat = DateTime.TIME_SIMPLE,
   value,
   onChange,
   disablePicker = false,
   hasDialog = false,
+  minuteStep = 1,
   ...textFieldProps
 }) => {
   const [isEditing, setIsEditing] = React.useState(false)
   const [inputValue, setInputValue] = React.useState('')
-  const [pickerIsOpen, setPickerIsOpen] = React.useState(false)
+  const [pickerState, setPickerState] = React.useState('closed')
 
   const [ref, dim] = useDimensions()
 
@@ -99,9 +115,22 @@ export const DateField = ({
 
   const displayValue = value ? value.toLocaleString(displayFormat) : ''
 
+  const pickerIsOpen = pickerState !== 'closed'
+
+  console.log({
+    displayValue,
+    inputValue,
+    value,
+    pickerState,
+  })
+
   function handleInputChange(event) {
     if (isEditing) {
-      setInputValue(maskInputValue(event.target.value))
+      const isDeleting = event.target.value <= inputValue
+
+      console.log({ prev: inputValue, next: event.target.value })
+      setInputValue(maskInputValue(event.target.value, isDeleting))
+      // setInputValue(event.target.value)
     }
   }
 
@@ -127,7 +156,7 @@ export const DateField = ({
     }
 
     if (event.key === 'ArrowDown') {
-      setPickerIsOpen(true)
+      setPickerState('closed')
     }
   }
 
@@ -151,31 +180,43 @@ export const DateField = ({
         InputProps={{
           ...textFieldProps.InputProps,
           endAdornment: !disablePicker && (
-            <InputAdornment position="end">
-              <IconButton onClick={() => setPickerIsOpen(!pickerIsOpen)} color={pickerIsOpen ? 'primary' : 'default'}>
-                <CalendarTodayIcon />
-              </IconButton>
-            </InputAdornment>
+            <>
+              {textFieldProps.InputProps?.endAdornment}
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setPickerState(pickerState === 'closed'
+                    ? 'hours'
+                    : pickerState === 'hours'
+                    ? 'minutes'
+                    : 'closed'
+                  )}
+                  color={pickerIsOpen ? 'primary' : 'default'}
+                >
+                  <TimeIcon />
+                </IconButton>
+              </InputAdornment>
+            </>
           ),
         }}
       />
 
       {pickerIsOpen && hasDialog && (
-        <DatePicker
+        <TimePicker
           open
-          onClose={() => setPickerIsOpen(false)}
+          onClose={() => setPickerState('closed')}
           allowKeyboardControl
           date={value}
           onChange={newValue => {
             onChange(newValue)
-            setPickerIsOpen(false)
+            // console.log(pickerState)
+            // setPickerState(pickerState === 'hours' ? 'minutes' : 'closed')
           }}
           renderInput={() => ""}
         />
       )}
 
       {pickerIsOpen && !hasDialog && (
-        <ClickAwayListener onClickAway={() => setPickerIsOpen(false)}>
+        <ClickAwayListener onClickAway={() => setPickerState('closed')}>
           <Paper
             style={{
               left: 0,
@@ -183,12 +224,20 @@ export const DateField = ({
               top: dim.height + 8,
             }}
           >
-            <CalendarPicker
+            <ClockPicker
+              ampm={inputFormat === 'ampm'}
+              ampmInClock={inputFormat === 'ampm'}
+              minuteStep={minuteStep}
               allowKeyboardControl
               date={value}
-              onChange={newValue => {
+              view={pickerState}
+              onChange={(newValue, reason) => {
                 onChange(newValue)
-                setPickerIsOpen(false)
+
+                if (reason !== 'shallow') {
+                  setPickerState(pickerState === 'hours' ? 'minutes' : 'closed')
+                }
+                // setPickerIsOpen(false)
               }}
               ref={pickerRef}
             />
@@ -199,9 +248,9 @@ export const DateField = ({
   )
 }
 
-DateField.propTypes = {
+TimeField.propTypes = {
   /** Input style when using the keyboard. */
-  inputFormat: PropTypes.oneOf(['month-first', 'day-first']),
+  inputFormat: PropTypes.oneOf(['ampm', '24hr']),
   /** DateTime formating object. */
   displayFormat: PropTypes.object,
   /** ISO Date string. */
@@ -212,6 +261,6 @@ DateField.propTypes = {
   disablePicker: PropTypes.bool,
   /** If `true` the picker element will be displayed in a Dialog component. */
   hasDialog: PropTypes.bool,
+  /** The step value for the minutes clock. */
+  minuteStep: PropTypes.number,
 }
-
-export default DateField

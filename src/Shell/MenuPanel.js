@@ -96,7 +96,7 @@ const MenuPanel = ({ isOpen, toggle, children, hasContent = false, ...listProps 
         onMouseLeave={() => setIsHovering(false)}
       >
         <div className={classes.content}>
-          {children}
+          {isOpen ? children : null}
         </div>
       </div>
 

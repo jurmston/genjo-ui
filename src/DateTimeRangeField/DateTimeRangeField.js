@@ -1,8 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DatePicker from '@material-ui/lab/DatePicker'
-import TimePicker from '@material-ui/lab/TimePicker'
-import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import Typography from '@material-ui/core/Typography'
 import FormControl from '@material-ui/core/FormControl'
@@ -12,15 +9,17 @@ import Grid from '@material-ui/core/Grid'
 
 import { DateTime, Duration } from 'luxon'
 
-const DateTimeRangeField = ({
+import DateField from '../DateField'
+import TimeField from '../TimeField'
+
+
+export const DateTimeRangeField = ({
   start: startFromProps,
   end: endFromProps,
   onChange,
   isStacked,
   label = '',
-  variant = 'filled',
-  helperText = '',
-  error = false,
+  ...textFieldProps
 }) => {
   const start = (startFromProps && !startFromProps.invalid ? startFromProps : DateTime.local().startOf('hour')).startOf(
     'minute'
@@ -43,8 +42,6 @@ const DateTimeRangeField = ({
     : duration.as('days') < 1
     ? `${Math.floor(duration.as('hours'))} h`
     : `${Math.floor(duration.as('days'))} d`
-
-  const [openPicker, setOpenPicker] = React.useState(null)
 
   /**
    * Callback to handle a change to the start date.
@@ -113,30 +110,26 @@ const DateTimeRangeField = ({
   }
 
   const startDate = (
-    <TextField
-      error={error}
-      variant={variant}
+    <DateField
       label={isStacked ? 'From' : null}
-      value={start.toLocaleString(DateTime.DATE_MED)}
-      onClick={() => setOpenPicker('startDate')}
+      value={start}
+      onChange={handleStartDateChange}
+      {...textFieldProps}
     />
   )
 
   const startTime = (
-    <TextField
-      error={error}
-      variant={variant}
-      value={start.toLocaleString(DateTime.TIME_SIMPLE)}
-      onClick={() => setOpenPicker('startTime')}
+    <TimeField
+      value={start}
+      onChange={handleStartTimeChange}
+      {...textFieldProps}
     />
   )
 
   const endTime = (
-    <TextField
-      error={error}
-      variant={variant}
-      value={end.toLocaleString(DateTime.TIME_SIMPLE)}
-      onClick={() => setOpenPicker('endTime')}
+    <TimeField
+      value={end}
+      onChange={handleEndTimeChange}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
@@ -146,21 +139,21 @@ const DateTimeRangeField = ({
           </InputAdornment>
         ),
       }}
+      {...textFieldProps}
     />
   )
 
   const endDate = (
-    <TextField
-      error={error}
-      variant={variant}
+    <DateField
       label={isStacked ? 'To' : null}
-      value={end.toLocaleString(DateTime.DATE_MED)}
-      onClick={() => setOpenPicker('endDate')}
+      value={end}
+      onChange={handleEndDateChange}
+      {...textFieldProps}
     />
   )
 
   return (
-    <FormControl error={error}>
+    <FormControl error={false}>
       {Boolean(label) && <InputLabel>{label}</InputLabel>}
       {isStacked ? (
         <Grid container spacing={1}>
@@ -197,30 +190,7 @@ const DateTimeRangeField = ({
         </Grid>
       )}
 
-      {/*}
-      <DatePicker
-        autoOk
-        open={openPicker === 'startDate' || openPicker === 'endDate'}
-        onClose={() => setOpenPicker(null)}
-        TextFieldComponent={() => ''}
-        value={openPicker === 'startDate' ? start : end}
-        onChange={openPicker === 'startDate' ? handleStartDateChange : handleEndDateChange}
-        minDate={openPicker === 'endDate' ? start : DateTime.fromISO('1900-01-01')}
-      />
-
-      <TimePicker
-        autoOk
-        open={openPicker === 'startTime' || openPicker === 'endTime'}
-        minutesStep={5}
-        onClose={() => setOpenPicker(null)}
-        TextFieldComponent={() => ''}
-        value={openPicker === 'startTime' ? start : end}
-        onChange={openPicker === 'startTime' ? handleStartTimeChange : handleEndTimeChange}
-        minDate={openPicker === 'endTime' ? start : null}
-      />
-      */}
-
-      {Boolean(helperText) && <FormHelperText>{helperText}</FormHelperText>}
+      {Boolean(false) && <FormHelperText>{/* text */'text'}</FormHelperText>}
     </FormControl>
   )
 }
@@ -235,5 +205,3 @@ DateTimeRangeField.propTypes = {
   helperText: PropTypes.string,
   error: PropTypes.bool,
 }
-
-export { DateTimeRangeField }

@@ -94,28 +94,30 @@ export const Main = () => {
       initials="JU"
       homeLink="https://www.example.com"
       name="jeff@example.com"
-      userMenuItems={[
-        <MenuItem key="support">
-          <ListItemIcon>
-            <ContactSupportIcon />
-          </ListItemIcon>
-          <ListItemText primary="Support" />
-        </MenuItem>,
+      userMenuContent={
+        <>
+          <MenuItem>
+            <ListItemIcon>
+              <ContactSupportIcon />
+            </ListItemIcon>
+            <ListItemText primary="Support" />
+          </MenuItem>
 
-        <MenuItem divider key="profile">
-          <ListItemIcon>
-            <AccountCircleIcon />
-          </ListItemIcon>
-          <ListItemText primary="My profile" />
-        </MenuItem>,
+          <MenuItem divider>
+            <ListItemIcon>
+              <AccountCircleIcon />
+            </ListItemIcon>
+            <ListItemText primary="My profile" />
+          </MenuItem>
 
-        <MenuItem key="logout">
-          <ListItemIcon>
-            <PowerSettingsNewIcon />
-          </ListItemIcon>
-          <ListItemText primary="Log out" />
-        </MenuItem>,
-      ]}
+          <MenuItem>
+            <ListItemIcon>
+              <PowerSettingsNewIcon />
+            </ListItemIcon>
+            <ListItemText primary="Log out" />
+          </MenuItem>
+        </>
+      }
       appBarContent={
         <NavTabs value={tab} onChange={(event, newTab) => setTab(newTab)}>
           <NavTab label="Projects" icon={<ProjectsIcon />} />
