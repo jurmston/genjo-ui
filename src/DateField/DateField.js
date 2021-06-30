@@ -3,14 +3,11 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import Paper from '@material-ui/core/Paper'
+import Popover from '@material-ui/core/Popover'
 import CalendarPicker from '@material-ui/lab/CalendarPicker'
 import DatePicker from '@material-ui/lab/DatePicker'
 import { DateTime } from 'luxon'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
-
-import useDimensions from '../useDimensions'
 
 const monthFirstFormats = [
   'M/d/yy',
@@ -93,7 +90,7 @@ export const DateField = ({
   const [inputValue, setInputValue] = React.useState('')
   const [pickerIsOpen, setPickerIsOpen] = React.useState(false)
 
-  const [ref, dim] = useDimensions()
+  const ref = React.useRef()
 
   const pickerRef = React.useRef()
 
@@ -174,26 +171,33 @@ export const DateField = ({
         />
       )}
 
-      {pickerIsOpen && !hasDialog && (
-        <ClickAwayListener onClickAway={() => setPickerIsOpen(false)}>
-          <Paper
-            style={{
-              left: 0,
-              position: 'absolute',
-              top: dim.height + 8,
+      {!hasDialog && (
+        <Popover
+          open={pickerIsOpen}
+          onClose={() => setPickerIsOpen(false)}
+          anchorEl={ref.current}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          style={{
+            marginTop: 8,
+          }}
+        >
+          <CalendarPicker
+            allowKeyboardControl
+            date={value}
+            onChange={newValue => {
+              onChange(newValue)
+              setPickerIsOpen(false)
             }}
-          >
-            <CalendarPicker
-              allowKeyboardControl
-              date={value}
-              onChange={newValue => {
-                onChange(newValue)
-                setPickerIsOpen(false)
-              }}
-              ref={pickerRef}
-            />
-          </Paper>
-        </ClickAwayListener>
+            ref={pickerRef}
+          />
+        </Popover>
       )}
     </div>
   )
@@ -204,8 +208,8 @@ DateField.propTypes = {
   inputFormat: PropTypes.oneOf(['month-first', 'day-first']),
   /** DateTime formating object. */
   displayFormat: PropTypes.object,
-  /** ISO Date string. */
-  value: PropTypes.string,
+  /** Luxon DateTime. */
+  value: PropTypes.object,
   /** Callback when date value is changed. */
   onChange: PropTypes.func,
   /** If `true`, the picker element will be hidden. */

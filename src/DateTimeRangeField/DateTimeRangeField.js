@@ -19,6 +19,8 @@ export const DateTimeRangeField = ({
   onChange,
   isStacked,
   label = '',
+  error = false,
+  helperText = '',
   ...textFieldProps
 }) => {
   const start = (startFromProps && !startFromProps.invalid ? startFromProps : DateTime.local().startOf('hour')).startOf(
@@ -50,12 +52,12 @@ export const DateTimeRangeField = ({
    * @param {object} newStartDate
    */
   const handleStartDateChange = newStartDate => {
-    const newStart = newStartDate.set({
+    const newStart = newStartDate?.set({
       hours: start.hours,
       minutes: start.minutes,
-    })
+    }) ?? null
 
-    const newEnd = newStart.plus(durationToAdd)
+    const newEnd = newStart?.plus(durationToAdd) ?? null
 
     onChange(newStart, newEnd)
   }
@@ -67,13 +69,13 @@ export const DateTimeRangeField = ({
    * @param {object} newStartTime
    */
   const handleStartTimeChange = newStartTime => {
-    const newStart = newStartTime.set({
+    const newStart = newStartTime?.set({
       day: start.day,
       month: start.month,
       year: start.year,
-    })
+    }) ?? null
 
-    const newEnd = start.plus(durationToAdd)
+    const newEnd = start?.plus(durationToAdd) ?? null
 
     onChange(newStart, newEnd)
   }
@@ -85,11 +87,11 @@ export const DateTimeRangeField = ({
    * @param {object} newEndTime
    */
   const handleEndTimeChange = newEndTime => {
-    const newEnd = newEndTime.set({
+    const newEnd = newEndTime?.set({
       day: end.day,
       month: end.month,
       year: end.year,
-    })
+    }) ?? null
 
     onChange(start, newEnd)
   }
@@ -101,7 +103,7 @@ export const DateTimeRangeField = ({
    * @param {object} newEndDate
    */
   const handleEndDateChange = newEndDate => {
-    const newEnd = newEndDate.set({
+    const newEnd = newEndDate?.set({
       hours: end.hours,
       minutes: end.minutes,
     })
@@ -111,8 +113,9 @@ export const DateTimeRangeField = ({
 
   const startDate = (
     <DateField
+      error={error}
       label={isStacked ? 'From' : null}
-      value={start}
+      value={startFromProps ? start : null}
       onChange={handleStartDateChange}
       {...textFieldProps}
     />
@@ -120,7 +123,8 @@ export const DateTimeRangeField = ({
 
   const startTime = (
     <TimeField
-      value={start}
+      error={error}
+      value={startFromProps ? start : null}
       onChange={handleStartTimeChange}
       {...textFieldProps}
     />
@@ -128,7 +132,8 @@ export const DateTimeRangeField = ({
 
   const endTime = (
     <TimeField
-      value={end}
+      error={error}
+      value={endFromProps ? end : null}
       onChange={handleEndTimeChange}
       InputProps={{
         endAdornment: (
@@ -145,15 +150,16 @@ export const DateTimeRangeField = ({
 
   const endDate = (
     <DateField
+      error={error}
       label={isStacked ? 'To' : null}
-      value={end}
+      value={endFromProps ? end : null}
       onChange={handleEndDateChange}
       {...textFieldProps}
     />
   )
 
   return (
-    <FormControl error={false}>
+    <FormControl error={error}>
       {Boolean(label) && <InputLabel>{label}</InputLabel>}
       {isStacked ? (
         <Grid container spacing={1}>
@@ -190,7 +196,7 @@ export const DateTimeRangeField = ({
         </Grid>
       )}
 
-      {Boolean(false) && <FormHelperText>{/* text */'text'}</FormHelperText>}
+      {Boolean(helperText) && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
   )
 }

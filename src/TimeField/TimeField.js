@@ -3,14 +3,11 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
-import Paper from '@material-ui/core/Paper'
+import Popover from '@material-ui/core/Popover'
 import ClockPicker from '@material-ui/lab/ClockPicker'
 import TimePicker from '@material-ui/lab/TimePicker'
 import { DateTime } from 'luxon'
 import TimeIcon from '@material-ui/icons/AccessTimeRounded'
-
-import useDimensions from '../useDimensions'
 
 const validFormats = [
   'h:mm a',
@@ -27,13 +24,10 @@ function parseInputValue(inputValue) {
     return null
   }
 
-  console.log('Parsing', inputValue)
-
   for (let format of validFormats) {
     const parsedValue = DateTime.fromFormat(inputValue, format)
 
     if (!parsedValue.invalid) {
-      console.log(format)
       return parsedValue
     }
   }
@@ -76,8 +70,6 @@ function maskInputValue(inputValue = '', isDeleting = false) {
 
   let time = parsedSections.join(':')
 
-  console.log({ inputValue, isDeleting })
-
   if (!isDeleting) {
     if (inputValue.endsWith('a') || inputValue.endsWith('am') || inputValue.endsWith('A') || inputValue.endsWith('AM')) {
       time = `${time} AM`
@@ -109,7 +101,7 @@ export const TimeField = ({
   const [inputValue, setInputValue] = React.useState('')
   const [pickerState, setPickerState] = React.useState('closed')
 
-  const [ref, dim] = useDimensions()
+  const ref = React.useRef()
 
   const pickerRef = React.useRef()
 
@@ -117,18 +109,10 @@ export const TimeField = ({
 
   const pickerIsOpen = pickerState !== 'closed'
 
-  console.log({
-    displayValue,
-    inputValue,
-    value,
-    pickerState,
-  })
-
   function handleInputChange(event) {
     if (isEditing) {
       const isDeleting = event.target.value <= inputValue
 
-      console.log({ prev: inputValue, next: event.target.value })
       setInputValue(maskInputValue(event.target.value, isDeleting))
       // setInputValue(event.target.value)
     }
@@ -208,41 +192,38 @@ export const TimeField = ({
           date={value}
           onChange={newValue => {
             onChange(newValue)
-            // console.log(pickerState)
-            // setPickerState(pickerState === 'hours' ? 'minutes' : 'closed')
           }}
           renderInput={() => ""}
         />
       )}
 
-      {pickerIsOpen && !hasDialog && (
-        <ClickAwayListener onClickAway={() => setPickerState('closed')}>
-          <Paper
-            style={{
-              left: 0,
-              position: 'absolute',
-              top: dim.height + 8,
-            }}
-          >
-            <ClockPicker
-              ampm={inputFormat === 'ampm'}
-              ampmInClock={inputFormat === 'ampm'}
-              minuteStep={minuteStep}
-              allowKeyboardControl
-              date={value}
-              view={pickerState}
-              onChange={(newValue, reason) => {
-                onChange(newValue)
+      {!hasDialog && (
+        <Popover
+          style={{ marginTop: 8 }}
+          open={pickerIsOpen}
+          onClose={() => setPickerState('closed')}
+          anchorEl={ref.current}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        >
+          <ClockPicker
+            ampm={inputFormat === 'ampm'}
+            ampmInClock={inputFormat === 'ampm'}
+            minuteStep={minuteStep}
+            allowKeyboardControl
+            date={value}
+            view={pickerState === 'minutes' ? 'minutes' : 'hours'}
+            onChange={(newValue, reason) => {
+              onChange(newValue)
 
-                if (reason !== 'shallow') {
-                  setPickerState(pickerState === 'hours' ? 'minutes' : 'closed')
-                }
-                // setPickerIsOpen(false)
-              }}
-              ref={pickerRef}
-            />
-          </Paper>
-        </ClickAwayListener>
+              if (reason !== 'shallow') {
+                setPickerState(pickerState === 'hours' ? 'minutes' : 'closed')
+              }
+              // setPickerIsOpen(false)
+            }}
+            ref={pickerRef}
+          />
+        </Popover>
       )}
     </div>
   )
@@ -253,8 +234,8 @@ TimeField.propTypes = {
   inputFormat: PropTypes.oneOf(['ampm', '24hr']),
   /** DateTime formating object. */
   displayFormat: PropTypes.object,
-  /** ISO Date string. */
-  value: PropTypes.string,
+  /** Luxon DateTime. */
+  value: PropTypes.object,
   /** Callback when date value is changed. */
   onChange: PropTypes.func,
   /** If `true`, the picker element will be hidden. */

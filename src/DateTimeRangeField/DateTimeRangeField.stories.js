@@ -10,7 +10,15 @@ export default {
 export const Primary = () => {
   const [values, setValues] = React.useState({ start: null, end: null })
 
+  const error = values.start > values.end
+
   return (
-    <DateTimeRangeField start={values.start} end={values.end} onChange={(start, end) => setValues({ start, end })} />
+    <DateTimeRangeField
+      start={values.start}
+      end={values.end}
+      onChange={(start, end) => setValues({ start, end })}
+      error={error}
+      helperText={error ? 'Start must be before end' : ''}
+    />
   )
 }
