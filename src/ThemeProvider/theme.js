@@ -119,6 +119,12 @@ export const createTheme = ({ mode, primary, secondary }) =>
       // AUTOCOMPLETE
       MuiAutocomplete: {
         styleOverrides: {
+          root: {
+            '& .MuiFilledInput-root': {
+              padding: 0,
+            }
+          },
+
           tag: {
             margin: 2,
             maxWidth: 'calc(100% - 4px)',
@@ -131,12 +137,6 @@ export const createTheme = ({ mode, primary, secondary }) =>
               padding: 0,
               paddingTop: 0,
               paddingLeft: 0,
-              '& $input': {
-                padding: 6,
-              },
-            },
-            '&[class*="MuiFilledInput-root"]': {
-              padding: `0 !important`,
               '& $input': {
                 padding: 6,
               },

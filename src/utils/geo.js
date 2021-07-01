@@ -35,8 +35,6 @@ export function parseGeocoderResults(results) {
     return
   }
 
-  console.log({ place })
-
   const lat = place.geometry.location.lat()
   const lng = place.geometry.location.lng()
   const formattedAddress = place.formatted_address

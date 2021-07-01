@@ -28,7 +28,9 @@ export const Primary = () => {
     state: '',
     streetAddress: '',
     subpremise: '',
+    formattedAddress: '',
   })
+
   const addressRef = React.useRef()
   const [address, setAddress] = React.useState('')
 
@@ -52,7 +54,11 @@ export const Primary = () => {
       <div style={{ width: 300 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <SearchLocationsField placeholder="Search for an address..." onChange={handleSearchResult} />
+            <SearchLocationsField
+              value={values?.formattedAddress ?? ''}
+              placeholder="Search for an address..."
+              onChange={handleSearchResult}
+            />
           </Grid>
 
           <Grid item xs={12}>

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import Autocomplete from '@material-ui/core/Autocomplete'
 import Typography from '@material-ui/core/Typography'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import { makeStyles } from '@material-ui/styles'
 
@@ -28,7 +30,7 @@ const useStyles = makeStyles({
   },
 })
 
-export const SearchLocationsField = ({ onChange, ...textFieldProps }) => {
+export const SearchLocationsField = ({ value, onChange, ...textFieldProps }) => {
   const classes = useStyles()
   const [options, setOptions] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(false)
@@ -47,7 +49,6 @@ export const SearchLocationsField = ({ onChange, ...textFieldProps }) => {
    * @param {*} value
    */
   function handlePlaceChange(event, value) {
-    console.log({ placeChangeValue: value })
     if (value?.description) {
       geocode({ address: value.description }, results => {
         let parsedResults
@@ -82,13 +83,12 @@ export const SearchLocationsField = ({ onChange, ...textFieldProps }) => {
     }
 
     return (
-      <li {...props}>
-        <Typography variant="body2">{option.structured_formatting.main_text}</Typography>
-
-        <Typography style={{ marginLeft: 8 }} variant="caption" color="textSecondary">
-          {option.structured_formatting.secondary_text}
-        </Typography>
-      </li>
+      <ListItem {...props}>
+        <ListItemText
+          primary={option.structured_formatting.main_text}
+          secondary={option.structured_formatting.secondary_text}
+        />
+      </ListItem>
     )
   }
 
@@ -127,14 +127,16 @@ export const SearchLocationsField = ({ onChange, ...textFieldProps }) => {
       filterOptions={x => x}
       options={options}
       fullWidth
+      freeSolo
       autoComplete
       autoSelect
-      value={null}
+      value={value ?? null}
       disableClearable
       forcePopupIcon={false}
       loading={isLoading}
-      noOptionsText={
-        inputValue ? 'Start typing to search for a matching address.' : 'Could not find a matching address.'
+      noOptionsText={inputValue
+        ? 'Could not find a matching address.'
+        : 'Start typing to search for a matching address.'
       }
       filterSelectedOptions
       onChange={handlePlaceChange}
