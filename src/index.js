@@ -125,6 +125,9 @@ export * from './useStoredState'
 export { default as useOpenable } from './useOpenable'
 export * from './useOpenable'
 
+export { default as useCurrentLocation } from './useCurrentLocation'
+export * from './useCurrentLocation'
+
 export * from './utils'
 
 export * from './icons'

@@ -13,6 +13,8 @@ import { useGeocoder } from './useGeocoder'
 
 import { GoogleMapsWrapper } from '../../.storybook/components/GoogleMapsWrapper'
 
+import useCurrentLocation from '../useCurrentLocation'
+
 export default {
   title: 'Providers/GoogleMapsProvider',
   component: GoogleMapsProvider,
@@ -44,6 +46,8 @@ const PrimaryInner = () => {
 
   const [currentPosition, setCurrentPosition] = React.useState(0)
 
+  const currentLocation = useCurrentLocation()
+
   function handleSearchResult(result) {
     const newValues = Object.keys(values).reduce((acc, key) => {
       acc[key] = result[key] ?? ''
@@ -70,6 +74,16 @@ const PrimaryInner = () => {
   return (
     <div style={{ width: 500 }}>
       <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography>
+            {currentLocation.isLoading ? 'LOADING...' : ''}
+          </Typography>
+
+          <Typography>
+            {`${currentLocation.location?.latitude} : ${currentLocation.location?.longitude}`}
+          </Typography>
+        </Grid>
+
         <Grid item xs={12}>
           <SearchLocationsField
             value={values?.formattedAddress ?? ''}
