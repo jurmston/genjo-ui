@@ -1,6 +1,6 @@
-export { default } from './GoogleMapsProvider'
-
-export { default as GoogleMapsContext } from './GoogleMapsContext'
-export { default as useGoogleMaps } from './useGoogleMaps'
-export { default as usePlacesAutocomplete } from './usePlacesAutocomplete'
-export { default as useGeocoder } from './useGeocoder'
+export { GoogleMapsProvider as default } from './GoogleMapsProvider'
+export * from './GoogleMapsProvider'
+export * from './GoogleMapsContext'
+export * from './useGoogleMaps'
+export * from './usePlacesAutocomplete'
+export * from './useGeocoder'

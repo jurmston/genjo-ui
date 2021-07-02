@@ -1,10 +1,14 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import GoogleMapsContext from './GoogleMapsContext'
+import { GoogleMapsContext } from './GoogleMapsContext'
 
-export const GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script'
+export const DEFAULT_GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script'
 
-export function GoogleMapsProvider({ apiKey, children }) {
+export function GoogleMapsProvider({
+  scriptId = DEFAULT_GOOGLE_MAPS_SCRIPT_ID,
+  apiKey,
+  children,
+}) {
   const [state, setState] = React.useState({
     status: 'idle',
     error: null,
@@ -20,7 +24,7 @@ export function GoogleMapsProvider({ apiKey, children }) {
   }
 
   React.useEffect(() => {
-    const existingScript = document.getElementById(GOOGLE_MAPS_SCRIPT_ID)
+    const existingScript = document.getElementById(scriptId)
 
     if (existingScript || window.google) {
       return onLoad()
@@ -30,7 +34,7 @@ export function GoogleMapsProvider({ apiKey, children }) {
 
     const script = document.createElement('script')
     script.setAttribute('async', '')
-    script.setAttribute('id', GOOGLE_MAPS_SCRIPT_ID)
+    script.setAttribute('id', scriptId)
 
     const src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`
     script.src = src
@@ -43,7 +47,7 @@ export function GoogleMapsProvider({ apiKey, children }) {
 
     // Remove script on unload
     return () => {
-      const scriptToRemove = document.getElementById(GOOGLE_MAPS_SCRIPT_ID)
+      const scriptToRemove = document.getElementById(scriptId)
       scriptToRemove?.remove()
     }
   }, [])
@@ -52,8 +56,10 @@ export function GoogleMapsProvider({ apiKey, children }) {
 }
 
 GoogleMapsProvider.propTypes = {
+  /** Id for the Google Maps script tag. */
+  scriptId: PropTypes.string,
+  /** Wrapped content of the provider. */
   children: PropTypes.node,
+  /** Your Google Maps api key. Keep it secret. Keep it safe. */
   apiKey: PropTypes.string.isRequired,
 }
-
-export default GoogleMapsProvider

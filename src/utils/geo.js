@@ -13,18 +13,18 @@ import geohash from 'ngeohash'
 //   subpremise: '',
 // }
 
-const COMPONENTS = new Set([
-  'locality',
-  'administrative_area_level_1',
-  'administrative_area_level_2',
-  'country',
-  'postal_code',
-  'route',
-  'street_number',
-  'postal_town',
-  'postal_code_suffix',
-  'subpremise',
-])
+// const COMPONENTS = new Set([
+//   'locality',
+//   'administrative_area_level_1',
+//   'administrative_area_level_2',
+//   'country',
+//   'postal_code',
+//   'route',
+//   'street_number',
+//   'postal_town',
+//   'postal_code_suffix',
+//   'subpremise',
+// ])
 
 const SHORT_NAME_COMPONENTS = new Set(['country', 'adminstrative_area_level_1'])
 
@@ -50,9 +50,11 @@ export function parseGeocoderResults(results) {
   }
 
   return {
-    latitude: lat,
-    longitude: lng,
-    geohash: geohash.encode(lat, lng),
+    geopoint: {
+      latitude: lat,
+      longitude: lng,
+      geohash: geohash.encode(lat, lng),
+    },
     formattedAddress,
     placeId,
     city: parsedComponents.locality || parsedComponents.postal_town || '',

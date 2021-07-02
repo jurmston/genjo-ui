@@ -103,6 +103,9 @@ export * from './TimeField'
 export { default as DateTimeRangeField } from './DateTimeRangeField'
 export * from './DateTimeRangeField'
 
+export { default as MapComponent } from './MapComponent'
+export * from './MapComponent'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'

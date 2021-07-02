@@ -1,26 +1,29 @@
 import * as React from 'react'
-import useGoogleMaps from './useGoogleMaps'
+import { useGoogleMaps } from './useGoogleMaps'
+
+
+const globalPlacesAutocompleteService = { current: null }
+
 
 export function usePlacesAutocomplete() {
-  const [service, setService] = React.useState(null)
-
   const { status, google } = useGoogleMaps()
 
   React.useEffect(() => {
-    if (!service && status === 'ready') {
+    if (!globalPlacesAutocompleteService.current && status === 'ready') {
       const newService = new google.maps.places.AutocompleteService()
-      setService(newService)
+      globalPlacesAutocompleteService.current = newService
     }
-  }, [status, service, google])
+  }, [status, google])
 
   const getPlacePredictions = React.useCallback(
     (request, callback) => {
-      service?.getPlacePredictions(request, callback)
+      globalPlacesAutocompleteService.current?.getPlacePredictions(
+        request,
+        callback,
+      )
     },
-    [service]
+    []
   )
 
   return { getPlacePredictions, status }
 }
-
-export default usePlacesAutocomplete
