@@ -19,7 +19,7 @@ import SortGenericDescendingIcon from '../icons/SortGenericDescendingIcon'
 const useStyles = makeStyles(theme => ({
   head: {
     cursor: 'pointer',
-    // padding: 2,
+    padding: 2,
   },
   isSelected: {
     color: theme.palette.primary.main,

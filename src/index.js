@@ -106,6 +106,9 @@ export * from './DateTimeRangeField'
 export { default as MapComponent } from './MapComponent'
 export * from './MapComponent'
 
+export { default as SortableTableHeadCell } from './SortableTableHeadCell'
+export * from './SortableTableHeadCell'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'
