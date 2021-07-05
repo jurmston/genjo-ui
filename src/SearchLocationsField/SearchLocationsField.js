@@ -202,10 +202,10 @@ SearchLocationsField.propTypes = {
    * should be limited to.
    * https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#ComponentRestrictions.country
    */
-  countryRestrictions: PropTypes.oneOfType(
+  countryRestrictions: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.arrayOf(PropTypes.string),
-  ),
+  ]),
   helperText: PropTypes.string,
 }
 
