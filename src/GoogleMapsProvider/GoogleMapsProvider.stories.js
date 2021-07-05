@@ -89,6 +89,7 @@ const PrimaryInner = () => {
             value={values?.formattedAddress ?? ''}
             placeholder="Search for an address..."
             onChange={handleSearchResult}
+            countryRestrictions="jp"
           />
         </Grid>
 

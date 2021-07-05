@@ -30,7 +30,13 @@ const useStyles = makeStyles({
   },
 })
 
-export const SearchLocationsField = ({ value, onChange, ...textFieldProps }) => {
+export const SearchLocationsField = ({
+  value,
+  onChange,
+  predictionTypes,
+  countryRestrictions,
+  ...textFieldProps
+}) => {
   const classes = useStyles()
   const [options, setOptions] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(false)
@@ -102,7 +108,21 @@ export const SearchLocationsField = ({ value, onChange, ...textFieldProps }) => 
     let active = true
     setIsLoading(true)
 
-    getPlacePredictions({ input: debouncedInputValue }, results => {
+    const placesQuery = { input: debouncedInputValue }
+
+    // Conditionally add in the extra query items.
+    // See: https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompletionRequest
+    if (countryRestrictions) {
+      placesQuery.componentRestrictions = {
+        country: countryRestrictions
+      }
+    }
+
+    if (predictionTypes) {
+      placesQuery.types = predictionTypes
+    }
+
+    getPlacePredictions(placesQuery, (results, status) => {
       if (active) {
         let newOptions = []
 
@@ -170,13 +190,22 @@ export const SearchLocationsField = ({ value, onChange, ...textFieldProps }) => 
 }
 
 SearchLocationsField.propTypes = {
-  id: PropTypes.string,
-  label: PropTypes.string,
-  variant: PropTypes.string,
-  placeholder: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
-  types: PropTypes.arrayOf(PropTypes.string),
+  /**
+   * Array of types that the predication belongs to.
+   * https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompletePrediction.types
+   */
+  predictionTypes: PropTypes.arrayOf(PropTypes.string),
+  /**
+   * A single country code or an array of country codes that the search results
+   * should be limited to.
+   * https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#ComponentRestrictions.country
+   */
+  countryRestrictions: PropTypes.oneOfType(
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ),
   helperText: PropTypes.string,
 }
 
