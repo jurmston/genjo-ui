@@ -1,6 +1,9 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import SnackbarProvider from './SnackbarProvider'
 import useSnackbar from './useSnackbar'
 
@@ -29,6 +32,8 @@ function getRandomMessage() {
 const TriggerSnackbarButtons = () => {
   const snackbar = useSnackbar()
 
+  const [dialogIsOpen, setDialogIsOpen] = React.useState(false)
+
   function trigger(type) {
     snackbar.addMessage({
       text: getRandomMessage(),
@@ -37,31 +42,51 @@ const TriggerSnackbarButtons = () => {
   }
 
   return (
-    <Grid container spacing={1}>
-      <Grid item>
-        <Button variant="contained" color="primary" onClick={() => trigger('info')}>
-          Info
-        </Button>
+    <>
+      <Grid container spacing={1}>
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={() => trigger('info')}>
+            Info
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={() => trigger('success')}>
+            Success
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={() => trigger('warning')}>
+            Warning
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={() => trigger('error')}>
+            Error
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button variant="outlined" color="primary" onClick={() => setDialogIsOpen(true)}>
+            Open Dialog
+          </Button>
+        </Grid>
       </Grid>
 
-      <Grid item>
-        <Button variant="contained" color="primary" onClick={() => trigger('success')}>
-          Success
-        </Button>
-      </Grid>
-
-      <Grid item>
-        <Button variant="contained" color="primary" onClick={() => trigger('warning')}>
-          Warning
-        </Button>
-      </Grid>
-
-      <Grid item>
-        <Button variant="contained" color="primary" onClick={() => trigger('error')}>
-          Error
-        </Button>
-      </Grid>
-    </Grid>
+      <Dialog
+        open={dialogIsOpen}
+        onClose={() => setDialogIsOpen(false)}
+        maxWidth="xs"
+      >
+        <DialogTitle>Test with dialog</DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setDialogIsOpen(false)}>Close</Button>
+          <Button onClick={() => trigger('success')} variant="contained">Create Message</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
 

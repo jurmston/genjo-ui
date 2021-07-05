@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column-reverse',
     transitions: theme.transitions.create('height'),
+    zIndex: theme.zIndex.snackbar,
   },
 }))
 
