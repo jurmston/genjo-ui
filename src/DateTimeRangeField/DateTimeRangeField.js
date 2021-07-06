@@ -23,11 +23,9 @@ export const DateTimeRangeField = ({
   helperText = '',
   ...textFieldProps
 }) => {
-  const start = (startFromProps && !startFromProps.invalid ? startFromProps : DateTime.local().startOf('hour')).startOf(
-    'minute'
-  )
+  const start = (startFromProps && !startFromProps.invalid ? startFromProps : DateTime.local().startOf('hour'))
 
-  const end = (endFromProps && !endFromProps.invalid ? endFromProps : start.plus({ hours: 1 })).startOf('minute')
+  const end = (endFromProps && !endFromProps.invalid ? endFromProps : start.plus({ hours: 1 }))
 
   const duration = end.diff(start)
 
@@ -53,8 +51,8 @@ export const DateTimeRangeField = ({
    */
   const handleStartDateChange = newStartDate => {
     const newStart = newStartDate?.set({
-      hours: start.hours,
-      minutes: start.minutes,
+      hour: start.hour,
+      minute: start.minute,
     }) ?? null
 
     const newEnd = newStart?.plus(durationToAdd) ?? null
@@ -104,8 +102,8 @@ export const DateTimeRangeField = ({
    */
   const handleEndDateChange = newEndDate => {
     const newEnd = newEndDate?.set({
-      hours: end.hours,
-      minutes: end.minutes,
+      hour: end.hour,
+      minute: end.minute,
     })
 
     onChange(start, newEnd)
