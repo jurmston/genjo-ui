@@ -15,17 +15,15 @@ const useStyles = makeStyles(theme => ({
     minHeight: 56,
     minWidth: 'unset',
 
-    '&.Mui-selected .MuiTab-wrapper': {
-      color: theme.palette.primary.main,
-    },
-  },
-
-  wrapper: {
     color: theme.palette.text.secondary,
     textTransform: 'initial',
     flexDirection: 'column',
     alignItems: 'center',
     padding: `0 16px`,
+
+    '&.Mui-selected': {
+      color: theme.palette.primary.main,
+    },
   },
 
 }))

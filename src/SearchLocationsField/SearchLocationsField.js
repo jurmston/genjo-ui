@@ -122,7 +122,7 @@ export const SearchLocationsField = ({
       placesQuery.types = predictionTypes
     }
 
-    getPlacePredictions(placesQuery, (results, status) => {
+    getPlacePredictions(placesQuery, results => {
       if (active) {
         let newOptions = []
 

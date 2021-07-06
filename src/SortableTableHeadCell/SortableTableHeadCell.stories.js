@@ -103,7 +103,7 @@ export const Primary = () => {
         <TableBody>
           {ROWS.map((row, index) => (
             <TableRow key={index}>
-              <TableCell divider>{row[0]}</TableCell>
+              <TableCell>{row[0]}</TableCell>
               <TableCell>{row[1]}</TableCell>
               <TableCell>{row[2]}</TableCell>
               <TableCell>{row[3]}</TableCell>
