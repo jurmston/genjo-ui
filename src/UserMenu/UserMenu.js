@@ -44,11 +44,19 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: props => props.color,
   },
 
-  name: {
+  nameWrapper: {
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'nowrap',
     rowGap: 8,
     marginLeft: 8,
+  },
+
+  name: {
+    maxWidth: 210,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
     ...theme.typography.subtitle2,
   },
 }))
@@ -87,8 +95,10 @@ export const UserMenu = ({
           {initials}
         </Avatar>
           {Boolean(name) && !avatarOnly && (
-            <span className={classes.name}>
-              {name}
+            <span className={classes.nameWrapper}>
+              <span className={classes.name}>
+                {name}
+              </span>
               <DownArrow />
             </span>
           )}

@@ -115,7 +115,7 @@ export const Main = () => {
         <UserMenu
           avatarOnly={avatarOnly}
           initials="JU"
-          name="jeff@example.com"
+          name="colleen.camenisch@gmail.com"
           color="darkgreen"
         >
           <MenuItem>
