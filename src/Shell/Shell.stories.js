@@ -27,12 +27,14 @@ import ContractsIcon from '@material-ui/icons/ArticleRounded'
 import AddressBookIcon from '@material-ui/icons/ContactMailRounded'
 import SettingsIcon from '@material-ui/icons/SettingsRounded'
 
+import UserMenu from '../UserMenu'
+
 export default {
   title: 'Widgets/Shell',
   component: Shell,
 }
 
-const PageWithMenu = ({ setPage }) => {
+const PageWithMenu = ({ setPage, toggleAvatar }) => {
   const [contentKey, setContentKey] = React.useState('Apple')
   const menuContent = (
     <>
@@ -62,11 +64,17 @@ const PageWithMenu = ({ setPage }) => {
       <Button variant="contained" color="primary" onClick={toggleContent}>
         Change menu content
       </Button>
+
+      <div style={{ margin: 16 }} />
+
+      <Button variant="contained" color="primary" onClick={toggleAvatar}>
+        ToggleAvatar
+      </Button>
     </Container>
   )
 }
 
-const PageWithoutMenu = ({ setPage }) => {
+const PageWithoutMenu = ({ setPage, toggleAvatar }) => {
   useShell({})
 
   return (
@@ -78,6 +86,12 @@ const PageWithoutMenu = ({ setPage }) => {
       <Button variant="contained" color="primary" onClick={() => setPage('menu')}>
         With Menu
       </Button>
+
+      <div style={{ margin: 16 }} />
+
+      <Button variant="contained" color="primary" onClick={toggleAvatar}>
+        ToggleAvatar
+      </Button>
     </Container>
   )
 }
@@ -86,16 +100,24 @@ export const Main = () => {
   const [page, setPage] = React.useState('menu')
   const [tab, setTab] = React.useState(0)
 
+  const [avatarOnly, setAvatarOnly] = React.useState(false)
+
+  function toggleAvatar() {
+    setAvatarOnly(!avatarOnly)
+  }
+
   return (
     <Shell
       logo={story_logo}
       brandName="Genjo UI"
-      color="red"
-      initials="JU"
       homeLink="https://www.example.com"
-      name="jeff@example.com"
-      userMenuContent={
-        <>
+      userMenu={
+        <UserMenu
+          avatarOnly={avatarOnly}
+          initials="JU"
+          name="jeff@example.com"
+          color="darkgreen"
+        >
           <MenuItem>
             <ListItemIcon>
               <ContactSupportIcon />
@@ -116,7 +138,7 @@ export const Main = () => {
             </ListItemIcon>
             <ListItemText primary="Log out" />
           </MenuItem>
-        </>
+        </UserMenu>
       }
       appBarContent={
         <NavTabs value={tab} onChange={(event, newTab) => setTab(newTab)}>
@@ -126,7 +148,11 @@ export const Main = () => {
         </NavTabs>
       }
     >
-      {page === 'menu' ? <PageWithMenu setPage={setPage} /> : <PageWithoutMenu setPage={setPage} />}
+      {page === 'menu' ? (
+        <PageWithMenu setPage={setPage} toggleAvatar={toggleAvatar} />
+      ) : (
+        <PageWithoutMenu setPage={setPage} toggleAvatar={toggleAvatar} />
+      )}
     </Shell>
   )
 }

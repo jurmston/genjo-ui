@@ -38,9 +38,9 @@ const useStyles = makeStyles(theme => ({
   },
 
   avatar: {
-    height: 32,
-    width: 32,
-    fontSize: 18,
+    height: props => props.avatarOnly ? 48 : 32,
+    width: props => props.avatarOnly ? 48 : 32,
+    fontSize: props => props.avatarOnly ? 26 : 18,
     backgroundColor: props => props.color,
   },
 
@@ -60,10 +60,11 @@ export const UserMenu = ({
   initials,
   name,
   children,
+  avatarOnly = false,
 }) => {
   const [anchor, setAnchor] = React.useState(null)
   const isOpen = Boolean(anchor)
-  const classes = useStyles({ isOpen, color })
+  const classes = useStyles({ isOpen, color, avatarOnly })
 
   return (
     <ClickAwayListener
@@ -84,7 +85,7 @@ export const UserMenu = ({
         >
           {initials}
         </Avatar>
-          {Boolean(name) && (
+          {Boolean(name) && !avatarOnly && (
             <span className={classes.name}>
               {name}
               <DownArrow />
@@ -118,4 +119,5 @@ UserMenu.propTypes = {
   initials: PropTypes.string,
   name: PropTypes.string,
   children: PropTypes.node,
+  avatarOnly: PropTypes.bool,
 }
