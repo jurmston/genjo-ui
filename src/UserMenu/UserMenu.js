@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   button: {
     display: 'flex',
     alignItems: 'center',
-    height: 55,
+    height: props => props.height,
     backgroundColor: props => props.isOpen
       ? theme.palette.grey[200]
       : theme.palette.common.white,
@@ -38,9 +38,9 @@ const useStyles = makeStyles(theme => ({
   },
 
   avatar: {
-    height: props => props.avatarOnly ? 48 : 32,
-    width: props => props.avatarOnly ? 48 : 32,
-    fontSize: props => props.avatarOnly ? 26 : 18,
+    height: props => props.height * (props.avatarOnly ? 0.8 : 0.6),
+    width: props => props.height * (props.avatarOnly ? 0.8 : 0.6),
+    fontSize: props => props.height * (props.avatarOnly ? 0.5 : 0.3),
     backgroundColor: props => props.color,
   },
 
@@ -61,10 +61,11 @@ export const UserMenu = ({
   name,
   children,
   avatarOnly = false,
+  height = 55,
 }) => {
   const [anchor, setAnchor] = React.useState(null)
   const isOpen = Boolean(anchor)
-  const classes = useStyles({ isOpen, color, avatarOnly })
+  const classes = useStyles({ isOpen, color, avatarOnly, height })
 
   return (
     <ClickAwayListener
