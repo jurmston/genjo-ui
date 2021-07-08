@@ -383,7 +383,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
         styleOverrides: {
           fontSizeSmall: {
-            fontSize: '20px !important',
+            fontSize: '20px',
           },
         },
       },
