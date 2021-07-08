@@ -177,7 +177,6 @@ export class PasswordField extends React.Component {
               </>
             ),
           }}
-          inputProps
         />
       </Tooltip>
     )
