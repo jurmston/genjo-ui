@@ -109,6 +109,9 @@ export * from './MapComponent'
 export { default as SortableTableHeadCell } from './SortableTableHeadCell'
 export * from './SortableTableHeadCell'
 
+export { default as TableResultsLoader } from './TableResultsLoader'
+export * from './TableResultsLoader'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'

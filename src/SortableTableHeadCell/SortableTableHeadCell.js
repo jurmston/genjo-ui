@@ -19,17 +19,18 @@ import SortGenericDescendingIcon from '../icons/SortGenericDescendingIcon'
 const useStyles = makeStyles(theme => ({
   head: {
     cursor: 'pointer',
-    padding: 2,
+    padding: `2px 4px 0 4px`,
+    borderTopLeftRadius: theme.shape.borderRadius,
+    borderTopRightRadius: theme.shape.borderRadius,
+    '&:hover': {
+      backgroundColor: theme.palette.grey[200],
+    },
   },
   isSelected: {
     color: theme.palette.primary.main,
   },
   wrapper: {
     padding: 2,
-    borderRadius: theme.shape.borderRadius,
-    '&:hover': {
-      backgroundColor: theme.palette.grey[200],
-    },
   },
   iconButton: {
     height: 22,
