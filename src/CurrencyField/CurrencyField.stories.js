@@ -20,12 +20,11 @@ export const Main = ({ variant, ...args }) => {
 
   return (
     <div style={{ width: 300 }}>
-      <CurrencyField {...args} variant={variant} value={value} onChange={(event, newValue) => setValue(newValue)} />
+      <CurrencyField {...args} label="Controlled" variant={variant} value={value} onChange={(event, newValue) => setValue(newValue)} />
     </div>
   )
 }
 
 Main.args = {
-  label: 'Currency Value',
   symbol: '$',
 }
