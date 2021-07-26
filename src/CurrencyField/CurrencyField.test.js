@@ -85,6 +85,23 @@ describe('Testing <CurrencyField />...', () => {
     expect(screen.getByRole('textbox')).toHaveValue('1,234?56')
   })
 
+  it('should render the correct thousands separator', () => {
+    const onChange = jest.fn()
+
+    render(<CurrencyField onChange={onChange} value={123456} thousandsSeparator="?" />)
+
+    expect(screen.getByRole('textbox')).toHaveValue('1?234.56')
+  })
+
+
+  it('should render zero decimal currencies correctly', () => {
+    const onChange = jest.fn()
+
+    render(<CurrencyField onChange={onChange} value={123456} currencySymbol="¥" decimalPlaces={0} />)
+
+    expect(screen.getByRole('textbox')).toHaveValue('123,456')
+  })
+
   it('should render the correct placeholder text', () => {
     const onChange = jest.fn()
     const { rerender } = render(<CurrencyField onChange={onChange} value={0} />)
@@ -94,6 +111,11 @@ describe('Testing <CurrencyField />...', () => {
     userEvent.type(screen.getByRole('textbox'), '-')
     rerender(<CurrencyField onChange={onChange} value={0} />)
     expect(screen.getByPlaceholderText('-0.00')).toBeInTheDocument()
+
+    // Check zero decimal
+    userEvent.type(screen.getByRole('textbox'), '-')
+    rerender(<CurrencyField onChange={onChange} value={0} decimalPlaces={0} />)
+    expect(screen.getByPlaceholderText('0')).toBeInTheDocument()
   })
 
   it('should render the correct currency symbol', () => {

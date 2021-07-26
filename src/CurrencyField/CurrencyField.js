@@ -6,7 +6,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 
 
 
-function formatValue(value, places, decimalSeperator, thousandSeparator) {
+function formatValue(value, places, decimalSeperator, thousandsSeparator) {
   // Absolute value removes the sign so that we can make sure to place it
   // to left when the value is less than zero (e.g. -0.01, not 0.-1)
   const numberValue = Math.abs(Number.parseInt(value, 10))
@@ -16,14 +16,20 @@ function formatValue(value, places, decimalSeperator, thousandSeparator) {
     return ''
   }
 
-  const integerPart = stringValue.slice(0, -places).padStart(1, '0')
-  const decimalPart = stringValue.slice(-places).padStart(places, '0')
+  const integerPart = places > 0 ? stringValue.slice(0, -places).padStart(1, '0') : stringValue
+  const decimalPart = places > 0 ? stringValue.slice(-places).padStart(places, '0') : ''
 
-  const seperatedIntegerParts = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  const seperatedIntegerParts = integerPart.replace(
+    /\B(?=(\d{3})+(?!\d))/g,
+    thousandsSeparator,
+  )
 
   const signValue = value < 0 ? '-' : ''
+  // Exclude the decimal part if the places value is less than zero to better
+  // support zero-decimal currencies.
+  const combinedDecimalPart = places > 0 ? `${decimalSeperator}${decimalPart}` : ''
 
-  return `${signValue}${seperatedIntegerParts}${decimalSeperator}${decimalPart}`
+  return `${signValue}${seperatedIntegerParts}${combinedDecimalPart}`
 }
 
 const INTEGER_KEY = /^\d$/
@@ -34,9 +40,9 @@ export const CurrencyField = ({
   currencySymbol = '$',
   decimalPlaces = 2,
   decimalSeperator = '.',
+  onChange,
   thousandsSeparator = ',',
   value,
-  onChange,
   ...textFieldProps
 }) => {
   const [toggleNegative, setToggleNegative] = React.useState(false)
@@ -85,7 +91,10 @@ export const CurrencyField = ({
   }
 
   const placeholderSign = toggleNegative ? '-' : ''
-  const placeholder = `${placeholderSign}0${decimalSeperator}${''.padStart(decimalPlaces, '0')}`
+  const placeholderDecimal = decimalPlaces > 0
+    ? `${decimalSeperator}${''.padStart(decimalPlaces, '0')}`
+    : ''
+  const placeholder = `${placeholderSign}0${placeholderDecimal}`
 
   return (
     <TextField
@@ -117,10 +126,15 @@ export const CurrencyField = ({
 CurrencyField.propTypes = {
   /** The currency symbol to use. */
   currencySymbol: PropTypes.string,
-  /** The max number of decimal places to show. */
-  maxPlaces: PropTypes.number,
-  /** If `true`, the field will always display the zero-padding max decimal places. */
-  fixedDecimalPlaces: PropTypes.bool,
+  /** The number of fixed decimal places to show. */
+  decimalPlaces: PropTypes.number,
+  /** Symbol to use for seperating the integer and decimal parts. */
+  decimalSeperator: PropTypes.string,
+  /** Callback when the value is changed. */
+  onChange: PropTypes.func,
+  /** Symbol to use for seperating the thousands place. */
+  thousandsSeparator: PropTypes.string,
+  /** The integer value of the input. */
   value: PropTypes.number,
 }
 

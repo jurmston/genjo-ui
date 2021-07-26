@@ -15,16 +15,20 @@ export default {
   },
 }
 
-export const Main = ({ variant, ...args }) => {
+export const Main = ({ ...args }) => {
   const [value, setValue] = React.useState('')
 
   return (
     <div style={{ width: 300 }}>
-      <CurrencyField {...args} label="Controlled" variant={variant} value={value} onChange={(event, newValue) => setValue(newValue)} />
+      <CurrencyField {...args} label="Controlled" value={value} onChange={(event, newValue) => setValue(newValue)} />
+      {value}
     </div>
   )
 }
 
 Main.args = {
-  symbol: '$',
+  currencySymbol: '$',
+  decimalPlaces: 2,
+  decimalSeperator: '.',
+  thousandsSeperator: ',',
 }
