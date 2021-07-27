@@ -5,6 +5,9 @@ import TextField from '@material-ui/core/TextField'
 import InputAdornment from '@material-ui/core/InputAdornment'
 
 
+const INTEGER_KEY = /^\d$/
+const NEGATIVE_KEY = /^-$/
+
 
 function formatValue(value, places, decimalSeperator, thousandsSeparator) {
   // Absolute value removes the sign so that we can make sure to place it
@@ -32,9 +35,6 @@ function formatValue(value, places, decimalSeperator, thousandsSeparator) {
   return `${signValue}${seperatedIntegerParts}${combinedDecimalPart}`
 }
 
-const INTEGER_KEY = /^\d$/
-const NEGATIVE_KEY = /^-$/
-
 
 export const CurrencyField = ({
   currencySymbol = '$',
@@ -45,6 +45,9 @@ export const CurrencyField = ({
   value,
   ...textFieldProps
 }) => {
+  // Flag to indicate that the negative sign was pressed, but the value is
+  // still zero. When a number is pressed, it will make sure the new number is
+  // negative. If the negative key is pressed twice it will cancel the flag.
   const [toggleNegative, setToggleNegative] = React.useState(false)
   React.useEffect(
     () => {
@@ -68,23 +71,25 @@ export const CurrencyField = ({
     const currentDigits = displayValue.toString().replace(/\D/g, '')
     const currentValue = `${currentSignValue}${currentDigits}`
 
-    // Handle deleting
+    // Handle deleting keys
     if (event.key === 'Backspace' || event.key === 'Delete') {
       const newValue = parseInt(currentValue.slice(0, -1), 0)
       return onChange(event, Number.isFinite(newValue) ? newValue : 0)
     }
 
+    // Number keys
     if (INTEGER_KEY.test(event.key)) {
       const newValue = parseInt(`${currentValue}${event.key}`, 0)
       return onChange(event, Number.isFinite(newValue) ? newValue : 0)
     }
 
+    // Negative key
     if (NEGATIVE_KEY.test(event.key)) {
-      if (value) {
+      if (value) {  // Non-zero values have their sign changed.
         const toggledSignValue = currentSignValue === '-' ? '' : '-'
         const newValue = parseInt(`${toggledSignValue}${currentDigits}${event.key}`, 0)
         return onChange(event, newValue)
-      } else {
+      } else {  // Toggle the negative flag
         setToggleNegative(!toggleNegative)
       }
     }
@@ -120,8 +125,8 @@ export const CurrencyField = ({
       }}
     />
 
-    )
-  }
+  )
+}
 
 CurrencyField.propTypes = {
   /** The currency symbol to use. */
@@ -130,7 +135,12 @@ CurrencyField.propTypes = {
   decimalPlaces: PropTypes.number,
   /** Symbol to use for seperating the integer and decimal parts. */
   decimalSeperator: PropTypes.string,
-  /** Callback when the value is changed. */
+  /**
+   * Callback fired when the value changes.
+   *
+   * @param {React.SyntheticEvent} event The event source of the callback. **Warning**: this is a generic event, not a change event.
+   * @param {number} newValue The integer value of the field.
+   */
   onChange: PropTypes.func,
   /** Symbol to use for seperating the thousands place. */
   thousandsSeparator: PropTypes.string,

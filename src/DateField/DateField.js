@@ -9,6 +9,9 @@ import DatePicker from '@material-ui/lab/DatePicker'
 import { DateTime } from 'luxon'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 
+export const DEFAULT_FORMAT = DateTime.DATE_MED
+
+
 const monthFirstFormats = [
   'M/d/yy',
   'M/d/yyyy',
@@ -79,7 +82,7 @@ function maskInputValue(inputValue = '') {
 
 export const DateField = ({
   inputFormat = 'month-first',
-  displayFormat = DateTime.DATE_MED,
+  displayFormat = DEFAULT_FORMAT,
   value,
   onChange,
   disablePicker = false,
