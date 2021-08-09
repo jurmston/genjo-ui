@@ -91,6 +91,7 @@ export const UserMenu = ({
           className={classes.avatar}
           src={avatar}
           alt={name}
+          style={{ textTransform: 'uppercase' }}
         >
           {initials}
         </Avatar>

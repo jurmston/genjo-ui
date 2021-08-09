@@ -40,6 +40,9 @@ const PageWithMenu = ({ setPage, toggleAvatar }) => {
     <>
       <MenuPanelItem icon={<ArrowBackIcon />} title="Back to Dashboard" isSelected={false} />
       <MenuPanelItem title={contentKey} />
+      <MenuPanelItem title="Nested">
+        <MenuPanelItem title="Noodles" />
+      </MenuPanelItem>
     </>
   )
 

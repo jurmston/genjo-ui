@@ -16,7 +16,7 @@ export default {
 }
 
 export const Main = ({ ...args }) => {
-  const [value, setValue] = React.useState('')
+  const [value, setValue] = React.useState('25')
 
   return (
     <div style={{ width: 300 }}>

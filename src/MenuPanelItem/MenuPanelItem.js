@@ -7,6 +7,9 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Icon from '@material-ui/core/Icon'
+import ArrowForwardIcon from '@material-ui/icons/ArrowForwardRounded'
+import ArrowDownIcon from '@material-ui/icons/ArrowDownwardRounded'
+
 
 const useStyles = makeStyles(theme => ({
   listItem: {
@@ -125,7 +128,7 @@ export const MenuPanelItem = ({
               right: 8,
             }}
           >
-            {isOpen ? <Icon>arrow_downward</Icon> : <Icon>arrow_forward</Icon>}
+            {isOpen ? <ArrowDownIcon /> : <ArrowForwardIcon />}
           </div>
         )}
       </ListItem>
@@ -155,8 +158,6 @@ MenuPanelItem.propTypes = {
   isOpen: PropTypes.bool,
   /** Flag if item should always be expanded. Mutually exclusive with `isOpen` */
   isAlwaysOpen: PropTypes.bool,
-  /** Flag if item should always be expanded */
-  isExpanded: PropTypes.bool,
   /** Submenu items if the item is expanding. */
   children: PropTypes.node,
   /** Optional tag that highlights a feature in a menu section. */

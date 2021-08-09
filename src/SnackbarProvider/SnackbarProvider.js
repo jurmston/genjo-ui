@@ -54,6 +54,10 @@ const SnackbarProvider = ({ maxMessages = 3, children }) => {
       value={{
         addMessage,
         clearMessages,
+        error: text => addMessage({ type: 'error', text }),
+        warning: text => addMessage({ type: 'warning', text }),
+        success: text => addMessage({ type: 'success', text }),
+        info: text => addMessage({ type: 'info', text }),
       }}
     >
       {children}

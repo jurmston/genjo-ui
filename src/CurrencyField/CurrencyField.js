@@ -145,7 +145,7 @@ CurrencyField.propTypes = {
   /** Symbol to use for seperating the thousands place. */
   thousandsSeparator: PropTypes.string,
   /** The integer value of the input. */
-  value: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 }
 
 export default CurrencyField

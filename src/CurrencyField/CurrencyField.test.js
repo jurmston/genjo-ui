@@ -128,4 +128,18 @@ describe('Testing <CurrencyField />...', () => {
     const currencySymbol = screen.getByLabelText('currency symbol').textContent
     expect(currencySymbol).toBe('?')
   })
+
+  it('should handle the initial value being a string', () => {
+    let value = "25"
+    const onChange = jest.fn().mockImplementation((e, newValue) => {
+      value = newValue
+    })
+
+    render(<CurrencyField onChange={onChange} value={value} />)
+
+    expect(screen.getByRole('textbox')).toHaveValue('0.25')
+
+    userEvent.type(screen.getByRole('textbox'), '1')
+    expect(value).toBe(251)
+  })
 })
