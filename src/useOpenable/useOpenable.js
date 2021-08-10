@@ -4,24 +4,13 @@ import * as React from 'react'
 export function useOpenable(defaultState = false) {
   const [isOpen, setIsOpen] = React.useState(defaultState)
 
-  function open() {
-    setIsOpen(true)
+  const handlers = {
+    open: () => setIsOpen(true),
+    close: () => setIsOpen(false),
+    toggle: () => setIsOpen(s => !s),
   }
 
-  function close() {
-    setIsOpen(false)
-  }
-
-  function toggle() {
-    setIsOpen(!isOpen)
-  }
-
-  return {
-    isOpen,
-    open,
-    close,
-    toggle,
-  }
+  return [isOpen, handlers]
 }
 
 export default useOpenable
