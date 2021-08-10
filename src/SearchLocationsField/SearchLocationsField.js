@@ -50,11 +50,6 @@ export const SearchLocationsField = ({
 
   const [error, setError] = React.useState(null)
 
-  function handleGeocoderError(error) {
-    console.log({ error })
-    setError(error?.message ?? 'There was a problem using Google Maps')
-  }
-
   /**
    * Passes a selected AutocompleteService value into the
    * geocoder to extract location details.
@@ -62,16 +57,17 @@ export const SearchLocationsField = ({
    * @param {*} event
    * @param {*} value
    */
-  function handlePlaceChange(event, value) {
+  async function handlePlaceChange(event, value) {
     if (value?.description) {
       const geocoderRequest = { address: value.description }
 
-      geocode(
-        geocoderRequest,
-        onChange,
-        handleGeocoderError,
-        componentsMap,
-      )
+      try {
+        const results = await geocode(geocoderRequest, componentsMap)
+        onChange(results)
+      } catch (error) {
+        console.log({ error })
+        setError(error?.message ?? 'There was a problem using Google Maps')
+      }
     }
   }
 

@@ -16,21 +16,19 @@ export function useGeocoder() {
   }, [status, google])
 
   const geocode = React.useCallback(
-    (request, onSuccess, onError, componentsMap) => {
-      try {
+    (request, componentsMap) => {
+      return new Promise((resolve, reject) => {
         globalGeocoderServer.current?.geocode(
           request,
           (results, status) => {
             if (status === 'OK') {
-              return onSuccess?.(parseGeocoderResults(results, componentsMap))
+              return resolve(parseGeocoderResults(results, componentsMap))
             }
 
-            return onError?.(status)
+            return reject(status)
           },
         )
-      } catch (error) {
-        onError?.(error)
-      }
+      })
     },
     []
   )

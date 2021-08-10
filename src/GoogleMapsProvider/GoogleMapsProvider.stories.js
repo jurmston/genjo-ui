@@ -163,7 +163,7 @@ const PrimaryInner = () => {
             label="Address"
             value={values.text}
             onInputChange={handleAddressChange}
-            onGeocoderResultsChange={handleGeocoderResultsChange}
+            onGeocoderSuccess={handleGeocoderResultsChange}
             inputRef={addressRef}
           />
         </Grid>

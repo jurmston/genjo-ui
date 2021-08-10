@@ -9,33 +9,29 @@ export const AddressField = ({
   disableGeocode = false,
   value,
   onInputChange,
-  onGeocoderResultsChange,
   onGeocoderError,
+  onGeocoderSuccess,
+  onGeocoderSettled,
   componentsMap,
   ...textFieldProps
 }) => {
   const { geocode } = useGeocoder()
 
-  function handleGeocoderResults(results) {
-    onGeocoderResultsChange?.(results)
-  }
-
-  function handleGeocoderError(error) {
-    onGeocoderError?.(error)
-  }
-
-  function handleBlur() {
+  async function handleBlur() {
     if (disableGeocode) {
       return
     }
 
-    const geocoderQuery = { address: value }
-    geocode(
-      geocoderQuery,
-      handleGeocoderResults,
-      handleGeocoderError,
-      componentsMap,
-    )
+    const geocoderRequest = { address: value }
+
+    try {
+      const results = await geocode(geocoderRequest, componentsMap)
+      onGeocoderSuccess?.(results)
+    } catch (error) {
+      onGeocoderError?.(error)
+    } finally {
+      onGeocoderSettled?.()
+    }
   }
 
   return (
@@ -67,7 +63,7 @@ AddressField.propTypes = {
   /**
    * Callback fired when the geocoder has returned location results.
    */
-  onGeocoderResultsChange: PropTypes.func,
+  onGeocoderSuccess: PropTypes.func,
   /**
    * Callback fired when the geocoder throws an error.
    */
@@ -78,6 +74,7 @@ AddressField.propTypes = {
    * name = the name of the componeny key in the parsed results.
    */
   componentsMap: PropTypes.object,
+  onGeocoderSettled: PropTypes.func,
 }
 
 export default AddressField
