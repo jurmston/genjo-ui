@@ -55,21 +55,28 @@ export function parseGeocoderResults(results) {
       longitude: lng,
       geohash: geohash.encode(lat, lng),
     },
+
     formattedAddress,
+
     placeId,
-    city: parsedComponents.locality || parsedComponents.postal_town || '',
-    state: parsedComponents.administrative_area_level_1 || '',
-    country: parsedComponents.country || '',
-    postalCode: parsedComponents.postal_code || '',
-    streetAddress: [parsedComponents.street_number, parsedComponents.route].filter(x => x).join(' '),
-    county: parsedComponents.administrative_area_level_2 || '',
-    postalCodeSuffix: parsedComponents.postal_code_suffix || '',
-    subpremise: parsedComponents.subpremise || '',
+
+    components: {
+      city: parsedComponents.locality || parsedComponents.postal_town || '',
+      state: parsedComponents.administrative_area_level_1 || '',
+      country: parsedComponents.country || '',
+      postalCode: parsedComponents.postal_code || '',
+      streetNumber: parsedComponents.street_number || '',
+      street: parsedComponents.route || '',
+      county: parsedComponents.administrative_area_level_2 || '',
+      postalCodeSuffix: parsedComponents.postal_code_suffix || '',
+      subpremise: parsedComponents.subpremise || '',
+    },
   }
 }
 
 export function getFormattedAddress({
-  streetAddress = '',
+  street = '',
+  streetNumber = '',
   city = '',
   state = '',
   postalCode = '',
@@ -79,6 +86,8 @@ export function getFormattedAddress({
   includeCountry = false,
 }) {
   const formattedCode = postalCodeSuffix && postalCode ? `${postalCode}-${postalCodeSuffix}` : postalCode
+
+  const streetAddress = [streetNumber, street].filter(x => x).join(', ')
 
   const sepStreetSubpremise = streetAddress && subpremise ? ' ' : ''
   const sepCityState = city && state ? ', ' : ''

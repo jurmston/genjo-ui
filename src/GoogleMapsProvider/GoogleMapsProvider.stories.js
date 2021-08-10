@@ -3,13 +3,15 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 
-import { getFormattedAddress, parseGeocoderResults } from '../utils/geo'
 import AddressField from '../AddressField'
 import MapComponent, { Marker } from '../MapComponent'
 import SearchLocationsField from '../SearchLocationsField'
+import Checkbox from '../Checkbox'
 import { GoogleMapsProvider } from './GoogleMapsProvider'
 import { useGeocoder } from './useGeocoder'
+import { formatAddressComponents } from './utils'
 
 import { GoogleMapsWrapper } from '../../.storybook/components/GoogleMapsWrapper'
 
@@ -24,40 +26,74 @@ export default {
 
 
 const PrimaryInner = () => {
+  const [options, setOptions] = React.useState({
+    shouldIncludeCountry: false,
+    shouldIncludeCounty: false,
+    shouldIncludePostalCodeSuffix: false,
+    shouldIncludeSubpremise: false,
+  })
+
+  function toggleOption(option) {
+    setOptions({
+      ...options,
+      [option]: !options[option],
+    })
+  }
+
   const [values, setValues] = React.useState({
-    city: '',
-    country: '',
-    county: '',
+    text: '',
+
     geopoint: {
       latitude: 39.494942918409095,
       longitude: -119.80110393425723,
     },
-    postalCode: '',
-    postalCodeSuffix: '',
-    state: '',
-    streetAddress: '',
-    subpremise: '',
+
+    components: null,
+
+    placeId: null,
+
     formattedAddress: '',
   })
 
   const addressRef = React.useRef()
-  const [address, setAddress] = React.useState('')
   const { geocode } = useGeocoder()
 
   const [currentPosition, setCurrentPosition] = React.useState(0)
 
   const currentLocation = useCurrentLocation()
 
-  function handleSearchResult(result) {
-    const newValues = Object.keys(values).reduce((acc, key) => {
-      acc[key] = result[key] ?? ''
-      return acc
-    }, {})
+  function handleAddressChange(event) {
+    setValues(v => ({
+      text: event.target.value,
+      geopoint: v.geopoint,
+      formattedAddress: v.formattedAddress,
+      components: v.components,
+      placeId: v.placeId,
+    }))
+  }
 
-    setValues(newValues)
+  function handleGeocoderResultsChange(results) {
+    const { geopoint, formattedAddress, components, placeId } = results
+    setValues(v => ({
+      text: v.text,
+      geopoint,
+      formattedAddress,
+      components,
+      placeId,
+    }))
+  }
 
-    const newAddress = getFormattedAddress(result)
-    setAddress(newAddress)
+  function handleSearchResult(results) {
+    const { geopoint, formattedAddress, components, placeId } = results
+    const text = formatAddressComponents(components, options)
+
+    setValues({
+      text,
+      components,
+      formattedAddress,
+      placeId,
+      geopoint,
+    })
 
     // Focus the address input
     addressRef.current?.focus()
@@ -65,10 +101,9 @@ const PrimaryInner = () => {
 
   const handleMarkMove = mapMouseEvent => {
     const { latLng } = mapMouseEvent
+    const geocoderRequest = { location: latLng }
 
-    geocode({ location: latLng }, (results, status) => {
-      setValues(parseGeocoderResults(results))
-    })
+    geocode(geocoderRequest, handleSearchResult)
   }
 
   return (
@@ -89,7 +124,6 @@ const PrimaryInner = () => {
             value={values?.formattedAddress ?? ''}
             placeholder="Search for an address..."
             onChange={handleSearchResult}
-            countryRestrictions="jp"
           />
         </Grid>
 
@@ -127,35 +161,54 @@ const PrimaryInner = () => {
         <Grid item xs={12}>
           <AddressField
             label="Address"
-            value={address}
-            onAddressValueChange={setAddress}
-            onAddressComponentsChange={setValues}
+            value={values.text}
+            onInputChange={handleAddressChange}
+            onGeocoderResultsChange={handleGeocoderResultsChange}
             inputRef={addressRef}
           />
         </Grid>
 
         <Grid item xs={12}>
-          <Typography>{`Street Address: ${values.streetAddress}`}</Typography>
+          <FormControlLabel
+            label="Include Country?"
+            control={
+              <Checkbox
+                checked={options.shouldIncludeCountry}
+                onChange={() => toggleOption('shouldIncludeCountry')}
+              />
+            }
+          />
+          <FormControlLabel
+            label="Include County?"
+            control={
+              <Checkbox
+                checked={options.shouldIncludeCounty}
+                onChange={() => toggleOption('shouldIncludeCounty')}
+              />
+            }
+          />
+          <FormControlLabel
+            label="Include Postal Code Suffix?"
+            control={
+              <Checkbox
+                checked={options.shouldIncludePostalCodeSuffix}
+                onChange={() => toggleOption('shouldIncludePostalCodeSuffix')}
+              />
+            }
+          />
+          <FormControlLabel
+            label="Include Subpremise?"
+            control={
+              <Checkbox
+                checked={options.shouldIncludeSubpremise}
+                onChange={() => toggleOption('shouldIncludeSubpremise')}
+              />
+            }
+          />
         </Grid>
 
         <Grid item xs={12}>
-          <Typography>{`City: ${values.city}`}</Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography>{`County: ${values.county}`}</Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography>{`State: ${values.state}`}</Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography>{`Zip Code: ${values.postalCode}`}</Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography>{`Country: ${values.country}`}</Typography>
+          <Typography>{`Address: ${values.formattedAddress}`}</Typography>
         </Grid>
 
         <Grid item xs={12}>

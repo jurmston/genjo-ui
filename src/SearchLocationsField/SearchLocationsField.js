@@ -31,10 +31,11 @@ const useStyles = makeStyles({
 })
 
 export const SearchLocationsField = ({
-  value,
+  value: valueFromProps,
   onChange,
   predictionTypes,
   countryRestrictions,
+  componentsMap,
   ...textFieldProps
 }) => {
   const classes = useStyles()
@@ -47,6 +48,13 @@ export const SearchLocationsField = ({
   const [inputValue, setInputValue] = React.useState('')
   const debouncedInputValue = useDebounce(inputValue)
 
+  const [error, setError] = React.useState(null)
+
+  function handleGeocoderError(error) {
+    console.log({ error })
+    setError(error?.message ?? 'There was a problem using Google Maps')
+  }
+
   /**
    * Passes a selected AutocompleteService value into the
    * geocoder to extract location details.
@@ -56,20 +64,14 @@ export const SearchLocationsField = ({
    */
   function handlePlaceChange(event, value) {
     if (value?.description) {
-      geocode({ address: value.description }, results => {
-        let parsedResults
-        try {
-          parsedResults = parseGeocoderResults(results)
-        } catch (e) {
-          console.log({ e })
-          // TODO: need something to happen here to explain if there
-          // there was an issue geoding the response.
-        }
+      const geocoderRequest = { address: value.description }
 
-        if (parsedResults) {
-          onChange(parsedResults)
-        }
-      })
+      geocode(
+        geocoderRequest,
+        onChange,
+        handleGeocoderError,
+        componentsMap,
+      )
     }
   }
 
@@ -150,7 +152,7 @@ export const SearchLocationsField = ({
       freeSolo
       autoComplete
       autoSelect
-      value={value ?? null}
+      value={valueFromProps ?? null}
       disableClearable
       forcePopupIcon={false}
       loading={isLoading}
@@ -168,6 +170,8 @@ export const SearchLocationsField = ({
           {...textFieldProps}
           {...params}
           className={null}
+          helperText={error || textFieldProps.helperText}
+          error={Boolean(error || textFieldProps.error)}
           InputProps={{
             ...params.InputProps,
             className: null,
@@ -208,5 +212,3 @@ SearchLocationsField.propTypes = {
   ]),
   helperText: PropTypes.string,
 }
-
-export default SearchLocationsField

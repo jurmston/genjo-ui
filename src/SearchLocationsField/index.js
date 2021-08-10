@@ -1,1 +1,3 @@
-export { default } from './SearchLocationsField'
+export { SearchLocationsField as default } from './SearchLocationsField'
+export * from './SearchLocationsField'
+export * from './utils'

@@ -3,55 +3,46 @@ import PropTypes from 'prop-types'
 
 import TextField from '@material-ui/core/TextField'
 import { useGeocoder } from '../GoogleMapsProvider'
-import { parseGeocoderResults } from '../utils/geo'
+
 
 export const AddressField = ({
   disableGeocode = false,
-  value: valueFromProps,
-  onAddressValueChange,
-  onAddressComponentsChange,
+  value,
+  onInputChange,
+  onGeocoderResultsChange,
+  onGeocoderError,
+  componentsMap,
   ...textFieldProps
 }) => {
-  const [value, setValue] = React.useState('')
-  const [originalValue, setOriginalValue] = React.useState('')
   const { geocode } = useGeocoder()
 
-  function handleChange(event) {
-    setValue(event.target.value)
+  function handleGeocoderResults(results) {
+    onGeocoderResultsChange?.(results)
+  }
+
+  function handleGeocoderError(error) {
+    onGeocoderError?.(error)
   }
 
   function handleBlur() {
     if (disableGeocode) {
-      return onAddressValueChange(value)
+      return
     }
 
-    if (value !== originalValue) {
-      onAddressValueChange(value)
-
-      geocode({ address: value }, results => {
-        try {
-          const components = parseGeocoderResults(results)
-          onAddressComponentsChange(components)
-        } catch (e) {
-          console.log({ e })
-          // TODO: need something to happen here to explain if there
-          // there was an issue geoding the response.
-        }
-      })
-    }
+    const geocoderQuery = { address: value }
+    geocode(
+      geocoderQuery,
+      handleGeocoderResults,
+      handleGeocoderError,
+      componentsMap,
+    )
   }
-
-  // Synchronize the value from props
-  React.useEffect(() => {
-    setValue(valueFromProps)
-    setOriginalValue(valueFromProps)
-  }, [valueFromProps])
 
   return (
     <TextField
       {...textFieldProps}
       value={value}
-      onChange={handleChange}
+      onChange={onInputChange}
       multiline
       minRows={3}
       maxRows={7}
@@ -72,11 +63,21 @@ AddressField.propTypes = {
   /**
    * Callback fired when the formatted string value is changed.
    */
-  onAddressValueChange: PropTypes.func,
+  onInputChange: PropTypes.func,
   /**
    * Callback fired when the geocoder has returned location results.
    */
-  onAddressComponentsChange: PropTypes.func,
+  onGeocoderResultsChange: PropTypes.func,
+  /**
+   * Callback fired when the geocoder throws an error.
+   */
+  onGeocoderError: PropTypes.func,
+  /**
+   * A map of Google Maps address component names to the [nameType, name].
+   * NameType = short_name | long_name
+   * name = the name of the componeny key in the parsed results.
+   */
+  componentsMap: PropTypes.object,
 }
 
 export default AddressField
