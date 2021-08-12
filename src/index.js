@@ -112,6 +112,9 @@ export * from './SortableTableHeadCell'
 export { default as TableResultsLoader } from './TableResultsLoader'
 export * from './TableResultsLoader'
 
+export { default as SearchField } from './SearchField'
+export * from './SearchField'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'

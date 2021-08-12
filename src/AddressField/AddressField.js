@@ -9,6 +9,7 @@ export const AddressField = ({
   disableGeocode = false,
   value,
   onInputChange,
+  onGeocode,
   onGeocoderError,
   onGeocoderSuccess,
   onGeocoderSettled,
@@ -25,6 +26,7 @@ export const AddressField = ({
     const geocoderRequest = { address: value }
 
     try {
+      onGeocode?.()
       const results = await geocode(geocoderRequest, componentsMap)
       onGeocoderSuccess?.(results)
     } catch (error) {
