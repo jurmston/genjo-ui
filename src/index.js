@@ -115,6 +115,9 @@ export * from './TableResultsLoader'
 export { default as SearchField } from './SearchField'
 export * from './SearchField'
 
+export { default as OptionsButtonMenu } from './OptionsButtonMenu'
+export * from './OptionsButtonMenu'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'

@@ -718,6 +718,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
       MuiTableRow: {
         styleOverrides: {
           root: {
+            minHeight: 42,
             // '&.MuiTableRow-head td': {
             //   borderBottom: `2px solid ${colors.blueGrey[200]}`,
             // },
