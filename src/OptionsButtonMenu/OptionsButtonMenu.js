@@ -29,6 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
 
   actionsContainer: {
+    backgroundColor: theme.palette.common.white,
     opacity: props => props.shouldShow ? 1 : 0,
     boxShadow: props => props.shouldShow ? '0 2px 10px 0 rgb(21 27 38 / 10%)' : 'none',
     display: props => props.shouldShow ? 'flex' : 'none',
