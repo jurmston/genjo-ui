@@ -171,6 +171,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
             textTransform: 'none',
             // Creates padding that matches the size of inputs.
             padding: '7px 16px',
+            borderRadius: 999,  // Creates pill shape
           },
           outlined: {
             padding: '6px 16px',
@@ -684,7 +685,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
         styleOverrides: {
           root: {
             padding: 4,
-            borderBottom: 'none',
+            borderBottom: `1px solid ${colors.grey[100]}`,
           },
           head: {
             color: colors.blueGrey[400],
