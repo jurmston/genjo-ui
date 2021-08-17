@@ -13,9 +13,21 @@ export function SearchField({
   value: valueFromProps,
   onChange,
   delay = 250,
+  shouldGrowOnFocus = false,
   ...textFieldProps
 }) {
   const [inputValue, setInputValue] = React.useState('')
+  const [isFocused, setIsFocused] = React.useState(false)
+
+  function handleFocus(event) {
+    setIsFocused(true)
+    textFieldProps?.onFocus?.(event)
+  }
+
+  function handleBlur(event) {
+    setIsFocused(false)
+    textFieldProps?.onBlur?.(event)
+  }
 
   function handleChange(event) {
     setInputValue(event.target.value)
@@ -47,7 +59,13 @@ export function SearchField({
   return (
     <TextField
       {...textFieldProps}
+      fullWidth={!shouldGrowOnFocus
+        ? undefined  // rely on theme default
+        : isFocused
+      }
       value={inputValue}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       onChange={handleChange}
       InputProps={{
         ...textFieldProps.InputProps,

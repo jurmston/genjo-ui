@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Grid from '@material-ui/core/Grid'
 import { SearchField } from './SearchField'
 import { colors, colorsLight } from '../ThemeProvider/colors'
 
@@ -15,15 +15,28 @@ export const Primary = () => {
 
   return (
     <StorybookTheme>
-      <div style={{ maxWidth: 300 }}>
-        <SearchField
-          label="Search"
-          placeholder="Start searching..."
-          value={query}
-          onChange={setQuery}
-          helperText={query}
-        />
-      </div>
+      <Grid container spacing={1} style={{ maxWidth: 400 }}>
+        <Grid item xs={12}>
+          <SearchField
+            label="Search"
+            placeholder="Start searching..."
+            value={query}
+            onChange={setQuery}
+            helperText={query}
+          />
+        </Grid>
+
+        <Grid item xs={12} style={{ alignSelf: 'flex-end' }}>
+          <SearchField
+            shouldGrowOnFocus
+            label="Search"
+            placeholder="Start searching..."
+            value={query}
+            onChange={setQuery}
+            helperText={query}
+          />
+        </Grid>
+      </Grid>
     </StorybookTheme>
   )
 }
