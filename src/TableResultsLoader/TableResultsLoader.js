@@ -16,7 +16,12 @@ const useStyles = makeStyles({
   },
 })
 
-export const TableResultsLoader = ({ colSpan = 1, isLoading, count = 0 }) => {
+export const TableResultsLoader = ({
+  colSpan = 1,
+  isLoading,
+  count = 0,
+  children = 'No Results',
+}) => {
   const classes = useStyles()
 
   if (!isLoading && count) {
@@ -29,9 +34,9 @@ export const TableResultsLoader = ({ colSpan = 1, isLoading, count = 0 }) => {
         <div className={classes.container}>
           {isLoading ? (
             <CircleLoader />
-          ) : (
-            <Typography variant="h6" color="textSecondary">No Results</Typography>
-          )}
+          ) : typeof children === 'string' ? (
+            <Typography variant="h6" color="textSecondary">{children}</Typography>
+          ) : children}
         </div>
       </TableCell>
     </TableRow>
@@ -45,4 +50,6 @@ TableResultsLoader.propTypes = {
   count: PropTypes.number,
   /** The number of columns in the table. */
   colSpan: PropTypes.number,
+  /** Content to render when the loaded count is zero. */
+  children: PropTypes.node,
 }
