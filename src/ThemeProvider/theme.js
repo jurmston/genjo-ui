@@ -186,6 +186,22 @@ export const createTheme = ({ mode, primary, secondary }) =>
             },
           },
         },
+
+        variants: [
+          {
+            props: { variant: 'white' },
+            style: {
+              boxShadow: '0 1px 4px 0 rgb(21 27 38 / 8%)',
+              backgroundColor: colors.common.white,
+              borderWidth: 1,
+              borderStyle: 'solid',
+              borderColor: colors.grey[300],
+              '&:hover': {
+                boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
+              },
+            }
+          },
+        ],
       },
 
       // BUTTON BASE
@@ -289,7 +305,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
         styleOverrides: {
           root: {
             boxSizing: 'border-box',
-            borderRadius,
+            borderRadius: 999,
             borderWidth: 1,
             borderStyle: 'solid',
             borderColor: mode === 'light' ? colors.grey[300] : colors.grey[600],
@@ -312,7 +328,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
             paddingRight: 0,
           },
           input: {
-            padding: 6,
+            padding: `6px 12px`,
             '&:-webkit-autofill': {
               borderTopLeftRadius: 'inherit',
               borderTopRightRadius: 'inherit',
@@ -327,7 +343,8 @@ export const createTheme = ({ mode, primary, secondary }) =>
             paddingRight: 4,
           },
           multiline: {
-            padding: 6,
+            borderRadius: 17,
+            padding: 0,
           },
         },
       },
@@ -405,7 +422,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
         styleOverrides: {
           root: {
             boxSizing: 'border-box',
-            borderRadius,
+            borderRadius: 999,
             borderWidth: 1,
             borderStyle: 'solid',
             borderColor: 'transparent',
@@ -422,6 +439,14 @@ export const createTheme = ({ mode, primary, secondary }) =>
               marginTop: 0,
             },
           },
+
+          input: {
+            padding: `6px 12px`,
+          },
+
+          multiline: {
+            borderRadius: 17,
+          }
         },
       },
 
@@ -464,11 +489,11 @@ export const createTheme = ({ mode, primary, secondary }) =>
             padding: 0,
           },
           input: {
-            padding: 6,
+            padding: `6px 12px`,
             textOverflow: 'ellipsis',
           },
           inputMultiline: {
-            padding: 6,
+            padding: `6px 12px`,
           },
         },
       },
@@ -598,7 +623,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
         styleOverrides: {
           root: {
             boxSizing: 'border-box',
-            borderRadius,
+            borderRadius: 999,
             borderWidth: 1,
             borderStyle: 'solid',
             borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
@@ -625,7 +650,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
             paddingRight: 0,
           },
           input: {
-            padding: 6,
+            padding: `6px 12px`,
           },
           inputAdornedStart: {
             paddingLeft: 4,
@@ -634,7 +659,8 @@ export const createTheme = ({ mode, primary, secondary }) =>
             paddingRight: 4,
           },
           multiline: {
-            padding: 6,
+            borderRadius: 17,
+            padding: 0,
           },
         },
       },
@@ -685,23 +711,21 @@ export const createTheme = ({ mode, primary, secondary }) =>
         styleOverrides: {
           root: {
             padding: 4,
-            borderBottom: `1px solid ${colors.grey[100]}`,
+            height: 42,
+            borderBottom: `1px solid ${colors.grey[300]}`,
           },
           head: {
-            color: colors.blueGrey[400],
+            color: 'rgba(0, 0, 0, 0.6)',
+            height: 56,
             fontWeight: 700,
           },
+
           footer: {
-            color: colors.blueGrey[700],
-            fontWeight: 700,
-
-            '&:first-of-type': {
-              borderBottomLeftRadius: 8,
-            },
-
-            '&:last-of-type': {
-              borderBottomRightRadius: 8,
-            },
+            color: 'rgba(0, 0, 0, 0.6)',
+            fontSize: 14,
+            // fontWeight: 700,
+            height: 56,
+            borderBottom: 'none'
           },
         },
       },
@@ -719,26 +743,17 @@ export const createTheme = ({ mode, primary, secondary }) =>
       MuiTableRow: {
         styleOverrides: {
           root: {
-            minHeight: 42,
             // '&.MuiTableRow-head td': {
             //   borderBottom: `2px solid ${colors.blueGrey[200]}`,
             // },
-            // '&:last-child td:not(.MuiTableCell-footer)': {
-            //   borderBottom: `2px solid ${colors.blueGrey[200]}`,
-            // },
+            '&:last-child td:not(.MuiTableCell-footer)': {
+              borderBottom: `2px solid ${colors.blueGrey[200]}`,
+            },
           },
 
           head: {
             '& th': {
               borderBottom: `2px solid ${colors.blueGrey[200]}`,
-            },
-          },
-
-          footer: {
-            backgroundColor: colors.blueGrey[50],
-
-            '& td': {
-              borderTop: `2px solid ${colors.blueGrey[200]}`,
             },
           },
         },

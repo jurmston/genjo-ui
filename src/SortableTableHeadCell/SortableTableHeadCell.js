@@ -22,6 +22,8 @@ const useStyles = makeStyles(theme => ({
     padding: `2px 4px 0 4px`,
     borderTopLeftRadius: theme.shape.borderRadius,
     borderTopRightRadius: theme.shape.borderRadius,
+    fontVariant: 'small-caps',
+    fontSize: 12,
     '&:hover': {
       backgroundColor: theme.palette.grey[200],
     },

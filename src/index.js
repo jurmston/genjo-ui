@@ -118,6 +118,9 @@ export * from './SearchField'
 export { default as OptionsButtonMenu } from './OptionsButtonMenu'
 export * from './OptionsButtonMenu'
 
+export { default as SortableHeader } from './SortableHeader'
+export * from './SortableHeader'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'

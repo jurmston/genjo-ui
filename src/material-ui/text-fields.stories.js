@@ -69,6 +69,17 @@ export const Primary = () => {
             error={error}
           />
         </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            variant="filled"
+            required={required}
+            error={error}
+            multiline
+            minRows={5}
+            maxRows={10}
+          />
+        </Grid>
       </Grid>
 
       <div style={{ marginTop: 32 }} />
