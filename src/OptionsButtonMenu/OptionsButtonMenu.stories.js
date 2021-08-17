@@ -17,7 +17,7 @@ export const Primary = () => {
 
   return (
     <StorybookTheme>
-      <div style={{ display: 'flex', width: 300 }}>
+      <div style={{ display: 'flex', width: 300 }} onClick={() => alert('Container clicked')}>
         <div style={{ flex: 1 }}>Other content</div>
         <div>
           <OptionsButtonMenu

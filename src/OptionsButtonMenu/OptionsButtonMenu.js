@@ -63,7 +63,8 @@ export function OptionsButtonMenu({ show = false, actions, children, ...buttonGr
   })
 
   const handleCloseMenu = React.useCallback(
-    () => {
+    event => {
+      event.stopPropagation()
       setMenuAnchor(null)
     },
     []
@@ -71,7 +72,7 @@ export function OptionsButtonMenu({ show = false, actions, children, ...buttonGr
 
   const handleOpenMenu = React.useCallback(
     event => {
-      event.stopPropagation
+      event.stopPropagation()
       setMenuAnchor(event.currentTarget)
     },
     []
@@ -91,12 +92,20 @@ export function OptionsButtonMenu({ show = false, actions, children, ...buttonGr
     [],
   )
 
+  function handleContainerClick(event) {
+    event.stopPropagation()
+  }
+
   return (
     <>
       <div
         className={classes.root}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={handleContainerClick}
+        onKeyPress={handleContainerClick}
+        role="button"
+        tabIndex={0}
       >
         <div className={classes.actionsContainer}>
           {actions.map((action, index) => (
@@ -120,24 +129,26 @@ export function OptionsButtonMenu({ show = false, actions, children, ...buttonGr
         >
           <OptionsIcon />
         </ButtonBase>
+
+        <Menu
+          className={classes.menu}
+          open={Boolean(menuAnchor)}
+          onClose={handleCloseMenu}
+          anchorEl={menuAnchor}
+          anchorOrigin={{
+            horizontal: 'right',
+            vertical: 'bottom',
+          }}
+          transformOrigin={{
+            horizontal: 'right',
+            vertical: 'top',
+          }}
+        >
+          {children}
+        </Menu>
       </div>
 
-      <Menu
-        className={classes.menu}
-        open={Boolean(menuAnchor)}
-        onClose={handleCloseMenu}
-        anchorEl={menuAnchor}
-        anchorOrigin={{
-          horizontal: 'right',
-          vertical: 'bottom',
-        }}
-        transformOrigin={{
-          horizontal: 'right',
-          vertical: 'top',
-        }}
-      >
-        {children}
-      </Menu>
+
     </>
   )
 }
