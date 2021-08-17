@@ -92,7 +92,7 @@ export const Primary = () => {
               <Stack direction="row" spacing={1} alignItems="center">
                 <span>25 records</span>
                 <div style={{ flex: 1 }} />
-                <Button variant="white" disabled>
+                <Button variant="white">
                   Previous
                 </Button>
 

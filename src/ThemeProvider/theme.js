@@ -33,8 +33,25 @@ export const typographyLabel = {
   letterSpacing: `${round(0.1 / 14)}em`,
 }
 
+// Default for headers. Based on `h4`.
+export const typographyHeading1 = {
+  fontFamily,
+  fontSize: 34,
+  fontWeight: 700,
+  lineHeight: 1.235,
+  letterSpacing: `${round(0.15 / 34)}em`,
+}
+
 // Default for headers. Based on `h6`.
-export const typographyHeadline = {
+export const typographyHeading2 = {
+  fontFamily,
+  fontSize: 24,
+  fontWeight: 700,
+  lineHeight: 1.334,
+  letterSpacing: `${round(0 / 20)}em`,
+}
+
+export const typographyHeading3 = {
   fontFamily,
   fontSize: 20,
   fontWeight: 500,
@@ -142,6 +159,9 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
     typography: {
       fontFamily,
+      h1: typographyHeading1,
+      h2: typographyHeading2,
+      h3: typographyHeading3,
     },
 
     shape: {
