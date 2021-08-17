@@ -97,9 +97,47 @@ const shadows = [
 export const createTheme = ({ mode, primary, secondary }) =>
   createMuiTheme({
     palette: {
-      primary,
-      secondary,
+      primary: {
+        ...primary,
+        light: primary[100],
+        dark: primary[900],
+      },
+      secondary: {
+        ...secondary,
+        light: secondary[100],
+        dark: secondary[900],
+      },
       mode,
+
+      grey: {
+        ...colors.grey,
+        light: colors.grey[100],
+        dark: colors.grey[900],
+      },
+
+      error: {
+        main: colors.red[500],
+        light: colors.red[100],
+        dark: colors.red[900],
+      },
+
+      success: {
+        main: colors.green[500],
+        light: colors.green[100],
+        dark: colors.green[900],
+      },
+
+      info: {
+        main: colors.lightBlue[500],
+        light: colors.lightBlue[100],
+        dark: colors.lightBlue[900],
+      },
+
+      warning: {
+        main: colors.amber[500],
+        light: colors.amber[100],
+        dark: colors.amber[900],
+      },
     },
 
     typography: {
@@ -175,6 +213,18 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
           outlined: {
             padding: '6px 16px',
+            boxShadow: '0 1px 4px 0 rgb(21 27 38 / 8%)',
+            '&:hover': {
+              boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
+            },
+          },
+          contained: {
+            padding: '6px 16px',
+            border: `1px solid ${colors.grey[300]}`,
+            boxShadow: '0 1px 4px 0 rgb(21 27 38 / 8%)',
+            '&:hover': {
+              boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
+            },
           },
           text: {
             padding: '7px 16px',
@@ -246,6 +296,9 @@ export const createTheme = ({ mode, primary, secondary }) =>
         },
 
         styleOverrides: {
+          root: {
+            borderRadius: 4,
+          },
           sizeSmall: {
             height: 20,
             fontSize: 11,

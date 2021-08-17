@@ -121,6 +121,9 @@ export * from './OptionsButtonMenu'
 export { default as SortableHeader } from './SortableHeader'
 export * from './SortableHeader'
 
+export { default as StatusChip } from './StatusChip'
+export * from './StatusChip'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'
