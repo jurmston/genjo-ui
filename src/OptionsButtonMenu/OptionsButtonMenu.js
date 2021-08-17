@@ -71,6 +71,7 @@ export function OptionsButtonMenu({ show = false, actions, children, ...buttonGr
 
   const handleOpenMenu = React.useCallback(
     event => {
+      event.stopPropagation
       setMenuAnchor(event.currentTarget)
     },
     []
