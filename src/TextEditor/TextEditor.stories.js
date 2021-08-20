@@ -43,10 +43,10 @@ export const Messages = () => {
       <ThemeProvider theme={{ mode: 'light', primary: colors.indigo, secondary: colors.orange }}>
         <TextEditor
           value={value}
-          onSave={setValue}
+          onChange={setValue}
           minHeight={200}
           maxHeight={200}
-          />
+        />
 
         <div style={{ marginBottom: 32 }} />
 

@@ -4,8 +4,6 @@ import { createEditor } from 'slate'
 import { Slate, withReact } from 'slate-react'
 import { withHistory } from 'slate-history'
 
-import isEqual from 'react-fast-compare'
-
 import TextEditorContext from './TextEditorContext'
 import { ButtonPanel } from './ButtonPanel'
 import { Input } from './Input'
@@ -20,47 +18,33 @@ import { Element } from './Element'
 
 export const TextEditor = ({
   readOnly = false,
-  value: valueFromProps = null,
-  onSave,
-  children,
-  resetOnSave,
-  variant = 'message',
+  value = getEmptyValue(),
+  onChange,
+  // resetOnSave,
   minHeight,
   maxHeight,
-  ref,
 }) => {
   const classes = useStyles({ readOnly })
 
-  const [value, setValue] = React.useState(getEmptyValue())
-  const [originalValue, setOriginalValue] = React.useState(getEmptyValue())
-  const isDirty = !isEqual(value, originalValue)
+  // const [value, setValue] = React.useState(getEmptyValue())
+  // const [originalValue, setOriginalValue] = React.useState(getEmptyValue())
+  // const isDirty = !isEqual(value, originalValue)
 
   const [isFocused, setIsFocused] = React.useState(false)
 
   const editor = React.useMemo(() => withLinks(withDeleteBackwards(withHistory(withReact(createEditor())))), [])
 
-  function resetEditor() {
-    editor.selection = {
-      anchor: { path: [0, 0], offset: 0 },
-      focus: { path: [0, 0], offset: 0 },
-    }
-  }
+  // function handleSave() {
+  //   onSave?.(value)
 
-  function handleSave() {
-    onSave?.(value)
-
-    if (resetOnSave) {
-      resetEditor()
-      setValue(getEmptyValue())
-    }
-  }
+  //   if (resetOnSave) {
+  //     resetEditor()
+  //     setValue(getEmptyValue())
+  //   }
+  // }
 
   function handleChange(newValue) {
-    setValue(newValue)
-
-    if (ref?.current) {
-      ref.current = newValue
-    }
+    onChange(newValue)
   }
   // React.useEffect(() => {
   //   if (!value) {
@@ -69,11 +53,11 @@ export const TextEditor = ({
   // }, [value])
 
   // Synchronize the value whenever the props value changes.
-  React.useEffect(() => {
-    resetEditor()
-    setValue(valueFromProps || getEmptyValue())
-    setOriginalValue(valueFromProps || getEmptyValue())
-  }, [valueFromProps])
+  // React.useEffect(() => {
+  //   resetEditor()
+  //   setValue(valueFromProps || getEmptyValue())
+  //   // setOriginalValue(valueFromProps || getEmptyValue())
+  // }, [valueFromProps])
 
   const renderElement = React.useCallback(props => <Element {...props} />, [])
   const renderLeaf = React.useCallback(props => <Leaf {...props} />, [])
@@ -84,12 +68,9 @@ export const TextEditor = ({
         classes,
         setIsFocused,
         isFocused,
-        handleSave,
-        isDirty,
         value,
         renderElement,
         renderLeaf,
-        hasSaveButton: Boolean(onSave),
       }}
     >
       <Slate editor={editor} value={value} onChange={handleChange}>
@@ -117,6 +98,8 @@ TextEditor.propTypes = {
   onChange: PropTypes.func,
   saveOnEnter: PropTypes.bool,
   variant: PropTypes.oneOf(['message', 'post']),
+  minHeight: PropTypes.number,
+  maxHeight: PropTypes.number,
 }
 
 export default TextEditor

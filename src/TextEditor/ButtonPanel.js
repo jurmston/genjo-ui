@@ -51,7 +51,7 @@ const BLOCK_FORMATS = [
 export const ButtonPanel = () => {
   const [linkSelection, setLinkSelection] = React.useState(null)
 
-  const { classes, isFocused, isDirty, handleSave, hasSaveButton } = useTextEditor()
+  const { classes, isFocused } = useTextEditor()
 
   const editor = useSlate()
 
@@ -103,20 +103,6 @@ export const ButtonPanel = () => {
       />
 
       <div style={{ flex: 1 }} />
-
-      {Boolean(isDirty) && Boolean(hasSaveButton) && (
-        <Button
-          variant="white"
-          color="primary"
-          className={classes.saveButton}
-          onMouseDown={event => {
-            event.preventDefault()
-            handleSave()
-          }}
-        >
-          Save
-        </Button>
-      )}
 
       <LinkDialog
         isOpen={Boolean(linkSelection)}

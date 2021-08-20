@@ -9,7 +9,6 @@ import { Element } from './Element'
 import { Leaf } from './Leaf'
 
 import { useMessageStyles } from './styles'
-import { MessageRounded } from '@material-ui/icons'
 
 const HOTKEYS = {
   'mod+b': 'bold',
@@ -18,7 +17,7 @@ const HOTKEYS = {
 }
 
 export const Input = ({ minHeight, maxHeight }) => {
-  const { classes, readOnly, setIsFocused, handleSave } = useTextEditor()
+  const { readOnly, setIsFocused } = useTextEditor()
 
   const messageClasses = useMessageStyles({ minHeight, maxHeight })
 
