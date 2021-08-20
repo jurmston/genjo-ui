@@ -106,7 +106,7 @@ export const ButtonPanel = () => {
 
       {Boolean(isDirty) && Boolean(hasSaveButton) && (
         <Button
-          variant="contained"
+          variant="white"
           color="primary"
           className={classes.saveButton}
           onMouseDown={event => {

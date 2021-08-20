@@ -117,7 +117,7 @@ export const useMessageStyles = makeStyles(theme => ({
       borderLeft: `2px solid ${theme.palette.divider}`,
       '& span': {
         fontSize: theme.typography.body2.fontSize,
-        fontFamily: '"Vollkorn", serif',
+        fontFamily: 'serif',
       },
     },
 

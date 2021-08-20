@@ -1,5 +1,8 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
+import Tooltip from '@material-ui/core/Tooltip'
+import Typography from '@material-ui/core/Typography'
+
 
 export const Element = ({ attributes, children, element }) => {
 
@@ -13,19 +16,25 @@ export const Element = ({ attributes, children, element }) => {
     case 'bulleted-list':
       return <ul {...attributes}>{children}</ul>
     case 'heading-one':
-      return <h1 {...attributes}>{children}</h1>
+      return <Typography variant="h2" component="h1" {...attributes}>{children}</Typography>
     case 'heading-two':
-      return <h2 {...attributes}>{children}</h2>
+      return <Typography variant="h3" component="h2" {...attributes}>{children}</Typography>
     case 'list-item':
       return <li {...attributes}>{children}</li>
     case 'numbered-list':
       return <ol {...attributes}>{children}</ol>
-    case 'link':
+    case 'link': {
+      const url = children[0]?.props?.parent?.url ?? ''
+
       return (
-        <a {...attributes} href={element.url}>
-          {children}
-        </a>
+        <Tooltip title={url}>
+          <a {...attributes} href={element.url}>
+            {children}
+          </a>
+        </Tooltip>
       )
+    }
+
     default:
       return <p {...attributes}>{children}</p>
   }

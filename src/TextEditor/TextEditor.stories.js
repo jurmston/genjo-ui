@@ -16,6 +16,9 @@ import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { colors } from '../ThemeProvider/colors'
 
+import { RenderedText } from './RenderedText'
+
+
 const cache = createCache({
   key: 'css',
   prepend: true,
@@ -39,21 +42,17 @@ export const Messages = () => {
 
       <ThemeProvider theme={{ mode: 'light', primary: colors.indigo, secondary: colors.orange }}>
         <TextEditor
-          value={null}
+          value={value}
           onSave={setValue}
-          resetOnSave
           minHeight={200}
           maxHeight={200}
           />
 
         <div style={{ marginBottom: 32 }} />
 
-        <TextEditor
+        <RenderedText
           value={value}
-          ref={ref}
-          minHeight={200}
-          maxHeight={200}
-          />
+        />
       </ThemeProvider>
     </CacheProvider>
   )
