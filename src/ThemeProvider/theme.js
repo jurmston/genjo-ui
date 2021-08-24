@@ -822,6 +822,10 @@ export const createTheme = ({ mode, primary, secondary }) =>
             '&:last-child td:not(.MuiTableCell-footer)': {
               borderBottom: `2px solid ${colors.blueGrey[200]}`,
             },
+
+            '&.Mui-selected': {
+              backgroundColor: secondary[50],
+            },
           },
 
           head: {

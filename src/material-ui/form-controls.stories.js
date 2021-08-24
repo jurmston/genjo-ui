@@ -36,6 +36,13 @@ export const Primary = () => {
 
         <Grid item xs={12}>
           <FormControlLabel
+            label="This is an indeterminate checkbox!"
+            control={<Checkbox indeterminate />}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <FormControlLabel
             label="This is a radio!"
             control={<Radio />}
           />

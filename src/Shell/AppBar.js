@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
 
+import AppsIcon from '@material-ui/icons/AppsRounded'
+
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -23,6 +25,19 @@ const useStyles = makeStyles(theme => ({
     height: 52,
     marginLeft: 24,
     cursor: 'pointer',
+  },
+
+  textLink: {
+    ...theme.typography.h1,
+    cursor: 'pointer',
+    textDecoration: 'none',
+    color: theme.palette.primary.dark,
+    marginLeft: 24,
+  },
+
+  appsIcon: {
+    fontSize: 24,
+    marginRight: 8,
   },
 
   logo: {
@@ -75,13 +90,20 @@ export function AppBar({ children, logo, brandName, homeLink, userMenu }) {
 
   return (
     <div className={classes.appBar}>
-      <a href={homeLink} className={classes.logoLink}>
-        <img
-          alt={brandName}
-          src={logo}
-          className={classes.logo}
-        />
-      </a>
+      {logo ? (
+        <a href={homeLink} className={classes.logoLink}>
+          <img
+            alt={brandName}
+            src={logo}
+            className={classes.logo}
+          />
+        </a>
+      ) : (
+        <a href={homeLink} className={classes.textLink}>
+          <span><AppsIcon className={classes.appsIcon} /></span>
+          {brandName}
+        </a>
+      )}
 
       {children}
       <div style={{ flex: 1 }} />

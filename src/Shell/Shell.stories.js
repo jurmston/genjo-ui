@@ -34,7 +34,7 @@ export default {
   component: Shell,
 }
 
-const PageWithMenu = ({ setPage, toggleAvatar }) => {
+const PageWithMenu = ({ setPage, toggleAvatar, toggleLogo }) => {
   const [contentKey, setContentKey] = React.useState('Apple')
   const menuContent = (
     <>
@@ -71,13 +71,19 @@ const PageWithMenu = ({ setPage, toggleAvatar }) => {
       <div style={{ margin: 16 }} />
 
       <Button variant="contained" color="primary" onClick={toggleAvatar}>
-        ToggleAvatar
+        Toggle Avatar
+      </Button>
+
+      <div style={{ margin: 16 }} />
+
+      <Button variant="contained" color="primary" onClick={toggleLogo}>
+        Toggle Logo
       </Button>
     </Container>
   )
 }
 
-const PageWithoutMenu = ({ setPage, toggleAvatar }) => {
+const PageWithoutMenu = ({ setPage, toggleAvatar, toggleLogo }) => {
   useShell({})
 
   return (
@@ -93,7 +99,13 @@ const PageWithoutMenu = ({ setPage, toggleAvatar }) => {
       <div style={{ margin: 16 }} />
 
       <Button variant="contained" color="primary" onClick={toggleAvatar}>
-        ToggleAvatar
+        Toggle Avatar
+      </Button>
+
+      <div style={{ margin: 16 }} />
+
+      <Button variant="contained" color="primary" onClick={toggleLogo}>
+        Toggle Logo
       </Button>
     </Container>
   )
@@ -102,16 +114,21 @@ const PageWithoutMenu = ({ setPage, toggleAvatar }) => {
 export const Main = () => {
   const [page, setPage] = React.useState('menu')
   const [tab, setTab] = React.useState(0)
+  const [hasLogo, setHasLogo] = React.useState(true)
 
   const [avatarOnly, setAvatarOnly] = React.useState(false)
 
   function toggleAvatar() {
-    setAvatarOnly(!avatarOnly)
+    setAvatarOnly(s => !s)
+  }
+
+  function toggleLogo() {
+    setHasLogo(s => !s)
   }
 
   return (
     <Shell
-      logo={story_logo}
+      logo={hasLogo ? story_logo : undefined}
       brandName="Genjo UI"
       homeLink="https://www.example.com"
       userMenu={
@@ -152,9 +169,9 @@ export const Main = () => {
       }
     >
       {page === 'menu' ? (
-        <PageWithMenu setPage={setPage} toggleAvatar={toggleAvatar} />
+        <PageWithMenu setPage={setPage} toggleAvatar={toggleAvatar} toggleLogo={toggleLogo} />
       ) : (
-        <PageWithoutMenu setPage={setPage} toggleAvatar={toggleAvatar} />
+        <PageWithoutMenu setPage={setPage} toggleAvatar={toggleAvatar} toggelLogo={toggleLogo} />
       )}
     </Shell>
   )

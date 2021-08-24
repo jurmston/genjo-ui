@@ -102,7 +102,7 @@ export const Primary = () => {
 
         <TableBody>
           {ROWS.map((row, index) => (
-            <TableRow key={index}>
+            <TableRow key={index} selected={index === 2}>
               <TableCell>{row[0]}</TableCell>
               <TableCell>{row[1]}</TableCell>
               <TableCell>{row[2]}</TableCell>

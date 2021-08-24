@@ -18,7 +18,7 @@ import { Element } from './Element'
 
 export const TextEditor = ({
   readOnly = false,
-  value = getEmptyValue(),
+  value,
   onChange,
   // resetOnSave,
   minHeight,
