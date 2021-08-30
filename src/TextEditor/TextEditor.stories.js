@@ -33,7 +33,7 @@ export default {
 }
 
 export const Messages = () => {
-  const [value, setValue] = React.useState()
+  const [value, setValue] = React.useState([])
 
   const ref = React.useRef()
 

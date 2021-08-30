@@ -16,13 +16,18 @@ export const ConfirmationDialog = ({
   message = '',
   cancelText = 'Cancel',
   confirmText = 'Yes, do it',
+  children,
 }) => {
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <ClosableDialogTitle onClose={onClose}>{title}</ClosableDialogTitle>
       {Boolean(message) && (
         <DialogContent>
-          <DialogContentText>{message}</DialogContentText>
+          {Boolean(message) && (
+            <DialogContentText>{message}</DialogContentText>
+          )}
+
+          {children}
         </DialogContent>
       )}
 
