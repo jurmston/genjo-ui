@@ -26,10 +26,10 @@ export const ConfirmationDialog = ({
           {Boolean(message) && (
             <DialogContentText>{message}</DialogContentText>
           )}
-
-          {children}
         </DialogContent>
       )}
+
+      {children}
 
       <DialogActions>
         <Button onClick={onClose}>{cancelText}</Button>
@@ -50,6 +50,7 @@ ConfirmationDialog.propTypes = {
   message: PropTypes.string,
   cancelText: PropTypes.string,
   confirmText: PropTypes.string,
+  children: PropTypes.node,
 }
 
 export default ConfirmationDialog
