@@ -44,6 +44,7 @@ export const DataTable = ({
   overscanCount = 30,
   renderActions,
   rowCount,
+  rowHeight = 44,
   rows = {},
   selected,
   selectionMode,
@@ -60,8 +61,6 @@ export const DataTable = ({
 
   // --- Dimesions
   const dataGridHeight = containerHeight - HEADER_HEIGHT - TOTALS_HEIGHT - HEIGHT_BUFFER - 2 * INNER_BORDER_WIDTH
-  const [rowDensity, setRowDensity] = React.useState('dense')
-  const rowHeight = rowDensity === 'dense' ? 36 : 52
   const hasScrollbar = rowCount >= rowWindow.visibleCount
   const scrollbarWidth = hasScrollbar ? scrollbarSize() : 0
 
@@ -235,14 +234,12 @@ export const DataTable = ({
           rowHeight={rowHeight}
           selectionMode={selectionMode}
           toggleSelectionMode={toggleSelectionMode}
-          rowDensity={rowDensity}
-          setRowDensity={setRowDensity}
           autoSizeColumns={autoSizeColumns}
           actionsWidth={actionsWidth}
         />
 
         {isFetching && !isLoading && (
-          <div className="GenjoDataTable__fetch-bar" style={{ top: rowHeight }}>
+          <div className="GenjoDataTable__fetch-bar" style={{ top: rowHeight - 4 }}>
             <LinearProgress />
           </div>
         )}

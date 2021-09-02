@@ -6,7 +6,6 @@ import Checkbox from '../Checkbox'
 
 import { HeaderCell } from './HeaderCell'
 import { AutoSizeButton } from './AutoSizeButton'
-import { DensityButton } from './DensityButton'
 
 const HEADER_HEIGHT = 48
 
@@ -17,8 +16,6 @@ export const Header = React.memo(
     selected,
     selectionMode,
     toggleSelectionMode,
-    rowDensity,
-    setRowDensity,
     autoSizeColumns,
     rowHeight,
     actionsWidth,
@@ -31,7 +28,7 @@ export const Header = React.memo(
             'GenjoDataTable__row',
             'GenjoDataTable__header-row',
           )}
-          style={{ height: rowDensity === 'dense' ? 48 : 56 }}
+          style={{ height: rowHeight }}
         />
       )
     }
@@ -42,7 +39,7 @@ export const Header = React.memo(
           'GenjoDataTable__row',
           'GenjoDataTable__header-row',
         )}
-        style={{ height: rowDensity === 'dense' ? 48 : 56 }}
+        style={{ height: rowHeight }}
       >
 
         <div
@@ -76,7 +73,6 @@ export const Header = React.memo(
             }}
           >
             <AutoSizeButton autoSizeColumns={autoSizeColumns} />
-            <DensityButton rowDensity={rowDensity} setRowDensity={setRowDensity} />
           </div>
         )}
       </div>
