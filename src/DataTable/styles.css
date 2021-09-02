@@ -20,6 +20,7 @@
   box-sizing: border-box;
   overflow: hidden;
   /* border-radius: var(--border-radius); */
+  font-size: 14px;
 }
 
 .GenjoDataTable__section {
