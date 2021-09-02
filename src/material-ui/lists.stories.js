@@ -38,7 +38,7 @@ export const Primary = () => {
 
   return (
     <div style={{ width: 300 }}>
-      <List variant="contained">
+      <List>
         <ListTitle
           title="My Playlist"
           icon={<ChecklistIcon />}

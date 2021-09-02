@@ -4,7 +4,7 @@
   --inner-border-color: #90a4ae;
   --totals-bg-color: #eceff1;
   --row-hover-bg-color: #e1f5fe;
-  --header-cell-text-color: #607d8b;
+  --header-cell-text-color: #000;
   --resize-handle-bg-color: #455a64;
   --drag-boundry-bg-color: rgb(255,179,0, 0.2);
   --drag-boundry-border-color: #ffb300;
@@ -16,10 +16,10 @@
 .GenjoDataTable__root {
   position: relative;
   width: 100%;
-  border: 1px solid var(--main-border-color);
+  /* border: 1px solid var(--main-border-color); */
   box-sizing: border-box;
   overflow: hidden;
-  border-radius: var(--border-radius);
+  /* border-radius: var(--border-radius); */
 }
 
 .GenjoDataTable__section {
@@ -61,11 +61,13 @@
 }
 
 .GenjoDataTable__header-cell:hover {
-  background-color: var(--totals-bg-color);
+  /* background-color: var(--totals-bg-color); */
+  color: var(--header-selected-color);
 }
 
 .GenjoDataTable__header-cell.is-selected {
-  background-color: var(--header-selected-bg-color);
+  color: var(--header-selected-color);
+  /* background-color: var(--header-selected-bg-color); */
 }
 
 
@@ -95,7 +97,6 @@
 
 .GenjoDataTable__fetch-bar {
   position: absolute;
-  top: 0;
   left: 0;
   right: 0;
 }
@@ -139,7 +140,7 @@
   box-sizing: border-box;
   overflow: hidden;
   border-top: 2px solid var(--inner-border-color);
-  background-color: var(--totals-bg-color);
+  /* background-color: var(--totals-bg-color); */
   display: flex;
   align-items: center;
 }

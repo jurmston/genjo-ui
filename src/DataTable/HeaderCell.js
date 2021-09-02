@@ -3,13 +3,10 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
 import ButtonBase from '@material-ui/core/ButtonBase'
-import ArrowDownIcon from '@material-ui/icons/ArrowBack'
+import AscIcon from '@material-ui/icons/KeyboardArrowDownRounded'
+import DescIcon from '@material-ui/icons/KeyboardArrowUpRounded'
 
 import { useDataTable } from './useDataTable'
-import { Button } from '@material-ui/core'
-
-
-const ROW_HEIGHT = 36
 
 
 export const HeaderCell = ({ index, column }) => {
@@ -27,10 +24,11 @@ export const HeaderCell = ({ index, column }) => {
     width = 0,
     align = 'left',
     title = '',
-    sortIcon: SortIcon,
     isSortable = false,
     hasSubtotals,
   } = columns[index]
+
+  const SortIcon = sortBy.startsWith('-') ? DescIcon : AscIcon
 
   const clickProps = {}
 

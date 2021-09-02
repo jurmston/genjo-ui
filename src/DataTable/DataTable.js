@@ -5,7 +5,6 @@ import clsx from 'clsx'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 import getCellAlignment from './utils/getCellAlignment'
-import getSortIcon from './utils/getSortIcon'
 
 import useDebounce from '../useDebounce'
 
@@ -24,7 +23,7 @@ import scrollbarSize from 'dom-helpers/scrollbarSize'
 import { DataTableContext } from './DataTableContext'
 
 
-const HEADER_HEIGHT = 48
+const HEADER_HEIGHT = 56
 const TOTALS_HEIGHT = 56
 const HEIGHT_BUFFER = 7
 const INNER_BORDER_WIDTH = 2
@@ -157,7 +156,6 @@ export const DataTable = ({
       ...column,
       align: getCellAlignment(column.type),
       width: widths[index],
-      sortIcon: getSortIcon({ sortBy, column }),
     })))
   }, [columnsFromProps, containerWidth, sortBy])
 
@@ -244,7 +242,7 @@ export const DataTable = ({
         />
 
         {isFetching && !isLoading && (
-          <div className="GenjoDataTable__fetch-bar">
+          <div className="GenjoDataTable__fetch-bar" style={{ top: rowHeight }}>
             <LinearProgress />
           </div>
         )}
