@@ -4,12 +4,12 @@
   --inner-border-color: #90a4ae;
   --totals-bg-color: #eceff1;
   --row-hover-bg-color: #e1f5fe;
-  --header-cell-text-color: #000;
+  --header-cell-text-color: #607d8b;
   --resize-handle-bg-color: #455a64;
   --drag-boundry-bg-color: rgb(255,179,0, 0.2);
   --drag-boundry-border-color: #ffb300;
   --row-selected-bg-color: #fff8e1;
-  --header-selected-color: #3d5afe;
+  --header-selected-color: #2196f3;
   --header-selected-bg-color: #e8eaf6;
 }
 
