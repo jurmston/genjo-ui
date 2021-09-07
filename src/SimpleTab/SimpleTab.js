@@ -1,8 +1,8 @@
-import { withStyles } from '@material-ui/styles'
+import { styled } from '@material-ui/styles'
 import Tab from '@material-ui/core/Tab'
 
 
-export const SimpleTab = withStyles((theme) => ({
+export const SimpleTab = styled(Tab)(({ theme }) => ({
   root: {
     textTransform: 'none',
     alignItems: 'flex-start',
@@ -20,4 +20,4 @@ export const SimpleTab = withStyles((theme) => ({
       marginBottom: 0,
     }
   },
-}))((props) => <Tab disableRipple {...props} />)
+}))

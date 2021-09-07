@@ -1,6 +1,6 @@
 import React from 'react'
 
-import StarIcon from '@material-ui/icons/Star'
+import StarIcon from '@material-ui/icons/StarRounded'
 import SimpleTab from '../SimpleTab'
 import { SimpleTabs } from './SimpleTabs'
 
