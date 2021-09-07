@@ -54,7 +54,7 @@ export const typographyHeading2 = {
 export const typographyHeading3 = {
   fontFamily,
   fontSize: 20,
-  fontWeight: 500,
+  fontWeight: 700,
   lineHeight: 1.6,
   letterSpacing: `${round(0.15 / 20)}em`,
 }

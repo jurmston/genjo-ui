@@ -124,6 +124,9 @@ export * from './SortableHeader'
 export { default as StatusChip } from './StatusChip'
 export * from './StatusChip'
 
+export { default as SimpleTab } from './SimpleTab'
+export * from './SimpleTab'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'
