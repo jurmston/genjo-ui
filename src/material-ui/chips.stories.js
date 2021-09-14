@@ -18,6 +18,9 @@ import TableCell from '@material-ui/core/TableCell'
 
 import ChecklistIcon from '@material-ui/icons/PlaylistAddRounded'
 
+
+import { colors } from '../ThemeProvider'
+
 import StatusChip from '../StatusChip'
 
 import mountainsImage from '../media/mountains.jpg'
@@ -56,7 +59,7 @@ export const Primary = () => {
 
       <div style={{ marginTop: 32 }} />
 
-      <Typography variant="subtitle2">Genjo Status Chip</Typography>
+      <Typography variant="subtitle2">Genjo Status Chip with Palette Colors</Typography>
       <Grid container spacing={2}>
         <Grid item>
           <StatusChip label="Default" />
@@ -86,6 +89,15 @@ export const Primary = () => {
           <StatusChip label="Info" color="info" />
         </Grid>
 
+      </Grid>
+
+      <Typography variant="subtitle2">Genjo Status Chip with Custom Colors</Typography>
+      <Grid container spacing={2}>
+        {Object.keys(colors).filter(name => name !== 'common').map(name => (
+          <Grid item key={name}>
+            <StatusChip label={name} color={name} />
+          </Grid>
+        ))}
       </Grid>
     </>
   )

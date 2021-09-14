@@ -114,47 +114,9 @@ const shadows = [
 export const createTheme = ({ mode, primary, secondary }) =>
   createMuiTheme({
     palette: {
-      primary: {
-        ...primary,
-        light: primary[100],
-        dark: primary[900],
-      },
-      secondary: {
-        ...secondary,
-        light: secondary[100],
-        dark: secondary[900],
-      },
+      primary,
+      secondary,
       mode,
-
-      grey: {
-        ...colors.grey,
-        light: colors.grey[100],
-        dark: colors.grey[900],
-      },
-
-      error: {
-        main: colors.red[500],
-        light: colors.red[100],
-        dark: colors.red[900],
-      },
-
-      success: {
-        main: colors.green[500],
-        light: colors.green[100],
-        dark: colors.green[900],
-      },
-
-      info: {
-        main: colors.lightBlue[500],
-        light: colors.lightBlue[100],
-        dark: colors.lightBlue[900],
-      },
-
-      warning: {
-        main: colors.amber[500],
-        light: colors.amber[100],
-        dark: colors.amber[900],
-      },
     },
 
     typography: {
