@@ -2,6 +2,7 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 
 import Chip from '@material-ui/core/Chip'
+import { useTheme, lighten, darken } from '@material-ui/core/styles'
 import { colors } from '../ThemeProvider'
 
 const PALETTE_SET = new Set(['primary', 'secondary', 'success', 'info', 'warning', 'error'])
@@ -9,14 +10,15 @@ const PALETTE_SET = new Set(['primary', 'secondary', 'success', 'info', 'warning
 
 export function StatusChip({ color = 'grey', ...chipProps }) {
   const isPaletteColor = PALETTE_SET.has(color)
+  const theme = useTheme()
 
   const backgroundColor = isPaletteColor
-    ? `${color}.light`
+    ? lighten(theme.palette[color].main, 0.5)
     : colors[color][100]
 
   const textColor = isPaletteColor
-    ? `${color}.contrastText`
-    : colors[color][900]
+    ? darken(theme.palette[color].dark, 0.5)
+    : darken(colors[color][900], 0.1)
 
   return (
     <Chip
