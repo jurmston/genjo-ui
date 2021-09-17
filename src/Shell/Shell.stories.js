@@ -6,12 +6,15 @@ import List from '@material-ui/core/List'
 import MenuItem from '@material-ui/core/MenuItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
+import BottomNavigation from '@material-ui/core/BottomNavigation'
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
 import ContactSupportIcon from '@material-ui/icons/ContactSupport'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
+import DeviceProvider from '../DeviceProvider'
 import MenuPanelItem from '../MenuPanelItem'
 import NavTab from '../NavTab'
 import NavTabs from '../NavTabs'
@@ -43,6 +46,35 @@ const PageWithMenu = ({ setPage, toggleAvatar, toggleLogo }) => {
       <MenuPanelItem title="Nested">
         <MenuPanelItem title="Noodles" />
       </MenuPanelItem>
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
+      <MenuPanelItem title="Content" />
     </>
   )
 
@@ -127,52 +159,93 @@ export const Main = () => {
   }
 
   return (
-    <Shell
-      logo={hasLogo ? story_logo : undefined}
-      brandName="Genjo UI"
-      homeLink="https://www.example.com"
-      userMenu={
-        <UserMenu
-          avatarOnly={avatarOnly}
-          initials="JU"
-          name="colleen.camenisch@gmail.com"
-          color="darkgreen"
-        >
-          <MenuItem>
-            <ListItemIcon>
-              <ContactSupportIcon />
-            </ListItemIcon>
-            <ListItemText primary="Support" />
-          </MenuItem>
+    <DeviceProvider>
+      <Shell
+        logo={hasLogo ? story_logo : undefined}
+        brandName="Genjo UI"
+        homeLink="https://www.example.com"
+        mobileNavigationActions
+        userMenu={
+          <UserMenu
+            avatarOnly={avatarOnly}
+            initials="JU"
+            name="colleen.camenisch@gmail.com"
+            color="darkgreen"
+          >
+            <MenuItem>
+              <ListItemIcon>
+                <ContactSupportIcon />
+              </ListItemIcon>
+              <ListItemText primary="Support" />
+            </MenuItem>
 
-          <MenuItem divider>
-            <ListItemIcon>
-              <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary="My profile" />
-          </MenuItem>
+            <MenuItem divider>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="My profile" />
+            </MenuItem>
 
-          <MenuItem>
-            <ListItemIcon>
-              <PowerSettingsNewIcon />
-            </ListItemIcon>
-            <ListItemText primary="Log out" />
-          </MenuItem>
-        </UserMenu>
-      }
-      appBarContent={
-        <NavTabs value={tab} onChange={(event, newTab) => setTab(newTab)}>
-          <NavTab label="Projects" icon={<ProjectsIcon />} />
-          <NavTab label="People" icon={<PeopleIcon />} />
-          <NavTab label="Settings" icon={<SettingsIcon />} />
-        </NavTabs>
-      }
-    >
-      {page === 'menu' ? (
-        <PageWithMenu setPage={setPage} toggleAvatar={toggleAvatar} toggleLogo={toggleLogo} />
-      ) : (
-        <PageWithoutMenu setPage={setPage} toggleAvatar={toggleAvatar} toggelLogo={toggleLogo} />
-      )}
-    </Shell>
+            <MenuItem>
+              <ListItemIcon>
+                <PowerSettingsNewIcon />
+              </ListItemIcon>
+              <ListItemText primary="Log out" />
+            </MenuItem>
+          </UserMenu>
+        }
+        mobileUserMenu={
+          <UserMenu
+            avatarOnly={avatarOnly}
+            height={47}
+            initials="JU"
+            color="darkgreen"
+          >
+            <MenuItem>
+              <ListItemIcon>
+                <ContactSupportIcon />
+              </ListItemIcon>
+              <ListItemText primary="Support" />
+            </MenuItem>
+
+            <MenuItem divider>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="My profile" />
+            </MenuItem>
+
+            <MenuItem>
+              <ListItemIcon>
+                <PowerSettingsNewIcon />
+              </ListItemIcon>
+              <ListItemText primary="Log out" />
+            </MenuItem>
+          </UserMenu>
+        }
+
+        mobileNavigation={
+          <BottomNavigation showLabels value={tab} onChange={(event, newValue) => setTab(newValue)}>
+            <BottomNavigationAction label="Projects" icon={<ProjectsIcon />} />
+            <BottomNavigationAction label="People" icon={<PeopleIcon />} />
+            <BottomNavigationAction label="Settings" icon={<SettingsIcon />} />
+          </BottomNavigation>
+        }
+
+        appBarContent={
+          <NavTabs value={tab} onChange={(event, newTab) => setTab(newTab)}>
+            <NavTab label="Projects" icon={<ProjectsIcon />} />
+            <NavTab label="People" icon={<PeopleIcon />} />
+            <NavTab label="Settings" icon={<SettingsIcon />} />
+          </NavTabs>
+        }
+      >
+        {page === 'menu' ? (
+          <PageWithMenu setPage={setPage} toggleAvatar={toggleAvatar} toggleLogo={toggleLogo} />
+        ) : (
+          <PageWithoutMenu setPage={setPage} toggleAvatar={toggleAvatar} toggelLogo={toggleLogo} />
+        )}
+      </Shell>
+    </DeviceProvider>
   )
 }

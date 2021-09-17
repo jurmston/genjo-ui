@@ -6,7 +6,6 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import Icon from '@material-ui/core/Icon'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForwardRounded'
 import ArrowDownIcon from '@material-ui/icons/ArrowDownwardRounded'
 

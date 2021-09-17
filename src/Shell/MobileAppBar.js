@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
   appBar: {
     position: 'fixed',
     top: 0,
-    height: 56,
+    height: 48,
     left: 0,
     right: 0,
     display: 'flex',
@@ -18,11 +18,11 @@ const useStyles = makeStyles(theme => ({
     zIndex: theme.zIndex.drawer + 1,
     boxShadow: 'none',
     boxSizing: 'border-box',
-    borderBottom: `1px solid ${theme.palette.divider}`,
+    // borderBottom: `1px solid ${theme.palette.divider}`,
   },
 
   logoLink: {
-    height: 52,
+    height: 36,
     marginLeft: 24,
     cursor: 'pointer',
   },
@@ -45,6 +45,7 @@ const useStyles = makeStyles(theme => ({
     width: 'auto',
   },
 
+
   icon: {
     marginBottom: 0,
   }
@@ -55,7 +56,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * Desktop App Bar
  */
-export function AppBar({ children, logo, brandName, homeLink, userMenu }) {
+export function MobileAppBar({ children, logo, brandName, homeLink, userMenu }) {
   const classes = useStyles()
 
   return (
@@ -83,7 +84,7 @@ export function AppBar({ children, logo, brandName, homeLink, userMenu }) {
   )
 }
 
-AppBar.propTypes = {
+MobileAppBar.propTypes = {
   children: PropTypes.node,
   logo: PropTypes.string,
   brandName: PropTypes.string,

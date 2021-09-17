@@ -14,7 +14,6 @@ import { usePlacesAutocomplete, useGeocoder } from '../GoogleMapsProvider'
 
 import { colors } from '../ThemeProvider'
 import useDebounce from '../useDebounce'
-import { parseGeocoderResults } from '../utils/geo'
 
 const useStyles = makeStyles({
   // input: {
@@ -207,4 +206,5 @@ SearchLocationsField.propTypes = {
     PropTypes.arrayOf(PropTypes.string),
   ]),
   helperText: PropTypes.string,
+  componentsMap: PropTypes.object,
 }

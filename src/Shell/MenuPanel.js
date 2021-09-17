@@ -84,7 +84,7 @@ const useStyles = makeStyles(theme => ({
 /**
  * Menu panel.
  */
-const MenuPanel = ({ isOpen, toggle, children, hasContent = false, ...listProps }) => {
+export const MenuPanel = ({ isOpen, toggle, children, hasContent = false }) => {
   const [isHovering, setIsHovering] = React.useState(false)
   const classes = useStyles({ isOpen, isHovering, hasContent })
 
@@ -103,7 +103,7 @@ const MenuPanel = ({ isOpen, toggle, children, hasContent = false, ...listProps 
       <div
         className={classes.button}
       >
-        <IconButton className={classes.iconButton} onClick={toggle}>
+        <IconButton className={classes.iconButton} onClick={() => toggle()}>
           {isOpen ? (
             <KeyboardArrowLeftIcon />
             ) : (
@@ -118,6 +118,7 @@ const MenuPanel = ({ isOpen, toggle, children, hasContent = false, ...listProps 
 MenuPanel.propTypes = {
   /** Content of the menu list. */
   children: PropTypes.node,
+  isOpen: PropTypes.bool,
+  toggle: PropTypes.func,
+  hasContent: PropTypes.bool,
 }
-
-export { MenuPanel }
