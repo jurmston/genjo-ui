@@ -59,6 +59,14 @@ export const typographyHeading3 = {
   letterSpacing: `${round(0.15 / 20)}em`,
 }
 
+export const typographyHeading4 = {
+  fontFamily,
+  fontSize: 16,
+  fontWeight: 700,
+  lineHeight: 1.57,
+  letterSpacing: `${round(0.1 / 16)}em`,
+}
+
 export const borderRadius = 8
 
 export const dividerColor = 'rgba(255, 255, 255, 0.12)'
@@ -124,6 +132,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
       h1: typographyHeading1,
       h2: typographyHeading2,
       h3: typographyHeading3,
+      h4: typographyHeading4,
     },
 
     shape: {

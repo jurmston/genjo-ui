@@ -2,7 +2,7 @@ import * as React from 'react'
 import ShellContext from './ShellContext'
 
 export const useShell = ({ title = '', menuContent = null, deps = [] }) => {
-  const { setMenuContent, setTitle } = React.useContext(ShellContext)
+  const { setMenuContent, setTitle, toggleMenu } = React.useContext(ShellContext)
 
   React.useEffect(
     () => {
@@ -11,6 +11,8 @@ export const useShell = ({ title = '', menuContent = null, deps = [] }) => {
     },
     [...deps]
   )
+
+  return { toggleMenu }
 }
 
 export default useShell

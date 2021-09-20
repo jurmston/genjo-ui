@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
 
   logoLink: {
     height: 36,
-    marginLeft: 24,
+    marginLeft: 6,
     cursor: 'pointer',
   },
 
@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
     textDecoration: 'none',
     color: theme.palette.primary.dark,
-    marginLeft: 24,
+    marginLeft: 6,
   },
 
   appsIcon: {

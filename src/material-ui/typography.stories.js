@@ -36,6 +36,7 @@ export const Primary = () => {
       <Typography variant="h1">h1. Heading 1</Typography>
       <Typography variant="h2">h2. Headline 2</Typography>
       <Typography variant="h3">h3. Headline 3</Typography>
+      <Typography variant="h4">h4. Headline 4</Typography>
     </>
   )
 }
