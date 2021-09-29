@@ -41,7 +41,7 @@ export const SaveButtonsDialog = ({
   return (
     <div className={classes.root} ref={ref}>
       <Slide in={isIn} direction="up">
-        <div className={classes.card} style={{ width: dim.width - 24, left: dim.left + 24 }}>
+        <div className={classes.card} style={{ width: dim.width - 48, left: dim.left + 24 }}>
           {children ?? (
             <>
               <Button onClick={onCancel}>Discard Changes</Button>
