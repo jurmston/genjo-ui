@@ -106,18 +106,6 @@ export const Shell = ({
     ? (mobileLogo ?? logo)
     : logo
 
-  const mobileNavigationWithMenu = mobileNavigation
-    ? React.cloneElement(
-      mobileNavigation,
-      {},
-      React.Children.toArray(mobileNavigation?.props?.children).concat(
-        menuContent ? [
-          <BottomNavigationAction key="mobile-menu-button" label="Menu" onClick={() => toggleMenu()} icon={<MenuIcon />} />
-        ] : [],
-      ),
-    )
-    : null
-
   return (
     <ShellContext.Provider value={{ setMenuContent, setTitle, toggleMenu }}>
       <AppBarComponent
@@ -141,9 +129,9 @@ export const Shell = ({
 
       <main className={classes.main}>{children}</main>
 
-      {isMobile && (
+      {isMobile && Boolean(mobileNavigation) && (
         <nav className={classes.mobileNavigation}>
-          {mobileNavigationWithMenu}
+          {mobileNavigation}
         </nav>
       )}
     </ShellContext.Provider>

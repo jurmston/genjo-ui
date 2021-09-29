@@ -25,11 +25,15 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2),
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
 }))
 
-export const SaveButtonsDialog = ({ isIn = false, onCancel, onSave }) => {
+export const SaveButtonsDialog = ({
+  isIn = false,
+  onCancel,
+  onSave,
+  children,
+}) => {
   const classes = useStyles()
 
   const [ref, dim] = useDimensions()
@@ -37,12 +41,18 @@ export const SaveButtonsDialog = ({ isIn = false, onCancel, onSave }) => {
   return (
     <div className={classes.root} ref={ref}>
       <Slide in={isIn} direction="up">
-        <div className={classes.card} style={{ width: dim.width, left: dim.left }}>
-          <Button onClick={onCancel}>Discard Changes</Button>
+        <div className={classes.card} style={{ width: dim.width - 24, left: dim.left - 24 }}>
+          {children ?? (
+            <>
+              <Button onClick={onCancel}>Discard Changes</Button>
 
-          <Button variant="contained" color="primary" onClick={onSave}>
-            Save Changes
-          </Button>
+              <div style={{ flex: 1 }} />
+
+              <Button variant="contained" color="primary" onClick={onSave}>
+                Save Changes
+              </Button>
+            </>
+          )}
         </div>
       </Slide>
     </div>
@@ -53,6 +63,7 @@ SaveButtonsDialog.propTypes = {
   isIn: PropTypes.bool,
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
+  children: PropTypes.node,
 }
 
 export default SaveButtonsDialog
