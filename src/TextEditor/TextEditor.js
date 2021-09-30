@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createEditor } from 'slate'
-import { Slate, withReact } from 'slate-react'
+import { createEditor, Transforms } from 'slate'
+import { Slate, withReact, ReactEditor } from 'slate-react'
 import { withHistory } from 'slate-history'
 
 import TextEditorContext from './TextEditorContext'
@@ -34,6 +34,23 @@ export const TextEditor = ({
 
   const editor = React.useMemo(() => withLinks(withDeleteBackwards(withHistory(withReact(createEditor())))), [])
 
+  React.useEffect(
+    () => {
+      if (isFocused) {
+        ReactEditor.focus(editor)
+        Transforms.move(editor, { edge: 'end' })
+      }
+    },
+    [isFocused, editor]
+  )
+
+  function handleManualFocus() {
+    if (!isFocused) {
+      setIsFocused(true)
+    }
+  }
+
+  console.log(editor.selection)
   // function handleSave() {
   //   onSave?.(value)
 
@@ -74,7 +91,7 @@ export const TextEditor = ({
       }}
     >
       <Slate editor={editor} value={value} onChange={handleChange}>
-        <div className={classes.editor}>
+        <div className={classes.editor} onClick={handleManualFocus}>
           <Input minHeight={minHeight} maxHeight={maxHeight} />
           <ButtonPanel />
         </div>

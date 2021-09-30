@@ -21,12 +21,12 @@ export const Primary = () => {
       <div style={{ width: 300 }}>
         <AddressField
           value={value}
-          onAddressValueChange={setValue}
-          onAddressComponentsChange={setComponents}
+          onInputChange={event => setValue(event.target.value)}
+          onGeocoderSuccess={results => setComponents(results ?? {})}
           label="Primary Address"
         />
         <div style={{ marginTop: 32 }} />
-        {Object.entries(components).map((component, index) => (
+        {Object.entries(components?.components ?? {}).map((component, index) => (
           <Typography key={index}>{`${component[0]}: ${component[1]}`}</Typography>
         ))}
       </div>

@@ -26,6 +26,11 @@ const cache = createCache({
 
 cache.compat = true
 
+const createBlankContent = () => ([{
+  type: 'paragraph',
+  children: [{ text: '' }],
+}])
+
 
 export default {
   title: 'Widgets/TextEditor',
@@ -33,9 +38,7 @@ export default {
 }
 
 export const Messages = () => {
-  const [value, setValue] = React.useState([])
-
-  const ref = React.useRef()
+  const [value, setValue] = React.useState(createBlankContent())
 
   return (
     <CacheProvider value={cache}>

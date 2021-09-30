@@ -18,7 +18,10 @@ export const AddressField = ({
 }) => {
   const { geocode } = useGeocoder()
 
-  async function handleBlur() {
+  async function handleBlur(event) {
+    // Trigger any events passed to the text field.
+    textFieldProps?.onBlur(event)
+
     if (disableGeocode) {
       return
     }
@@ -63,6 +66,10 @@ AddressField.propTypes = {
    */
   onInputChange: PropTypes.func,
   /**
+   * Callback fired when the Google Maps Geocoder is queried.
+   */
+   onGeocode: PropTypes.func,
+  /**
    * Callback fired when the geocoder has returned location results.
    */
   onGeocoderSuccess: PropTypes.func,
@@ -76,6 +83,9 @@ AddressField.propTypes = {
    * name = the name of the componeny key in the parsed results.
    */
   componentsMap: PropTypes.object,
+    /**
+   * Callback fired when the Google Maps Geocoder has completed.
+   */
   onGeocoderSettled: PropTypes.func,
 }
 
