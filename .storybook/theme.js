@@ -36,7 +36,7 @@ const createThemeFromMUITheme = (name, theme) => {
 }
 
 export const themeColors = {
-  primary: colors.indigo,
+  primary: colors.red,
   secondary: colors.teal,
 }
 

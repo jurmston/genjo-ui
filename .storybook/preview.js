@@ -49,7 +49,11 @@ export const decorators = [
       <CacheProvider value={cache}>
 
 
-          <ThemeProvider theme={muiThemeOptions}>
+          <ThemeProvider
+            mode={mode}
+            primaryColor={themeColors.primaryColor}
+            secondaryColor={themeColors.secondaryColor}
+          >
             <LocalizationProvider dateAdapter={AdapterLuxon}>
               <Story {...context} />
             </LocalizationProvider>

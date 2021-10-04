@@ -10,12 +10,12 @@ export const StorybookTheme = ({ children }) => {
 
   const mode = useDarkMode() ? 'dark' : 'light'
 
+  console.log({ mode })
+
   return (
     <ThemeProvider
-      theme={{
-        ...themeColors,
-        mode,
-      }}
+      mode={mode}
+      {...themeColors}
     >
       {children}
     </ThemeProvider>
@@ -23,5 +23,5 @@ export const StorybookTheme = ({ children }) => {
 }
 
 StorybookTheme.propTypes = {
-
+  children: PropTypes.node,
 }

@@ -237,8 +237,10 @@ export const createTheme = ({ mode, primary, secondary }) =>
               borderWidth: 1,
               borderStyle: 'solid',
               borderColor: colors.grey[300],
+              color: colors.grey[700],
               '&:hover': {
                 boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
+                backgroundColor: colors.grey[300],
               },
             }
           },
