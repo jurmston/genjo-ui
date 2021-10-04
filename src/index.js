@@ -127,6 +127,9 @@ export * from './StatusChip'
 export { default as SimpleTab } from './SimpleTab'
 export * from './SimpleTab'
 
+export { default as AspectRatioBox } from './AspectRatioBox'
+export * from './AspectRatioBox'
+
 // Hooks
 export { default as useDebounce } from './useDebounce'
 export * from './useDebounce'
