@@ -87,6 +87,7 @@ export const DateField = ({
   onChange,
   disablePicker = false,
   hasDialog = false,
+  DatePickerProps = {},
   ...textFieldProps
 }) => {
   const [isEditing, setIsEditing] = React.useState(false)
@@ -162,9 +163,10 @@ export const DateField = ({
 
       {pickerIsOpen && hasDialog && (
         <DatePicker
+          allowKeyboardControl
+          {...DatePickerProps}
           open
           onClose={() => setPickerIsOpen(false)}
-          allowKeyboardControl
           date={value}
           onChange={newValue => {
             onChange(newValue)
@@ -219,6 +221,8 @@ DateField.propTypes = {
   disablePicker: PropTypes.bool,
   /** If `true` the picker element will be displayed in a Dialog component. */
   hasDialog: PropTypes.bool,
+  /** Props passed to the DatePicker component */
+  DatePickerProps: PropTypes.object,
 }
 
 export default DateField
