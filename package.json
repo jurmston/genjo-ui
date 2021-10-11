@@ -1,6 +1,6 @@
 {
   "name": "genjo-ui",
-  "version": "2.18.0",
+  "version": "2.18.1",
   "description": "A component library built on top of Material-UI",
   "main": "./core/index.js",
   "module": "./core/index.js",
@@ -21,7 +21,7 @@
     "prettier:check": "prettier --list-different src/**/*.js"
   },
   "author": "",
-"license": "ISC",
+  "license": "ISC",
   "peerDependencies": {
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.0.0",
@@ -115,6 +115,7 @@
     "is-hotkey": "^0.1.8",
     "is-url": "^1.2.4",
     "ngeohash": "^0.6.3",
+    "react-cropper": "^2.1.8",
     "react-fast-compare": "^3.2.0",
     "react-number-format": "^4.5.1",
     "react-text-mask": "^5.4.3",

@@ -30,7 +30,7 @@ export const ClosableDialogTitle = ({ children, onClose, ...other }) => {
 
   return (
     <DialogTitle className={classes.root} {...other}>
-      <Typography variant="h6" component="div">
+      <Typography variant="h2" component="div">
         {children}
       </Typography>
       {onClose ? (

@@ -10,6 +10,7 @@ import { themeColors, lightTheme, darkTheme } from './theme'
 import { createTheme as createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider as EmotionThemeProvider } from 'emotion-theming'
 
+
 // This fixes an issue related to a warning when using "first-child"
 // selector. More about this here:
 // https://github.com/mui-org/material-ui/issues/24894
