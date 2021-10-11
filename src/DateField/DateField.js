@@ -88,6 +88,7 @@ export const DateField = ({
   disablePicker = false,
   hasDialog = false,
   DatePickerProps = {},
+  disabled = false,
   ...textFieldProps
 }) => {
   const [isEditing, setIsEditing] = React.useState(false)
@@ -144,6 +145,7 @@ export const DateField = ({
     <div style={{ position: 'relative' }} ref={ref}>
       <TextField
         {...textFieldProps}
+        disabled={disabled}
         value={isEditing ? inputValue : displayValue}
         onChange={handleInputChange}
         onFocus={handleFocus}
@@ -153,7 +155,11 @@ export const DateField = ({
           ...textFieldProps.InputProps,
           endAdornment: !disablePicker && (
             <InputAdornment position="end">
-              <IconButton onClick={() => setPickerIsOpen(!pickerIsOpen)} color={pickerIsOpen ? 'primary' : 'default'}>
+              <IconButton
+                disabled={disabled}
+                onClick={() => setPickerIsOpen(!pickerIsOpen)}
+                color={pickerIsOpen ? 'primary' : 'default'}
+              >
                 <CalendarTodayIcon />
               </IconButton>
             </InputAdornment>
@@ -195,6 +201,7 @@ export const DateField = ({
         >
           <CalendarPicker
             allowKeyboardControl
+            {...DatePickerProps}
             date={value}
             onChange={newValue => {
               onChange(newValue)
@@ -223,6 +230,8 @@ DateField.propTypes = {
   hasDialog: PropTypes.bool,
   /** Props passed to the DatePicker component */
   DatePickerProps: PropTypes.object,
+  /** If `true`, the field is disabled. */
+  disabled: PropTypes.bool,
 }
 
 export default DateField

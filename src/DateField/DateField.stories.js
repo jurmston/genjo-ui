@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { DateTime } from 'luxon'
 import { DateField } from './DateField'
 
 export default {
@@ -25,6 +25,10 @@ export const Main = ({ ...args }) => {
         value={value}
         onChange={setValue}
         hasDialog={args.hasDialog}
+        DatePickerProps={{
+          minDate: DateTime.now().plus({ days: 3 }),
+          maxDate: DateTime.now().plus({ days: 10 }),
+        }}
       />
     </div>
   )
