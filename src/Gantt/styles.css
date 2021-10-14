@@ -1,0 +1,118 @@
+:root {
+  --border-radius: 8px;
+  --main-border-color: rgba(0, 0, 0, 0.12);
+  --inner-border-color: #90a4ae;
+  --totals-bg-color: #eceff1;
+  --row-hover-bg-color: #e1f5fe;
+  --header-cell-text-color: #607d8b;
+  --resize-handle-bg-color: #455a64;
+  --drag-boundry-bg-color: rgb(255,179,0, 0.2);
+  --drag-boundry-border-color: #ffb300;
+  --row-selected-bg-color: #fff8e1;
+  --header-selected-color: #2196f3;
+  --header-selected-bg-color: #e8eaf6;
+}
+
+.GenjoGantt__container {
+  width: 100%;
+  overflow: auto;
+}
+
+.GenjoGantt__svg {
+  overflow: hidden;
+  vertical-align: middle;
+  background-color: #2196f3;
+}
+
+.GenjoGantt__grid__row {
+  fill: #fff;
+  padding: 0px 16px;
+  border-bottom: 1px solid rgb(238, 240, 242);
+  box-sizing: border-box;
+}
+
+.GenjoGantt__grid__line {
+  stroke: #ebeff2;
+  box-sizing: border-box;
+}
+
+.GenjoGantt__grid__header {
+  fill: #fff;
+  stroke: #e0e0e0;
+  stroke-width: 1.4;
+  box-sizing: border-box;
+}
+
+.GenjoGantt__grid__tick {
+  stroke: #e0e0e0;
+  stroke-width: .2;
+  box-sizing: border-box;
+}
+
+.GenjoGantt__grid__tick.GenjoGantt__grid__thick-tick {
+  stroke-width: .4;
+}
+
+.GenjoGantt__grid__today-highlight {
+  fill: #fcf8e3;
+  opacity: 0.5;
+  box-sizing: border-box;
+}
+
+.GenjoGantt__dates__lower-text {
+  fill: #333;
+  font-size: 12px;
+  text-anchor: middle;
+}
+
+.GenjoGantt__dates__upper-text {
+  fill: #555;
+  font-size: 12px;
+  text-anchor: middle;
+}
+
+.GenjoGantt__bar {
+  fill: #b8c2cc;
+  stroke: #8D99A6;
+  stroke-width: 0;
+  transition: stroke-width .3s ease;
+  box-sizing: border-box;
+}
+
+.GenjoGantt__progress {
+  fill: #1d6ab7;
+  box-sizing: border-box;
+}
+
+.GenjoGantt__handle {
+  fill: #ddd;
+  cursor: ew-resize;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease;
+  box-sizing: border-box;
+}
+
+.GenjoGantt__bar-wrapper:hover .GenjoGantt__bar {
+  stroke-width: 2;
+}
+
+.GenjoGantt__bar-wrapper:hover .GenjoGantt__handle {
+  opacity: 1;
+  visibility: visible;
+}
+
+.GenjoGantt__label {
+  fill: #fff;
+  dominant-baseline: central;
+  text-anchor: middle;
+  font-size: 12px;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+
+.GenjoGantt__arrow {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.4;
+}
