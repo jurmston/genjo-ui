@@ -1,5 +1,5 @@
-import { styled } from '@material-ui/styles'
-import Tabs from '@material-ui/core/Tabs'
+import { styled } from '@mui/styles'
+import Tabs from '@mui/material/Tabs'
 
 
 export const SimpleTabs = styled(Tabs)(({ theme }) => ({

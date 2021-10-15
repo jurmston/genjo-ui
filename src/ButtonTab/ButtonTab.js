@@ -1,5 +1,5 @@
-import Tab from '@material-ui/core/Tab'
-import { styled } from '@material-ui/core/styles'
+import Tab from '@mui/material/Tab'
+import { styled } from '@mui/material/styles'
 
 
 export const ButtonTab = styled(Tab)(({ theme }) => ({

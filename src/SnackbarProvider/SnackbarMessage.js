@@ -1,9 +1,9 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import Slide from '@material-ui/core/Slide'
-import Collapse from '@material-ui/core/Collapse'
-import Alert from '@material-ui/core/Alert'
+import Slide from '@mui/material/Slide'
+import Collapse from '@mui/material/Collapse'
+import Alert from '@mui/material/Alert'
 
 const MAX_DURATION = 7000
 const MIN_DURATION = 2000

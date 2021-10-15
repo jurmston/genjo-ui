@@ -1,4 +1,4 @@
-import { createTheme as createMuiTheme } from '@material-ui/core/styles'
+import { createTheme as createMuiTheme } from '@mui/material/styles'
 import { create } from '@storybook/theming/create'
 import { colors } from '../src/ThemeProvider'
 

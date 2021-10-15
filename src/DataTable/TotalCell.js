@@ -2,11 +2,11 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
-import ButtonBase from '@material-ui/core/ButtonBase'
-import ArrowDownIcon from '@material-ui/icons/ArrowBack'
+import ButtonBase from '@mui/material/ButtonBase'
+import ArrowDownIcon from '@mui/icons-material/ArrowBack'
 
 import { useDataTable } from './useDataTable'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 
 import renderCell from './utils/renderCell'
 

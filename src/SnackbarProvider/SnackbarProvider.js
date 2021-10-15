@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { v4 as uuid } from 'uuid'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@mui/styles'
 import SnackbarContext from './SnackbarContext'
 import { SnackbarMessage } from './SnackbarMessage'
 

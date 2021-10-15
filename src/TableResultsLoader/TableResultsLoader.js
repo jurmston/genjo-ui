@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/styles'
-import Typography from '@material-ui/core/Typography'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
+import { makeStyles } from '@mui/styles'
+import Typography from '@mui/material/Typography'
+import TableCell from '@mui/material/TableCell'
+import TableRow from '@mui/material/TableRow'
 import CircleLoader from 'genjo-ui/core/CircleLoader'
 
 const useStyles = makeStyles({

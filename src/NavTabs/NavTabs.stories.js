@@ -3,12 +3,12 @@ import React from 'react'
 import NavTab from '../NavTab'
 import NavTabs from './NavTabs'
 
-import HomeIcon from '@material-ui/icons/HomeRounded'
-import ProjectsIcon from '@material-ui/icons/SquareFootRounded'
-import PeopleIcon from '@material-ui/icons/PersonRounded'
-import ContractsIcon from '@material-ui/icons/ArticleRounded'
-import AddressBookIcon from '@material-ui/icons/ContactMailRounded'
-import SettingsIcon from '@material-ui/icons/SettingsRounded'
+import HomeIcon from '@mui/icons-material/HomeRounded'
+import ProjectsIcon from '@mui/icons-material/SquareFootRounded'
+import PeopleIcon from '@mui/icons-material/PersonRounded'
+import ContractsIcon from '@mui/icons-material/ArticleRounded'
+import AddressBookIcon from '@mui/icons-material/ContactMailRounded'
+import SettingsIcon from '@mui/icons-material/SettingsRounded'
 
 export default {
   title: 'Components/NavTabs',

@@ -1,10 +1,10 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
-import MenuItem from '@material-ui/core/MenuItem'
+import Button from '@mui/material/Button'
+import MenuItem from '@mui/material/MenuItem'
 import { OptionsButtonMenu } from './OptionsButtonMenu'
 
-import CloseIcon from '@material-ui/icons/CloseRounded'
-import EditIcon from '@material-ui/icons/EditRounded'
+import CloseIcon from '@mui/icons-material/CloseRounded'
+import EditIcon from '@mui/icons-material/EditRounded'
 
 import { StorybookTheme } from '../../.storybook/components/StorybookTheme'
 

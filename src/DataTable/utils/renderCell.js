@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { DateTime } from 'luxon'
-import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import CancelIcon from '@material-ui/icons/Cancel'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import CancelIcon from '@mui/icons-material/Cancel'
 import { colors } from '../../ThemeProvider'
 import NumberFormat from 'react-number-format'
 

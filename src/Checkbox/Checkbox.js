@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { experimentalStyled as styled, darken } from '@material-ui/core/styles'
+import { experimentalStyled as styled, darken } from '@mui/material/styles'
 
-import MuiCheckbox from '@material-ui/core/Checkbox'
+import MuiCheckbox from '@mui/material/Checkbox'
 
 
 const CheckboxIcon = styled('span')({

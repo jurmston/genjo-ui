@@ -1,8 +1,8 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import Chip from '@material-ui/core/Chip'
-import { useTheme, lighten, darken } from '@material-ui/core/styles'
+import Chip from '@mui/material/Chip'
+import { useTheme, lighten, darken } from '@mui/material/styles'
 import { colors } from '../ThemeProvider'
 
 const PALETTE_SET = new Set(['primary', 'secondary', 'success', 'info', 'warning', 'error'])

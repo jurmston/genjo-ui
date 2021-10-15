@@ -2,9 +2,9 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
-import ButtonBase from '@material-ui/core/ButtonBase'
-import AscIcon from '@material-ui/icons/KeyboardArrowDownRounded'
-import DescIcon from '@material-ui/icons/KeyboardArrowUpRounded'
+import ButtonBase from '@mui/material/ButtonBase'
+import AscIcon from '@mui/icons-material/KeyboardArrowDownRounded'
+import DescIcon from '@mui/icons-material/KeyboardArrowUpRounded'
 
 import { useDataTable } from './useDataTable'
 

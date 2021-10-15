@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import IconButton from '@material-ui/core/IconButton'
-import { makeStyles } from '@material-ui/styles'
+import IconButton from '@mui/material/IconButton'
+import { makeStyles } from '@mui/styles'
 
-import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowLeft'
-import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight'
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
 
 const DRAWER_CLOSED_WIDTH = 21

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Skeleton from '@material-ui/core/Skeleton'
+import Skeleton from '@mui/material/Skeleton'
 
 
 import renderCell from './utils/renderCell'

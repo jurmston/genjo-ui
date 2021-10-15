@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { withStyles } from '@material-ui/styles'
-import Tab from '@material-ui/core/Tab'
+import { withStyles } from '@mui/styles'
+import Tab from '@mui/material/Tab'
 
 
 export const SimpleTab = withStyles((theme) => ({

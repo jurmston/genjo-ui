@@ -1,9 +1,9 @@
 import * as React from 'react'
 
-import { makeStyles } from '@material-ui/styles'
-import Tabs from '@material-ui/core/Tabs'
-import { useTheme } from '@material-ui/core/styles'
-import { styled } from '@material-ui/core/styles'
+import { makeStyles } from '@mui/styles'
+import Tabs from '@mui/material/Tabs'
+import { useTheme } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 
 
 export const ButtonTabs = styled(Tabs)(({ theme }) => ({

@@ -1,5 +1,5 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
+import Grid from '@mui/material/Grid'
 import { SearchField } from './SearchField'
 import { colors, colorsLight } from '../ThemeProvider/colors'
 

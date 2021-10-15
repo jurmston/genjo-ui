@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/styles'
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction'
+import { makeStyles } from '@mui/styles'
+import BottomNavigationAction from '@mui/material/BottomNavigationAction'
 import useStoredState from '../useStoredState'
 
-import MenuIcon from '@material-ui/icons/MenuRounded'
+import MenuIcon from '@mui/icons-material/MenuRounded'
 
 import { useDevice } from '../DeviceProvider'
 

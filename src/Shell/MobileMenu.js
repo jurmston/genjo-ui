@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Dialog from '@material-ui/core/Dialog'
-import IconButton from '@material-ui/core/IconButton'
-import Icon from '@material-ui/core/Icon'
-import { makeStyles } from '@material-ui/styles'
+import Dialog from '@mui/material/Dialog'
+import IconButton from '@mui/material/IconButton'
+import Icon from '@mui/material/Icon'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles({
   closeButtonContainer: {

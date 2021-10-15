@@ -2,7 +2,7 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { DateTime } from 'luxon'
-// import COMPONENT from '@material-ui/core/COMPONENT'
+// import COMPONENT from '@mui/material/COMPONENT'
 import './styles.css'
 
 

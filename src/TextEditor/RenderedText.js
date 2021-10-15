@@ -1,7 +1,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-// import COMPONENT from '@material-ui/core/COMPONENT'
+// import COMPONENT from '@mui/material/COMPONENT'
 import { Element } from './Element'
 import { Leaf } from './Leaf'
 import { createEditor } from 'slate'

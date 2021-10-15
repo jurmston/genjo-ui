@@ -1,5 +1,5 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
+import Typography from '@mui/material/Typography'
 import { DeviceProvider } from './DeviceProvider'
 import { useDevice } from './useDevice'
 

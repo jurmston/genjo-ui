@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@material-ui/styles'
-import Slide from '@material-ui/core/Slide'
-import Button from '@material-ui/core/Button'
+import { makeStyles } from '@mui/styles'
+import Slide from '@mui/material/Slide'
+import Button from '@mui/material/Button'
 
 import useDimensions from '../useDimensions'
 

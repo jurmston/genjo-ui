@@ -1,6 +1,6 @@
 import * as React from 'react'
-import Typography from '@material-ui/core/Typography'
-import { useTheme } from '@material-ui/core/styles'
+import Typography from '@mui/material/Typography'
+import { useTheme } from '@mui/material/styles'
 import AddressField from './AddressField'
 import GoogleMapsWrapper from '../../.storybook/components/GoogleMapsWrapper'
 

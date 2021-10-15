@@ -2,7 +2,7 @@
 import PropTypes from 'prop-types'
 
 import clsx from 'clsx'
-import LinearProgress from '@material-ui/core/LinearProgress'
+import LinearProgress from '@mui/material/LinearProgress'
 
 import getCellAlignment from './utils/getCellAlignment'
 

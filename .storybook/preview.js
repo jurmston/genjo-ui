@@ -1,13 +1,12 @@
 import React from 'react'
 import { addDecorator } from '@storybook/react'
-import { withPerformance } from 'storybook-addon-performance'
 import { useDarkMode } from 'storybook-dark-mode'
-import AdapterLuxon from '@material-ui/lab/AdapterLuxon'
-import LocalizationProvider from '@material-ui/lab/LocalizationProvider'
-import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
+import AdapterLuxon from '@mui/lab/AdapterLuxon'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import StyledEngineProvider from '@mui/material/StyledEngineProvider'
 import ThemeProvider from '../src/ThemeProvider'
 import { themeColors, lightTheme, darkTheme } from './theme'
-import { createTheme as createMuiTheme } from '@material-ui/core/styles'
+import { createTheme as createMuiTheme } from '@mui/material/styles'
 import { ThemeProvider as EmotionThemeProvider } from 'emotion-theming'
 
 
@@ -23,9 +22,6 @@ const cache = createCache({
 })
 
 cache.compat = true
-
-
-addDecorator(withPerformance)
 
 
 export const parameters = {

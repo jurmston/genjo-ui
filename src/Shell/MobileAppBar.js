@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@mui/styles'
 
-import AppsIcon from '@material-ui/icons/AppsRounded'
+import AppsIcon from '@mui/icons-material/AppsRounded'
 
 
 const useStyles = makeStyles(theme => ({

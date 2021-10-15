@@ -1,13 +1,13 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import TextField from '@material-ui/core/TextField'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import Popover from '@material-ui/core/Popover'
-import CalendarPicker from '@material-ui/lab/CalendarPicker'
-import DatePicker from '@material-ui/lab/DatePicker'
+import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import Popover from '@mui/material/Popover'
+import CalendarPicker from '@mui/lab/CalendarPicker'
+import DatePicker from '@mui/lab/DatePicker'
 import { DateTime } from 'luxon'
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 
 export const DEFAULT_FORMAT = DateTime.DATE_MED
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/styles'
-import Avatar from '@material-ui/core/Avatar'
-import ButtonBase from '@material-ui/core/ButtonBase'
-import Menu from '@material-ui/core/Menu'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import { makeStyles } from '@mui/styles'
+import Avatar from '@mui/material/Avatar'
+import ButtonBase from '@mui/material/ButtonBase'
+import Menu from '@mui/material/Menu'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
 import { colors } from '../ThemeProvider'
 
-import DownArrow from '@material-ui/icons/KeyboardArrowDownRounded'
+import DownArrow from '@mui/icons-material/KeyboardArrowDownRounded'
 
 
 const useStyles = makeStyles(theme => ({

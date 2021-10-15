@@ -1,6 +1,6 @@
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { experimentalStyled as styled } from '@mui/material/styles'
 
-import MuiSwitch from '@material-ui/core/Switch'
+import MuiSwitch from '@mui/material/Switch'
 
 
 export const Switch = styled(MuiSwitch)(({ theme }) => ({

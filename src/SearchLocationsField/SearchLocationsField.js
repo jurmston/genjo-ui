@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TextField from '@material-ui/core/TextField'
-import Autocomplete from '@material-ui/core/Autocomplete'
-import Typography from '@material-ui/core/Typography'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import { makeStyles } from '@material-ui/styles'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
+import Typography from '@mui/material/Typography'
+import ListItem from '@mui/material/ListItem'
+import ListItemText from '@mui/material/ListItemText'
+import InputAdornment from '@mui/material/InputAdornment'
+import { makeStyles } from '@mui/styles'
 
-import SearchIcon from '@material-ui/icons/Search'
+import SearchIcon from '@mui/icons-material/Search'
 
 import { usePlacesAutocomplete, useGeocoder } from '../GoogleMapsProvider'
 

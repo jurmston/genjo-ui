@@ -1,10 +1,10 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import ButtonBase from '@material-ui/core/ButtonBase'
-import Typography from '@material-ui/core/Typography'
-import AscendingIcon from '@material-ui/icons/ArrowDropUpRounded'
-import DescendingIcon from '@material-ui/icons/ArrowDropDownRounded'
+import ButtonBase from '@mui/material/ButtonBase'
+import Typography from '@mui/material/Typography'
+import AscendingIcon from '@mui/icons-material/ArrowDropUpRounded'
+import DescendingIcon from '@mui/icons-material/ArrowDropDownRounded'
 
 
 export function SortableHeader({ onClick, value, sortingKey, direction = 'asc', children, ...buttonProps }) {

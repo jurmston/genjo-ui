@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { alpha } from '@material-ui/core/styles'
-import IconButton from '@material-ui/core/IconButton'
-import { useTheme } from '@material-ui/core/styles'
-import CheckIcon from '@material-ui/icons/Check'
+import { alpha } from '@mui/material/styles'
+import IconButton from '@mui/material/IconButton'
+import { useTheme } from '@mui/material/styles'
+import CheckIcon from '@mui/icons-material/Check'
 
 import { colors } from '../ThemeProvider'
 

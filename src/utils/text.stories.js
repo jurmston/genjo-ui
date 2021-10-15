@@ -1,10 +1,10 @@
 import React from 'react'
 
-import TextField from '@material-ui/core/TextField'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
+import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
 
-import TextFieldsIcon from '@material-ui/icons/TextFields'
+import TextFieldsIcon from '@mui/icons-material/TextFields'
 
 import { titleCase } from './text'
 

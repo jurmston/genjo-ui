@@ -1,9 +1,9 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import Tooltip from '@material-ui/core/Tooltip'
-import IconButton from '@material-ui/core/IconButton'
-import AutoSizeIcon from '@material-ui/icons/ExpandRounded'
+import Tooltip from '@mui/material/Tooltip'
+import IconButton from '@mui/material/IconButton'
+import AutoSizeIcon from '@mui/icons-material/ExpandRounded'
 
 
 export const AutoSizeButton = React.memo(

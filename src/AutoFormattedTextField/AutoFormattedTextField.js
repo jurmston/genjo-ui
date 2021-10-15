@@ -1,12 +1,12 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 import { conformToMask } from 'react-text-mask'
-import TextField from '@material-ui/core/TextField'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import Tooltip from '@material-ui/core/Tooltip'
+import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 
-import AutoAwesomeIcon from '@material-ui/icons/AutoAwesome'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 
 /**
  * Breaks a string mask value into an array where each '#' is replaced wtih

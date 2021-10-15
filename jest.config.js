@@ -14,6 +14,7 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!@material-ui/)'
   ],
+  testEnvironment: 'jsdom',
   // moduleNameMapper: {
   //   '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
   //   '^components(.*)$': '<rootDir>/components$1',

@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import TableCell from '@material-ui/core/TableCell'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
-import { makeStyles } from '@material-ui/styles'
+import TableCell from '@mui/material/TableCell'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import { makeStyles } from '@mui/styles'
 import clsx from 'clsx'
 
 import SortAlphaIcon from '../icons/SortAlphaIcon'

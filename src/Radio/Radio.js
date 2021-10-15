@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { experimentalStyled as styled, darken } from '@material-ui/core/styles'
-import MuiRadio from '@material-ui/core/Radio'
+import { experimentalStyled as styled, darken } from '@mui/material/styles'
+import MuiRadio from '@mui/material/Radio'
 
 
 const RadioIcon = styled('span')({

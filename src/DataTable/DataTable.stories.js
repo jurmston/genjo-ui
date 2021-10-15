@@ -6,12 +6,12 @@ import useDimensions from '../useDimensions'
 import { DataTable } from './DataTable'
 import createApiClient from './mocks/api'
 import useSelectionSet from '../useSelectionSet'
-import Avatar from '@material-ui/core/Avatar'
-import IconButton from '@material-ui/core/IconButton'
+import Avatar from '@mui/material/Avatar'
+import IconButton from '@mui/material/IconButton'
 
-import EditIcon from '@material-ui/icons/Edit'
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircleOutline'
-import FavoriteIcon from '@material-ui/icons/FavoriteBorderRounded'
+import EditIcon from '@mui/icons-material/Edit'
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircleOutline'
+import FavoriteIcon from '@mui/icons-material/FavoriteBorderRounded'
 
 export default {
   title: 'Widgets/DataTable',
