@@ -1,8 +1,8 @@
-name: Develop Continuous Integration
+name: Continuous Integration
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ develop, main ]
 
 
 jobs:
