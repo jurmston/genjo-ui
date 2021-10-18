@@ -31,6 +31,7 @@ This flow is a simplified version of the "gitflow" model described [here](https:
     - Approve and merge the Pull Request.
 
 1. Verify that Chromatic Deployment Action succeeded.
+    - This may take a few minutes as Chromatic needs to republish the site after a successful build.
 
 1. Sync the master branch on your local machine
     ```
@@ -42,7 +43,7 @@ This flow is a simplified version of the "gitflow" model described [here](https:
 1. Create an annotated tag on the `main` branch.
     ```
     git co main
-    git tag -a v0.1.2 "Version 0.1.2" [Tag names should start with "v", I think mostly to confirm to Github.com conventions :-)]
+    git tag -a v0.1.2 -m "Version 0.1.2" [Tag names should start with "v", I think mostly to confirm to Github.com conventions :-)]
     git push --tags
     ```
 
@@ -56,3 +57,10 @@ This flow is a simplified version of the "gitflow" model described [here](https:
 
 1. Verify that `npm publish` ran correctly.
     - Review under actions panel on github.
+
+1. Rebase `develop` on top of `main`
+    ```
+    git checkout develop
+    git rebase main
+    git push
+    ```
