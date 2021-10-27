@@ -3,8 +3,6 @@ import * as React from 'react'
 import clsx from 'clsx'
 import { useSlate } from 'slate-react'
 
-import Button from '@mui/material/Button'
-
 import FormatBoldIcon from '@mui/icons-material/FormatBold'
 import FormatItalicIcon from '@mui/icons-material/FormatItalic'
 import LooksOneIcon from '@mui/icons-material/LooksOne'

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createEditor, Transforms } from 'slate'
+import { createEditor } from 'slate'
 import { Slate, withReact, ReactEditor } from 'slate-react'
 import { withHistory } from 'slate-history'
 
@@ -9,12 +9,11 @@ import { ButtonPanel } from './ButtonPanel'
 import { Input } from './Input'
 import { useStyles } from './styles'
 
-import { getEmptyValue } from './utils'
-
 import { withLinks } from './plugins/links'
 import { withDeleteBackwards } from './plugins/delete-backwards'
 import { Leaf } from './Leaf'
 import { Element } from './Element'
+
 
 export const TextEditor = ({
   readOnly = false,
@@ -38,7 +37,6 @@ export const TextEditor = ({
     () => {
       if (isFocused) {
         ReactEditor.focus(editor)
-        Transforms.move(editor, { edge: 'end' })
       }
     },
     [isFocused, editor]
@@ -91,7 +89,13 @@ export const TextEditor = ({
       }}
     >
       <Slate editor={editor} value={value} onChange={handleChange}>
-        <div className={classes.editor} onClick={handleManualFocus}>
+        <div
+          className={classes.editor}
+          onClick={handleManualFocus}
+          onKeyPress={handleManualFocus}
+          role="textbox"
+          tabIndex={0}
+        >
           <Input minHeight={minHeight} maxHeight={maxHeight} />
           <ButtonPanel />
         </div>
@@ -118,5 +122,3 @@ TextEditor.propTypes = {
   minHeight: PropTypes.number,
   maxHeight: PropTypes.number,
 }
-
-export default TextEditor

@@ -1,35 +1,8 @@
 import * as React from 'react'
-import { v4 as uuid } from 'uuid'
 import { TextEditor } from './TextEditor'
-import Typography from '@mui/material/Typography'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import Grid from '@mui/material/Grid'
-
-import { DateTime } from 'luxon'
-
-import Message from '../Message'
-import ThemeProvider from '../ThemeProvider'
-
-import getRandomUser from '../../.storybook/utils/getRandomUser'
-import { CacheProvider } from '@emotion/react'
-import createCache from '@emotion/cache'
-import { colors } from '../ThemeProvider/colors'
-
+import SaveButtonsDialog from '../SaveButtonsDialog'
 import { RenderedText } from './RenderedText'
-
-
-const cache = createCache({
-  key: 'css',
-  prepend: true,
-})
-
-cache.compat = true
-
-const createBlankContent = () => ([{
-  type: 'paragraph',
-  children: [{ text: '' }],
-}])
+import { useTextContent } from './useTextContent'
 
 
 export default {
@@ -38,15 +11,24 @@ export default {
 }
 
 export const Messages = () => {
-  const [value, setValue] = React.useState(createBlankContent())
+  const [value, setValue] = React.useState('')
+
+  const {
+    value: textContent,
+    setValue: setTextContent,
+    isDirty,
+    reset: resetTextContent,
+  } = useTextContent(value)
+
+  function handleSave() {
+    setValue(JSON.stringify(textContent))
+  }
 
   return (
-    <CacheProvider value={cache}>
-
-      <ThemeProvider theme={{ mode: 'light', primary: colors.indigo, secondary: colors.orange }}>
+    <>
         <TextEditor
-          value={value}
-          onChange={setValue}
+          value={textContent}
+          onChange={setTextContent}
           minHeight={200}
           maxHeight={200}
         />
@@ -54,9 +36,14 @@ export const Messages = () => {
         <div style={{ marginBottom: 32 }} />
 
         <RenderedText
-          value={value}
+          value={textContent}
         />
-      </ThemeProvider>
-    </CacheProvider>
+
+        <SaveButtonsDialog
+          isIn={isDirty}
+          onCancel={resetTextContent}
+          onSave={handleSave}
+        />
+    </>
   )
 }

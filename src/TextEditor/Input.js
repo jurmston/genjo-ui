@@ -1,7 +1,8 @@
 import * as React from 'react'
+import PropTypes from 'prop-types'
 
 import isHotkey from 'is-hotkey'
-import { Editable, ReactEditor, useSlate } from 'slate-react'
+import { Editable, useSlate } from 'slate-react'
 
 import useTextEditor from './useTextEditor'
 import { toggleMark } from './utils'
@@ -30,10 +31,6 @@ export const Input = ({ minHeight, maxHeight }) => {
   return (
     <div
       className={messageClasses.message}
-      onClick={() => ReactEditor.focus(editor)}
-      onKeyPress={() => ReactEditor.focus(editor)}
-      role="textbox"
-      tabIndex={0}
       ref={messageRef}
     >
       <Editable
@@ -84,4 +81,9 @@ export const Input = ({ minHeight, maxHeight }) => {
       />
     </div>
   )
+}
+
+Input.propTypes = {
+  minHeight: PropTypes.number,
+  maxHeight: PropTypes.number,
 }
