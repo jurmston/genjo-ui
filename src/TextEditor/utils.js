@@ -31,8 +31,6 @@ export function isMarkActive(editor, format) {
 export function toggleMark(editor, format) {
   const isActive = isMarkActive(editor, format)
 
-  console.log({ format, isActive })
-
   if (isActive) {
     Editor.removeMark(editor, format)
   } else {
@@ -44,8 +42,6 @@ export function toggleMark(editor, format) {
 export function toggleBlock(editor, format) {
   const isActive = isBlockActive(editor, format)
   const isList = LIST_TYPES.includes(format)
-
-  console.log({ isActive, isList, format })
 
   Transforms.unwrapNodes(editor, {
     match: n => LIST_TYPES.includes(!Editor.isEditor(n) && Element.isElement(n) && n.type),

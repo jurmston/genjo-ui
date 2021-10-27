@@ -32,12 +32,9 @@ export const withLinks = editor => {
 }
 
 export const insertLink = (editor, url, selection = null) => {
-  console.log({ url, selection })
   if (selection) {
     Transforms.select(editor, selection)
   }
-
-  console.log(editor.selection)
 
   if (editor.selection) {
     wrapLink(editor, url)
