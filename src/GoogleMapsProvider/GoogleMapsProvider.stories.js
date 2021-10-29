@@ -124,6 +124,19 @@ const PrimaryInner = () => {
             value={values?.formattedAddress ?? ''}
             placeholder="Search for an address..."
             onChange={handleSearchResult}
+            onClear={() => setValues({
+              text: '',
+              geopoint: {
+                latitude: 39.494942918409095,
+                longitude: -119.80110393425723,
+              },
+
+              components: null,
+
+              placeId: null,
+
+              formattedAddress: '',
+            })}
           />
         </Grid>
 

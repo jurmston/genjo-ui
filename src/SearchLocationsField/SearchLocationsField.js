@@ -6,9 +6,11 @@ import Typography from '@mui/material/Typography'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import InputAdornment from '@mui/material/InputAdornment'
+import IconButton from '@mui/material/IconButton'
 import { makeStyles } from '@mui/styles'
 
-import SearchIcon from '@mui/icons-material/Search'
+import SearchIcon from '@mui/icons-material/SearchRounded'
+import CloseIcon from '@mui/icons-material/CloseRounded'
 
 import { usePlacesAutocomplete, useGeocoder } from '../GoogleMapsProvider'
 
@@ -32,6 +34,7 @@ const useStyles = makeStyles({
 export const SearchLocationsField = ({
   value: valueFromProps,
   onChange,
+  onClear,
   predictionTypes,
   countryRestrictions,
   componentsMap,
@@ -175,6 +178,13 @@ export const SearchLocationsField = ({
                 <SearchIcon />
               </InputAdornment>
             ),
+            endAdornment: Boolean(valueFromProps) && Boolean(onClear) && (
+              <InputAdornment position="end">
+                <IconButton onClick={onClear}>
+                  <CloseIcon />
+                </IconButton>
+              </InputAdornment>
+            )
           }}
           inputProps={{
             ...params.inputProps,
@@ -207,4 +217,6 @@ SearchLocationsField.propTypes = {
   ]),
   helperText: PropTypes.string,
   componentsMap: PropTypes.object,
+  /** Callback to clear the input. */
+  onClear: PropTypes.func,
 }
