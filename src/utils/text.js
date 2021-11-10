@@ -4,7 +4,7 @@ export function titleCase({ value = '', prefixes = [], uppers = [], lowers = [] 
 
   const formattedWords = words.map((word, index) => {
     // Check that word is not empty
-    if (word.legnth === 0) {
+    if (!word) {
       return ''
     }
 
