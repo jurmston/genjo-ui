@@ -11,7 +11,7 @@ export default {
 }
 
 export const Messages = () => {
-  const [value, setValue] = React.useState('')
+  const [value, setValue] = React.useState('test')
 
   const {
     value: textContent,

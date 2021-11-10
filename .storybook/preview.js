@@ -42,6 +42,9 @@ export const decorators = [
       mode,
     }
 
+    // Stupid toggle to remove MUI theme.
+    // return <Story {...context} />
+
     return (
       <CacheProvider value={cache}>
 

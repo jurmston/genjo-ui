@@ -3,9 +3,9 @@ import isEqual from 'react-fast-compare'
 
 
 
-const createBlankContent = () => ([{
+const createContent = (defaultValue = '') => ([{
   type: 'paragraph',
-  children: [{ text: '' }],
+  children: [{ text: defaultValue }],
 }])
 
 
@@ -15,10 +15,14 @@ function deserialize(value) {
       return JSON.parse(value)
     }
   } catch (err) {
-    console.log(err)
+    if (typeof value === 'string') {
+      return createContent(value)
+    } else {
+      console.log(err)
+    }
   }
 
-  return createBlankContent()
+  return createContent()
 
 }
 
@@ -29,7 +33,7 @@ function deserialize(value) {
  * @returns {*}
  */
 export function useTextContent(serializedValue = '') {
-  const [value, setValue] = React.useState(createBlankContent())
+  const [value, setValue] = React.useState(createContent())
 
   const parsedOriginalTextContent = React.useMemo(
     () => deserialize(serializedValue),
