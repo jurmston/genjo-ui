@@ -24,8 +24,8 @@ const useStyles = makeStyles(theme => ({
   },
 
   optionsButton: {
-    borderTopRightRadius: 999,
-    borderBottomRightRadius: 999,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
   },
 
   actionsContainer: {
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     position: 'absolute',
     right: 0,
     transition: theme.transitions.create('opacity'),
-    borderRadius: 999,
+    borderRadius: 4,
     overflow: 'hidden',
     border: `1px solid ${theme.palette.divider}`,
     boxSizing: 'border-box',

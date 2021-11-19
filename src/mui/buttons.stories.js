@@ -1,25 +1,12 @@
 import React from 'react'
 
 import Grid from '@mui/material/Grid'
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
 import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
-import MenuItem from '@mui/material/MenuItem'
-import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
-import Table from '@mui/material/Table'
-import TableHead from '@mui/material/TableHead'
-import TableBody from '@mui/material/TableBody'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
+import IconButton from '@mui/material/IconButton'
 
-import ChecklistIcon from '@mui/icons-material/PlaylistAddRounded'
-
-
-import mountainsImage from '../media/mountains.jpg'
+import AddIcon from '@mui/icons-material/AddRounded'
+import EditIcon from '@mui/icons-material/EditRounded'
+import DeleteIcon from '@mui/icons-material/DeleteRounded'
 
 
 export default {
@@ -27,36 +14,84 @@ export default {
 }
 
 export const Primary = () => {
-  const [required, setRequired] = React.useState(false)
-  const [error, setError] = React.useState(false)
 
   return (
-    <Grid container spacing={2}>
+    <>
+      <Grid container spacing={2} sx={{ mb: 2 }}>
 
-      <Grid item>
-        <Button>
-          Text Button
-        </Button>
+        <Grid item>
+          <Button>
+            Text Button
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button variant="contained">
+            Contained Button
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button variant="outlined">
+            Outlined Button
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button variant="white">
+            White Button
+          </Button>
+        </Grid>
+
       </Grid>
 
-      <Grid item>
-        <Button variant="contained">
-          Contained Button
-        </Button>
-      </Grid>
+      <Grid container spacing={2} sx={{ mb: 2 }}>
 
-      <Grid item>
-        <Button variant="outlined">
-          Outlined Button
-        </Button>
-      </Grid>
+        <Grid item>
+          <Button startIcon={<AddIcon />}>
+            Text Button
+          </Button>
+        </Grid>
 
-      <Grid item>
-        <Button variant="white">
-          White Button
-        </Button>
-      </Grid>
+        <Grid item>
+          <Button variant="contained" startIcon={<AddIcon />}>
+            Contained Button
+          </Button>
+        </Grid>
 
-    </Grid>
+        <Grid item>
+          <Button variant="outlined" endIcon={<DeleteIcon />}>
+            Outlined Button
+          </Button>
+        </Grid>
+
+        <Grid item>
+          <Button variant="white" endIcon={<DeleteIcon />}>
+            White Button
+          </Button>
+        </Grid>
+
+        </Grid>
+
+      <Grid container spacing={2}>
+        <Grid item>
+          <IconButton>
+            <AddIcon />
+          </IconButton>
+        </Grid>
+
+        <Grid item>
+          <IconButton color="primary">
+            <EditIcon />
+          </IconButton>
+        </Grid>
+
+        <Grid item>
+          <IconButton color="secondary">
+            <DeleteIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+    </>
   )
 }

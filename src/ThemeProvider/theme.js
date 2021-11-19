@@ -1,4 +1,9 @@
-import { createTheme as createMuiTheme } from '@mui/material/styles'
+import {
+  createTheme as createMuiTheme,
+  alpha,
+  duration,
+  easing,
+} from '@mui/material/styles'
 import { colors } from './colors'
 
 function round(value) {
@@ -87,8 +92,27 @@ export function createShadow(...px) {
   ].join(',')
 }
 
-'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px'
+export const baseHighlight = [
+  `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+  `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+  `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+  `rgb(60 66 87 / 16%) 0px 0px 0px 0px`,
+  `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+  `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+  `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+].join(',')
 
+export function createHighlight(color) {
+  return [
+    `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+    `${alpha(color, 0.36)} 0px 0px 0px 4px`,
+    `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+    `rgb(60 66 87 / 16%) 0px 0px 0px 1px`,
+    `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+    `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+    `rgb(0 0 0 / 0%) 0px 0px 0px 0px`,
+  ].join(',')
+}
 
 const shadows = [
   'none',
@@ -119,8 +143,70 @@ const shadows = [
 ]
 
 
-export const createTheme = ({ mode, primary, secondary }) =>
-  createMuiTheme({
+export const highlightTransition = `box-shadow ${duration.standard}ms ${easing.easeInOut}`
+
+
+
+export const createTheme = ({ mode, primary, secondary }) => {
+  const BaseInput = {
+    defaultProps: {
+      disableUnderline: true,
+    },
+
+    styleOverrides: {
+      root: {
+        boxSizing: 'border-box',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderStyle: 'solid',
+        boxShadow: baseHighlight,
+        transition: highlightTransition,
+        borderColor: 'transparent',
+        backgroundColor: mode === 'light' ? '#fff' : '#000',
+        '&:hover': {
+          backgroundColor: mode === 'light' ? colors.grey[50] : 'rgba(0, 0, 0, 0.8)',
+        },
+        '&.Mui-focused': {
+          borderColor: primary[500],
+          backgroundColor: mode === 'light' ? '#fff' : '#000',
+          boxShadow: createHighlight(primary[500]),
+          '&.Mui-error': {
+            boxShadow: createHighlight(colors.red[500])
+          },
+        },
+        '&.Mui-error': {
+          borderColor: colors.red[500],
+        },
+      },
+      adornedStart: {
+        paddingLeft: 0,
+      },
+      adornedEnd: {
+        paddingRight: 0,
+      },
+      input: {
+        padding: `4px 6px`,
+        '&:-webkit-autofill': {
+          borderTopLeftRadius: 'inherit',
+          borderTopRightRadius: 'inherit',
+          borderBottomLeftRadius: 'inherit',
+          borderBottomRightRadius: 'inherit',
+        },
+      },
+      inputAdornedStart: {
+        paddingLeft: 4,
+      },
+      inputAdornedEnd: {
+        paddingRight: 4,
+      },
+      multiline: {
+        borderRadius: 4,
+        padding: 0,
+      },
+    },
+  }
+
+  return createMuiTheme({
     palette: {
       primary,
       secondary,
@@ -192,33 +278,45 @@ export const createTheme = ({ mode, primary, secondary }) =>
       MuiButton: {
         defaultProps: {
           disableElevation: true,
+          disableFocusRipple: true,
         },
 
         styleOverrides: {
           root: {
             ...typographyText,
+            fontWeight: 500,
             textTransform: 'none',
             // Creates padding that matches the size of inputs.
-            padding: '7px 16px',
-            borderRadius: 999,  // Creates pill shape
+            padding: `4px 8px`,
+            boxShadow: baseHighlight,
+            transition: highlightTransition,
+            borderRadius: 4,  // Creates pill shape
+            '&:focus': {
+              boxShadow: createHighlight(primary[500]),
+            },
+            '& .MuiButton-startIcon': {
+              marginRight: 4,
+              marginLeft: -2,
+            },
+            '& .MuiButton-endIcon': {
+              marginRight: -2,
+              marginLeft: 4,
+            },
           },
           outlined: {
-            padding: '6px 16px',
             boxShadow: '0 1px 4px 0 rgb(21 27 38 / 8%)',
             '&:hover': {
               boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
             },
           },
           contained: {
-            padding: '6px 16px',
-            border: `1px solid ${colors.grey[300]}`,
-            boxShadow: '0 1px 4px 0 rgb(21 27 38 / 8%)',
+            // border: `1px solid ${colors.grey[300]}`,
+            border: 0,
             '&:hover': {
               boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
             },
           },
           text: {
-            padding: '7px 16px',
           },
           iconSizeMedium: {
             fontSize: 14,
@@ -240,7 +338,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
               color: colors.grey[700],
               '&:hover': {
                 boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
-                backgroundColor: colors.grey[300],
+                backgroundColor: colors.common.white,
               },
             }
           },
@@ -281,6 +379,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
           },
         ],
       },
+
 
       // --- CHIP
       MuiChip: {
@@ -344,53 +443,13 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
       // -- FILLED INPUT
       MuiFilledInput: {
-        defaultProps: {
-          disableUnderline: true,
-        },
+        ...BaseInput,
 
         styleOverrides: {
+          ...BaseInput.styleOverrides,
           root: {
-            boxSizing: 'border-box',
-            borderRadius: 999,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: mode === 'light' ? colors.grey[300] : colors.grey[600],
+            ...BaseInput.styleOverrides.root,
             backgroundColor: mode === 'light' ? colors.grey[100] : colors.grey[900],
-            '&:hover': {
-              backgroundColor: mode === 'light' ? colors.grey[50] : 'rgba(0, 0, 0, 0.8)',
-            },
-            '&.Mui-focused': {
-              borderColor: primary[500],
-              backgroundColor: mode === 'light' ? '#fff' : '#000',
-            },
-            '&.Mui-error': {
-              borderColor: colors.red[500],
-            },
-          },
-          adornedStart: {
-            paddingLeft: 0,
-          },
-          adornedEnd: {
-            paddingRight: 0,
-          },
-          input: {
-            padding: `6px 12px`,
-            '&:-webkit-autofill': {
-              borderTopLeftRadius: 'inherit',
-              borderTopRightRadius: 'inherit',
-              borderBottomLeftRadius: 'inherit',
-              borderBottomRightRadius: 'inherit',
-            },
-          },
-          inputAdornedStart: {
-            paddingLeft: 4,
-          },
-          inputAdornedEnd: {
-            paddingRight: 4,
-          },
-          multiline: {
-            borderRadius: 17,
-            padding: 0,
           },
         },
       },
@@ -455,45 +514,33 @@ export const createTheme = ({ mode, primary, secondary }) =>
       // --- ICON BUTTON
       MuiIconButton: {
         defaultProps: {
+          disableFocusRipple: true,
           size: 'small',
+        },
+
+        styleOverrides: {
+          root: {
+            boxShadow: baseHighlight,
+            transition: highlightTransition,
+            '&:focus': {
+              boxShadow: createHighlight(primary[500]),
+            },
+          }
         },
       },
 
       // --- INPUT
       MuiInput: {
-        defaultProps: {
-          disableUnderline: true,
-        },
-
+        ...BaseInput,
         styleOverrides: {
+          ...BaseInput.styleOverrides,
           root: {
-            boxSizing: 'border-box',
-            borderRadius: 999,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: 'transparent',
-            '&:hover': {
-              backgroundColor: mode === 'light' ? colors.grey[200] : colors.grey[800],
-            },
-            '&.Mui-focused': {
-              backgroundColor: '#fff',
-              borderColor: primary[500],
-            },
-          },
-          formControl: {
+            ...BaseInput.styleOverrides.root,
             'label + &': {
               marginTop: 0,
             },
-          },
-
-          input: {
-            padding: `6px 12px`,
-          },
-
-          multiline: {
-            borderRadius: 17,
           }
-        },
+        }
       },
 
       // --- INPUT ADORNMENT
@@ -552,14 +599,22 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
         styleOverrides: {
           root: {
-            marginLeft: 0,
+            marginBottom: 4,
             position: 'relative',
+
           },
           formControl: {
             transform: 'none',
           },
           shrink: {
             transform: 'none',
+          },
+          standard: {
+            pointerEvents: 'auto',
+            transform: 'none',
+            '&$shrink': {
+              transform: 'none',
+            },
           },
           outlined: {
             pointerEvents: 'auto',
@@ -575,6 +630,16 @@ export const createTheme = ({ mode, primary, secondary }) =>
               transform: 'none',
             },
           },
+          '& .MuiInputBase-root': {
+            marginTop: 0,
+          }
+        },
+      },
+
+      // LINK
+      MuiLink: {
+        defaultProps: {
+          underline: 'hover',
         },
       },
 
@@ -666,47 +731,17 @@ export const createTheme = ({ mode, primary, secondary }) =>
 
       // --- OUTLINED INPUT
       MuiOutlinedInput: {
+        ...BaseInput,
         styleOverrides: {
+          ...BaseInput.styleOverrides,
           root: {
-            boxSizing: 'border-box',
-            borderRadius: 999,
-            borderWidth: 1,
-            borderStyle: 'solid',
+            ...BaseInput.styleOverrides.root,
             borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
-            '&:hover': {
-              backgroundColor: mode === 'light' ? colors.grey[200] : colors.grey[800],
-            },
-            '&.Mui-focused': {
-              borderWidth: 1,
-              borderColor: primary[500],
-            },
-            '&$error': {
-              borderColor: colors.red[500],
-            },
             // Hide the nothced outlined. It is designed to accomodate floating
             // labels which genjo-ui does not use.
             '& .MuiOutlinedInput-notchedOutline': {
               display: 'none',
             }
-          },
-          adornedStart: {
-            paddingLeft: 0,
-          },
-          adornedEnd: {
-            paddingRight: 0,
-          },
-          input: {
-            padding: `6px 12px`,
-          },
-          inputAdornedStart: {
-            paddingLeft: 4,
-          },
-          inputAdornedEnd: {
-            paddingRight: 4,
-          },
-          multiline: {
-            borderRadius: 17,
-            padding: 0,
           },
         },
       },
@@ -832,6 +867,7 @@ export const createTheme = ({ mode, primary, secondary }) =>
       },
     },
   })
+}
 
 export const defaultTheme = {
   mode: 'light',
