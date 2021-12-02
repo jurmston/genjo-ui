@@ -6,12 +6,14 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
+import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import ToggleButton from '@mui/material/ToggleButton'
 import Stack from '@mui/material/Stack'
 
 import HelpIcon from '@mui/icons-material/Help'
 
+import AddOn, { AddOnButton, AddOnLabel } from '../AddOn'
 
 export default {
   title: 'Material-UI/TextFields',
@@ -22,7 +24,7 @@ export const Primary = () => {
   const [error, setError] = React.useState(false)
 
   return (
-    <div style={{ width: 300 }}>
+    <div style={{ width: 450 }}>
       <Grid container spacing={2}>
         <Grid item>
           <Button
@@ -95,9 +97,9 @@ export const Primary = () => {
             placeholder="Give me string..."
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
+                <AddOn position="start">
                   $
-                </InputAdornment>
+                </AddOn>
               ),
 
               endAdornment: (
@@ -115,23 +117,19 @@ export const Primary = () => {
 
         <Grid item xs={12}>
           <TextField
+            id={null}
             variant="outlined"
-            label="Label"
             helperText="This text helps."
             placeholder="Give me string..."
             InputProps={{
               startAdornment: (
-                <InputAdornment position="start">
-                  $
-                </InputAdornment>
+                <AddOnLabel position="start">Name</AddOnLabel>
               ),
 
               endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton>
-                    <HelpIcon />
-                  </IconButton>
-                </InputAdornment>
+                <AddOnButton position="end">
+                  Click Me
+                </AddOnButton>
               )
             }}
             required={required}
@@ -179,6 +177,8 @@ export const Primary = () => {
           </Stack>
         </Grid>
       </Grid>
+
+      <div style={{ marginBottom: 400 }} />
     </div>
   )
 }

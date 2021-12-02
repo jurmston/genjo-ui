@@ -3,6 +3,7 @@ import isEqual from 'react-fast-compare'
 
 export function useValues(initialValues = {}, deps = []) {
   const [values, setValues] = React.useState({})
+  const [isReady, setIsReady] = React.useState(false)
   const [originalValues, setOriginalValues] = React.useState({})
 
   const setFieldValue = React.useCallback((field, value) => setValues({ ...values, [field]: value }), [values])
@@ -18,6 +19,7 @@ export function useValues(initialValues = {}, deps = []) {
   React.useEffect(() => {
     setValues({ ...initialValues })
     setOriginalValues({ ...initialValues })
+    setIsReady(true)
   }, deps)
 
   return {
@@ -26,6 +28,7 @@ export function useValues(initialValues = {}, deps = []) {
     setFieldValue,
     resetValues,
     isDirty,
+    isReady,
   }
 }
 

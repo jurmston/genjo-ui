@@ -48,19 +48,19 @@ export const Primary = () => {
       <Grid container spacing={2} sx={{ mb: 2 }}>
 
         <Grid item>
-          <Button startIcon={<AddIcon />}>
+          <Button color="magic" startIcon={<AddIcon />}>
             Text Button
           </Button>
         </Grid>
 
         <Grid item>
-          <Button variant="contained" startIcon={<AddIcon />}>
+          <Button color="magic" variant="contained" startIcon={<AddIcon />}>
             Contained Button
           </Button>
         </Grid>
 
         <Grid item>
-          <Button variant="outlined" endIcon={<DeleteIcon />}>
+          <Button color="magic" variant="outlined" endIcon={<DeleteIcon />}>
             Outlined Button
           </Button>
         </Grid>

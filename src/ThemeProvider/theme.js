@@ -211,6 +211,20 @@ export const createTheme = ({ mode, primary, secondary }) => {
       primary,
       secondary,
       mode,
+      grey: {
+        ...colors.grey,
+        main: colors.grey[700],
+        light: colors.grey[100],
+        dark: colors.grey[900],
+        contrastText: '#fff',
+      },
+      magic: {
+        ...colors.purple,
+        main: colors.purple[500],
+        light: colors.purple[200],
+        dark: colors.purple[800],
+        contrastText: '#fff',
+      },
     },
 
     typography: {
@@ -325,24 +339,6 @@ export const createTheme = ({ mode, primary, secondary }) => {
             },
           },
         },
-
-        variants: [
-          {
-            props: { variant: 'white' },
-            style: {
-              boxShadow: '0 1px 4px 0 rgb(21 27 38 / 8%)',
-              backgroundColor: colors.common.white,
-              borderWidth: 1,
-              borderStyle: 'solid',
-              borderColor: colors.grey[300],
-              color: colors.grey[700],
-              '&:hover': {
-                boxShadow: '0 2px 10px 0 rgb(21 27 38 / 10%)',
-                backgroundColor: colors.common.white,
-              },
-            }
-          },
-        ],
       },
 
       // BUTTON BASE
@@ -450,6 +446,7 @@ export const createTheme = ({ mode, primary, secondary }) => {
           root: {
             ...BaseInput.styleOverrides.root,
             backgroundColor: mode === 'light' ? colors.grey[100] : colors.grey[900],
+            borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
           },
         },
       },
@@ -557,6 +554,52 @@ export const createTheme = ({ mode, primary, secondary }) => {
             marginTop: '0 !important',
           },
         },
+
+        variants: [
+          {
+            props: { variant: 'addon' },
+            style: {
+              backgroundColor: mode === 'light' ? colors.grey[100] : colors.grey[900],
+              border: 0,
+              borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
+              borderStyle: 'solid',
+              margin: 0,
+              padding: 0,
+              height: 'unset',
+              maxHeight: 'unset',
+              alignSelf: 'stretch',
+
+              '& p': {
+                paddingLeft: 8,
+                paddingRight: 8,
+                fontWeight: 500,
+              },
+
+              '&.MuiInputAdornment-positionEnd': {
+                borderTopRightRadius: 4,
+                borderBottomRightRadius: 4,
+                borderLeftWidth: 1,
+
+                '& .MuiButtonBase-root': {
+                  borderTopRightRadius: 4,
+                  borderBottomRightRadius: 4,
+                },
+              },
+
+              '&.MuiInputAdornment-positionStart': {
+                borderTopLeftRadius: 4,
+                borderBottomLeftRadius: 4,
+                borderRightWidth: 1,
+
+                '& .MuiButtonBase-root': {
+                  borderTopLeftRadius: 4,
+                  borderBottomLeftRadius: 4,
+                },
+              },
+
+            }
+          },
+        ],
       },
 
       // --- INPUT BASE
