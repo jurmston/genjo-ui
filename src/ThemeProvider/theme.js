@@ -554,52 +554,6 @@ export const createTheme = ({ mode, primary, secondary }) => {
             marginTop: '0 !important',
           },
         },
-
-        variants: [
-          {
-            props: { variant: 'addon' },
-            style: {
-              backgroundColor: mode === 'light' ? colors.grey[100] : colors.grey[900],
-              border: 0,
-              borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
-              borderStyle: 'solid',
-              margin: 0,
-              padding: 0,
-              height: 'unset',
-              maxHeight: 'unset',
-              alignSelf: 'stretch',
-
-              '& p': {
-                paddingLeft: 8,
-                paddingRight: 8,
-                fontWeight: 500,
-              },
-
-              '&.MuiInputAdornment-positionEnd': {
-                borderTopRightRadius: 4,
-                borderBottomRightRadius: 4,
-                borderLeftWidth: 1,
-
-                '& .MuiButtonBase-root': {
-                  borderTopRightRadius: 4,
-                  borderBottomRightRadius: 4,
-                },
-              },
-
-              '&.MuiInputAdornment-positionStart': {
-                borderTopLeftRadius: 4,
-                borderBottomLeftRadius: 4,
-                borderRightWidth: 1,
-
-                '& .MuiButtonBase-root': {
-                  borderTopLeftRadius: 4,
-                  borderBottomLeftRadius: 4,
-                },
-              },
-
-            }
-          },
-        ],
       },
 
       // --- INPUT BASE
@@ -691,19 +645,6 @@ export const createTheme = ({ mode, primary, secondary }) => {
         defaultProps: {
           dense: true,
         },
-
-        variants: [
-          {
-            props: { variant: 'contained' },
-            style: {
-              borderRadius,
-              borderWidth: 1,
-              borderStyle: 'solid',
-              borderColor: mode === 'light' ? colors.grey[300] : colors.grey[500],
-              // backgroundColor: mode === 'light' ? colors.grey[50] : colors.grey[800],
-            },
-          }
-        ],
       },
 
       // --- LIST ITEM AVATAR
