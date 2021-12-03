@@ -1,1 +1,3 @@
-export { default } from './PasswordField'
+export { PasswordField as default } from './PasswordField'
+export * from './PasswordField'
+

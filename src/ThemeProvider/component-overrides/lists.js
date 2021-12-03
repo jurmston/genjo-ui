@@ -1,9 +1,26 @@
 export function createListOverrides({ palette }) {
+  const MuiList = {
+    defaultProps: {
+      disablePadding: true,
+    },
+  }
+
   const MuiListItem = {
     styleOverrides: {
       root: {
-        paddingTop: 4,
-        paddingBottom: 4,
+        paddingTop: 6,
+        paddingBottom: 6,
+        minHeight: 0,
+      },
+    },
+  }
+
+  const MuiMenuItem = {
+    styleOverrides: {
+      root: {
+        paddingTop: 6,
+        paddingBottom: 6,
+        minHeight: 0,
       },
     },
   }
@@ -28,6 +45,7 @@ export function createListOverrides({ palette }) {
     styleOverrides: {
       root: {
         margin: 0,
+        lineHeight: 1.12,
       },
       multiline: {
         margin: 0,
@@ -59,5 +77,7 @@ export function createListOverrides({ palette }) {
     MuiListItemIcon,
     MuiListItemText,
     MuiListSubheader,
+    MuiMenuItem,
+    MuiList,
   }
 }

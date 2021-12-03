@@ -9,7 +9,7 @@ export default {
 
 export const Main = () => {
   const [value, setValue] = React.useState('')
-  const [, setIsValid] = React.useState(false)
+  const [isValid, setIsValid] = React.useState(false)
 
   return (
     <div style={{ width: 300 }}>
@@ -26,11 +26,10 @@ export const Main = () => {
         value={value}
         label="Password"
         variant="filled"
-        onChange={(newValue, newIsValid) => {
-          setValue(newValue)
-          setIsValid(newIsValid)
-        }}
+        onPasswordChange={event => setValue(event.target.value)}
+        onValidityChange={setIsValid}
         detectPasswordStrength
+        helperText={`Password is ${isValid ? 'valid' : 'invalid'}`}
       />
     </div>
   )

@@ -2,11 +2,11 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import ButtonBase from '@mui/material/ButtonBase'
 import { useTheme } from '@mui/material/styles'
-import { highlightTransition, createHighlight } from '../ThemeProvider'
+import { highlightTransition, createHighlightSx,  } from '../ThemeProvider'
 import { AddOn } from './AddOn'
 
 
-export function AddOnButton({ sx, ...props }) {
+export function AddOnButton({ sx, color = 'grey', ...props }) {
   const theme = useTheme()
 
   return (
@@ -18,17 +18,16 @@ export function AddOnButton({ sx, ...props }) {
       sx={{
         transition: highlightTransition,
         fontWeight: 700,
+        backgroundColor: theme.palette[color][100],
 
-        '&:focus': {
-          boxShadow: createHighlight(theme.palette.primary.main),
-        },
+        ...createHighlightSx(theme.palette.primary.main, '4px'),
 
         '&:hover': {
-          backgroundColor: theme.palette.grey[200],
+          backgroundColor: theme.palette[color][200],
         },
 
         '&:active': {
-          backgroundColor: theme.palette.grey[300],
+          backgroundColor: theme.palette[color][300],
         },
         ...sx,
       }}
@@ -38,4 +37,5 @@ export function AddOnButton({ sx, ...props }) {
 
 AddOnButton.propTypes = {
   sx: PropTypes.object,
+  color: PropTypes.string,
 }

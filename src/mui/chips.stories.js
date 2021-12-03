@@ -19,7 +19,7 @@ export const Primary = () => {
       <Grid container spacing={2}>
 
         <Grid item>
-          <Chip label="Test" />
+          <Chip label="Test" clickable />
         </Grid>
 
         <Grid item>

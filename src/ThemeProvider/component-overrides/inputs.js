@@ -33,9 +33,6 @@ export function createInputOverrides({ palette, mode }) {
   }
 
   const styledBase = {
-    defaultProps: {
-      disableUnderline: true,
-    },
 
     styleOverrides: {
       root: {
@@ -91,6 +88,11 @@ export function createInputOverrides({ palette, mode }) {
 
   const MuiInput = {
     ...styledBase,
+
+    defaultProps: {
+      ...styledBase.defaultProps,
+      disableUnderline: true,
+    },
     styleOverrides: {
       ...styledBase.styleOverrides,
       root: {
@@ -105,6 +107,11 @@ export function createInputOverrides({ palette, mode }) {
   const MuiFilledInput = {
     ...styledBase,
 
+    defaultProps: {
+      ...styledBase.defaultProps,
+      disableUnderline: true,
+    },
+
     styleOverrides: {
       ...styledBase.styleOverrides,
       root: {
@@ -117,6 +124,7 @@ export function createInputOverrides({ palette, mode }) {
 
   const MuiOutlinedInput = {
     ...styledBase,
+
     styleOverrides: {
       ...styledBase.styleOverrides,
       root: {

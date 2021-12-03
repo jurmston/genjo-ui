@@ -7,17 +7,16 @@ export default {
   component: AutoFormattedTextField,
 }
 
-export const Main = ({ mask }) => {
+export const Main = args => {
   const [value, setValue] = React.useState('')
 
   return (
     <div style={{ width: 300 }}>
       <AutoFormattedTextField
+        {...args}
         label="Phone Number"
         variant="filled"
-        mask={mask}
         value={value}
-        autoFormat
         onChange={(event, newValue) => setValue(newValue)}
       />
     </div>
@@ -26,4 +25,6 @@ export const Main = ({ mask }) => {
 
 Main.args = {
   mask: '(###) ###-####',
+  disableToggleButton: false,
+  defaultToggleState: true,
 }

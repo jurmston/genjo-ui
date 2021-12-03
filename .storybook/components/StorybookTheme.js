@@ -10,8 +10,6 @@ export const StorybookTheme = ({ children }) => {
 
   const mode = useDarkMode() ? 'dark' : 'light'
 
-  console.log({ mode })
-
   return (
     <ThemeProvider
       mode={mode}

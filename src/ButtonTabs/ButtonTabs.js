@@ -50,23 +50,4 @@ export const ButtonTabs = styled(Tabs)(({ theme }) => ({
   },
 }))
 
-// export const ButtonTabs = props => {
-//   const theme = useTheme()
-//   console.log({ theme })
-//   const classes = useStyles(theme)
-
-//   return (
-//     <Tabs
-//       {...props}
-//       classes={{sses.root,
-//         flexContainer: classes.flexContainer,
-//         scroller: classes.scroller,
-//         indicator: classes.indicator,
-//         scrollButtons: classes.scrollB
-//         root: clauttons,
-//       }}
-//     />
-//   )
-// }
-
 export default ButtonTabs

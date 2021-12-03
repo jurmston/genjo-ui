@@ -1,14 +1,14 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import useFormControl from '@mui/material/FormControl/useFormControl'
-import AddOn from '.'
+import { useFormControl } from '@mui/material/FormControl'
+import { AddOn } from './AddOn'
+
 
 export function AddOnLabel({ id: idOverride, component, position, children, sx, ...props }) {
   const isStart = position === 'start'
 
   const muiFormControl = useFormControl()
-  console.log({ muiFormControl })
 
   const ref = React.useRef(null)
 

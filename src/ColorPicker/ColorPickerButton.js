@@ -5,41 +5,39 @@ import IconButton from '@mui/material/IconButton'
 import { useTheme } from '@mui/material/styles'
 import CheckIcon from '@mui/icons-material/Check'
 
-import { colors } from '../ThemeProvider'
+import { shadows } from '../ThemeProvider'
 
 
 /**
  * Button for selecting the picker color.
  */
 export function ColorPickerButton({
-  checked,
-  color = colors.blueGrey[500],
+  color,
   onClick,
+  changeDisplayColor,
 }) {
   const theme = useTheme()
 
   return (
       <IconButton
         onClick={onClick}
+        onMouseEnter={() => changeDisplayColor?.(color)}
+        onMouseLeave={() => changeDisplayColor?.('')}
         sx={{
           backgroundColor: color,
           color: theme.palette.white,
-          margin: theme.spacing(0.5),
+          boxShadow: shadows[2],
           minWidth: 22,
           minHeight: 22,
           '&:hover': {
             backgroundColor: alpha(color || '#fff', 0.5),
           },
         }}
-      >
-        {checked && <CheckIcon />}
-      </IconButton>
+      />
   )
 }
 
 ColorPickerButton.propTypes = {
-  /** If `true`, a check mark appears. */
-  checked: PropTypes.bool,
   /** Color of the button. */
   color: PropTypes.string,
   /** Label of the button. */

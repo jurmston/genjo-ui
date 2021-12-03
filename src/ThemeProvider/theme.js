@@ -1,7 +1,8 @@
 import { createTheme as createMuiTheme } from '@mui/material/styles'
-import { colors } from './colors'
+import { colors, createActionPalette } from './colors'
 import { fontFamily, typographyVariants } from './typography'
-import { shadows } from './shadows'
+import { shadows, popperShadow } from './shadows'
+import { createHighlightSx } from './highlights'
 
 
 import {
@@ -20,7 +21,7 @@ export const baseUnit = 8
 export const fontFamilyMono = 'ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;'
 
 
-export const createTheme = ({ mode, primary, secondary, grey = colors.grey }) => {
+export const createTheme = ({ mode, primary, secondary, grey = colors.stone }) => {
   const palette = {
     primary,
     secondary,
@@ -30,6 +31,7 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.grey }) =>
     info: colors.sky,
     success: colors.green,
     warning: colors.amber,
+    action: createActionPalette({ primary, grey }),
   }
 
   const typography = {
@@ -86,7 +88,7 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.grey }) =>
       MuiCard: {
         styleOverrides: {
           root: {
-            boxShadow: shadows[2],
+            boxShadow: shadows[3],
           },
         },
       },
@@ -104,7 +106,12 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.grey }) =>
           sizeSmall: {
             height: 20,
             fontSize: 11,
+            lineHeight: 1.5,
           },
+          clickable: {
+            fontWeight: 700,
+            ...createHighlightSx(palette.primary.main, 4),
+          }
         },
       },
 
@@ -255,7 +262,14 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.grey }) =>
         },
       },
 
-      // LIST
+      MuiMenu: {
+        styleOverrides: {
+          paper: {
+            marginTop: 8,
+            boxShadow: popperShadow,
+          },
+        },
+      },
 
 
       // PRIVATE NOTCHED OUTLINED
@@ -361,13 +375,6 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.grey }) =>
         defaultProps: {
           fullWidth: true,
           variant: 'outlined',
-        },
-      },
-
-      // TOGGLE BUTTON
-      MuiToggleButton: {
-        styleOverrides: {
-
         },
       },
 

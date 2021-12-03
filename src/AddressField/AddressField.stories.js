@@ -14,7 +14,6 @@ export const Primary = () => {
   const [components, setComponents] = React.useState({})
 
   const theme = useTheme()
-  console.log({ theme })
 
   return (
     <GoogleMapsWrapper>

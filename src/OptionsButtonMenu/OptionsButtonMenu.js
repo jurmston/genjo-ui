@@ -21,6 +21,11 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.action.active,
     padding: `4px 8px`,
     boxSizing: 'border-box',
+    '&:hover': {
+      // Fixes issue with right border disappearing on hover
+      borderRight: `1px solid ${theme.palette.divider}`,
+      backgroundColor: theme.palette.grey[100],
+    },
   },
 
   optionsButton: {

@@ -1,3 +1,5 @@
+import { alpha } from '@mui/material/styles'
+
 export const slate = {
   50: '#f8fafc',
   100: '#f1f5f9',
@@ -395,4 +397,10 @@ export const colors = {
   fuchsia,
   pink,
   rose,
+}
+
+export function createActionPalette({ primary, grey }) {
+  return {
+    selected: alpha(primary.main, 0.45),
+  }
 }

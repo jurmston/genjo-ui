@@ -16,7 +16,6 @@ const TEST_DISCIPLINES = ['Engineering', 'Local Government', 'Homeowner', 'Archi
 
 
 export function createDataSet(recordCount = 1000, contactsCount = 100) {
-  console.log('Creating data set...')
   const names = randomWords(recordCount)
   const contacts = getRandomUser(contactsCount)
 

@@ -1,4 +1,4 @@
-import { createHighlight, highlightTransition } from '../highlights'
+import { createHighlightSx, createHighlight, highlightTransition, baseHighlight } from '../highlights'
 
 
 export function createButtonOverrides({ typography, palette, shadows }) {
@@ -15,9 +15,6 @@ export function createButtonOverrides({ typography, palette, shadows }) {
         padding: `4px 8px`,
         transition: highlightTransition,
         borderRadius: 4,  // Creates pill shape
-        '&:focus': {
-          boxShadow: createHighlight(palette.primary.main),
-        },
         '& .MuiButton-startIcon': {
           marginRight: 4,
           marginLeft: -2,
@@ -26,6 +23,7 @@ export function createButtonOverrides({ typography, palette, shadows }) {
           marginRight: -2,
           marginLeft: 4,
         },
+        ...createHighlightSx(palette.primary.main, 4),
       },
       outlined: {
         boxShadow: shadows[1],
@@ -63,9 +61,7 @@ export function createButtonOverrides({ typography, palette, shadows }) {
       root: {
         borderRadius: 4,
         transition: highlightTransition,
-        '&:focus': {
-          boxShadow: createHighlight(palette.primary[500]),
-        },
+        ...createHighlightSx(palette.primary.main, 4),
       }
     },
   }

@@ -20,9 +20,10 @@ export const AddOn = React.forwardRef(function AddOn(props, ref) {
       sx={{
         borderRadius: 0,
         alignSelf: 'stretch',
-        fontWeight: 700,
+        fontWeight: 400,
         backgroundColor: colors.grey[100],
         border: 0,
+        color: 'text.secondary',
         borderColor: colors.grey[300],
         borderStyle: 'solid',
         margin: 0,

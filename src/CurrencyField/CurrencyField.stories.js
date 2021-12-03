@@ -29,6 +29,6 @@ export const Main = ({ ...args }) => {
 Main.args = {
   currencySymbol: '$',
   decimalPlaces: 2,
-  decimalSeperator: '.',
-  thousandsSeperator: ',',
+  decimalSeparator: '.',
+  thousandsSeparator: ',',
 }

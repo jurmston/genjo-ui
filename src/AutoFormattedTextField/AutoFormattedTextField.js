@@ -5,8 +5,10 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+import Chip from '@mui/material/Chip'
 
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
+import { AddOnButton } from '../AddOn'
 
 /**
  * Breaks a string mask value into an array where each '#' is replaced wtih
@@ -22,8 +24,26 @@ function convertStringMaskToArray(stringMask = '') {
   })
 }
 
-export const AutoFormattedTextField = ({ mask = '', value = '', onChange, autoFormat = false, ...textFieldProps }) => {
-  const [isAutoFormatting, setIsAutoFormatting] = React.useState(autoFormat)
+export const AutoFormattedTextField = ({
+  mask = '',
+  value = '',
+  onChange,
+  defaultToggleState = true,
+  disableToggleButton = false,
+  toggleButtonLabel = 'Auto',
+  ...textFieldProps
+}) => {
+  const [isAutoFormatting, setIsAutoFormatting] = React.useState(defaultToggleState)
+
+  function formatValue(rawValue = '') {
+    const formattedMask = convertStringMaskToArray(mask)
+
+    const result = conformToMask(rawValue, formattedMask, {
+      guide: false,
+    })
+
+    return result?.conformedValue ?? ''
+  }
 
   function handleChange(event) {
     let rawValue = event.target.value
@@ -32,13 +52,15 @@ export const AutoFormattedTextField = ({ mask = '', value = '', onChange, autoFo
       return onChange(event, rawValue)
     }
 
-    const formattedMask = convertStringMaskToArray(mask)
+    return onChange(event, formatValue(rawValue))
+  }
 
-    const result = conformToMask(rawValue, formattedMask, {
-      guide: false,
-    })
+  function handleToggleClick(event) {
+    if (!isAutoFormatting) {
+      onChange(event, formatValue(value))
+    }
 
-    return onChange(event, result?.conformedValue ?? '')
+    setIsAutoFormatting(s => !s)
   }
 
   return (
@@ -48,17 +70,14 @@ export const AutoFormattedTextField = ({ mask = '', value = '', onChange, autoFo
       onChange={handleChange}
       InputProps={{
         ...textFieldProps.InputProps,
-        endAdornment: autoFormat && (
-          <InputAdornment position="end">
-            <Tooltip arrow title={isAutoFormatting ? 'Turn auto-formatting OFF' : 'Turn auto-formatting ON'}>
-              <IconButton
-                onClick={() => setIsAutoFormatting(!isAutoFormatting)}
-                color={isAutoFormatting ? 'primary' : 'default'}
-              >
-                <AutoAwesomeIcon />
-              </IconButton>
-            </Tooltip>
-          </InputAdornment>
+        endAdornment: !disableToggleButton && (
+          <Chip
+            sx={{ mr: 0.5 }}
+            clickable
+            onClick={handleToggleClick}
+            color={isAutoFormatting ? 'primary': 'default'}
+            label={toggleButtonLabel}
+          />
         ),
       }}
     />

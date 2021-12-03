@@ -80,7 +80,7 @@ describe('Testing <CurrencyField />...', () => {
   it('should render the correct decimal separator', () => {
     const onChange = jest.fn()
 
-    render(<CurrencyField onChange={onChange} value={123456} decimalSeperator="?" />)
+    render(<CurrencyField onChange={onChange} value={123456} decimalSeparator="?" />)
 
     expect(screen.getByRole('textbox')).toHaveValue('1,234?56')
   })

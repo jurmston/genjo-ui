@@ -1,3 +1,6 @@
+export { default as AddOn } from './AddOn'
+export * from './AddOn'
+
 export { default as ButtonTab } from './ButtonTab'
 export * from './ButtonTab'
 

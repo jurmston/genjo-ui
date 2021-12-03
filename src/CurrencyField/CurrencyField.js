@@ -2,14 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import TextField from '@mui/material/TextField'
-import InputAdornment from '@mui/material/InputAdornment'
-
+import AddOn from '../AddOn'
 
 const INTEGER_KEY = /^\d$/
 const NEGATIVE_KEY = /^-$/
 
 
-function formatValue(value, places, decimalSeperator, thousandsSeparator) {
+function formatValue(value, places, decimalSeparator, thousandsSeparator) {
   // Absolute value removes the sign so that we can make sure to place it
   // to left when the value is less than zero (e.g. -0.01, not 0.-1)
   const numberValue = Math.abs(Number.parseInt(value, 10))
@@ -30,7 +29,7 @@ function formatValue(value, places, decimalSeperator, thousandsSeparator) {
   const signValue = value < 0 ? '-' : ''
   // Exclude the decimal part if the places value is less than zero to better
   // support zero-decimal currencies.
-  const combinedDecimalPart = places > 0 ? `${decimalSeperator}${decimalPart}` : ''
+  const combinedDecimalPart = places > 0 ? `${decimalSeparator}${decimalPart}` : ''
 
   return `${signValue}${seperatedIntegerParts}${combinedDecimalPart}`
 }
@@ -39,7 +38,7 @@ function formatValue(value, places, decimalSeperator, thousandsSeparator) {
 export const CurrencyField = ({
   currencySymbol = '$',
   decimalPlaces = 2,
-  decimalSeperator = '.',
+  decimalSeparator = '.',
   onChange,
   thousandsSeparator = ',',
   value,
@@ -62,7 +61,7 @@ export const CurrencyField = ({
   const displayValue = formatValue(
     value,
     decimalPlaces,
-    decimalSeperator,
+    decimalSeparator,
     thousandsSeparator,
   )
 
@@ -97,7 +96,7 @@ export const CurrencyField = ({
 
   const placeholderSign = toggleNegative ? '-' : ''
   const placeholderDecimal = decimalPlaces > 0
-    ? `${decimalSeperator}${''.padStart(decimalPlaces, '0')}`
+    ? `${decimalSeparator}${''.padStart(decimalPlaces, '0')}`
     : ''
   const placeholder = `${placeholderSign}0${placeholderDecimal}`
 
@@ -111,9 +110,9 @@ export const CurrencyField = ({
       InputProps={{
         ...textFieldProps.InputProps,
         startAdornment: (
-          <InputAdornment position="start" aria-label="currency symbol">
+          <AddOn position="start" aria-label="currency symbol">
             {currencySymbol}
-          </InputAdornment>
+          </AddOn>
         ),
       }}
       inputProps={{
@@ -134,7 +133,7 @@ CurrencyField.propTypes = {
   /** The number of fixed decimal places to show. */
   decimalPlaces: PropTypes.number,
   /** Symbol to use for seperating the integer and decimal parts. */
-  decimalSeperator: PropTypes.string,
+  decimalSeparator: PropTypes.string,
   /**
    * Callback fired when the value changes.
    *
