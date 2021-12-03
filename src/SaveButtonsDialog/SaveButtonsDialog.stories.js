@@ -12,7 +12,7 @@ export const Primary = () => {
   const [originalValue, setOriginalValue] = React.useState('Original Value')
 
   return (
-    <div style={{ width: 300 }}>
+    <div style={{ width: 500 }}>
       <TextField variant="filled" value={value} onChange={event => setValue(event.target.value)} />
 
       <SaveButtonsDialog
