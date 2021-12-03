@@ -121,9 +121,6 @@ export * from './OptionsButtonMenu'
 export { default as SortableHeader } from './SortableHeader'
 export * from './SortableHeader'
 
-export { default as StatusChip } from './StatusChip'
-export * from './StatusChip'
-
 export { default as SimpleTab } from './SimpleTab'
 export * from './SimpleTab'
 

@@ -4,7 +4,7 @@ import { darken, useTheme } from '@mui/material/styles'
 
 import MuiCheckbox from '@mui/material/Checkbox'
 import Box from '@mui/material/Box'
-import { baseHighlight, createHighlight, highlightTransition } from '../ThemeProvider'
+import { createHighlight, highlightTransition } from '../ThemeProvider'
 
 
 function CheckboxIcon({ indeterminate = false, color = 'primary', checked = false, ...props }) {
@@ -26,7 +26,6 @@ function CheckboxIcon({ indeterminate = false, color = 'primary', checked = fals
         height: 17,
         minWidth: 17,
         maxHeight: 17,
-        boxShadow: baseHighlight,
         boxSizing: 'border-box',
         transition: highlightTransition,
         border: `1px solid ${theme.palette.divider}`,

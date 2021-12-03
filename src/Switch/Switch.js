@@ -59,7 +59,7 @@ export function Switch({ color = 'primary', ...props }) {
 
         '& .MuiSwitch-track': {
           // border: `1px solid ${theme.palette.grey[300]}`,
-          borderRadius: 1,
+          borderRadius: 2,
           opacity: 1,
           boxShadow: 'inset 0 0 0 1px rgba(16,22,26,.2), inset 0 -1px 0 rgba(16,22,26,.1)',
           backgroundColor: '#e8ecee',

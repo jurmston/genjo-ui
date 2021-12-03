@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ThemeProvider } from './ThemeProvider'
-import { colors, colorsLight } from '../ThemeProvider/colors'
+import { colors } from '../ThemeProvider/colors'
 
 import { StorybookTheme } from '../../.storybook/components/StorybookTheme'
 
@@ -57,16 +57,6 @@ export const Primary = () => {
       </Grid>
 
       <ThemeProvider value={color} onChange={setColor} />
-    </StorybookTheme>
-  )
-}
-
-export const Secondary = () => {
-  const [color, setColor] = React.useState(colors.blue[200])
-
-  return (
-    <StorybookTheme>
-      <ThemeProvider value={color} onChange={setColor} colors={colorsLight} />
     </StorybookTheme>
   )
 }

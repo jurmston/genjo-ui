@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ColorPicker } from './ColorPicker'
-import { colors, colorsLight } from '../ThemeProvider/colors'
+import { colors } from '../ThemeProvider/colors'
 
 import { StorybookTheme } from '../../.storybook/components/StorybookTheme'
 
@@ -16,16 +16,6 @@ export const Primary = () => {
   return (
     <StorybookTheme>
       <ColorPicker value={color} onChange={setColor} />
-    </StorybookTheme>
-  )
-}
-
-export const Secondary = () => {
-  const [color, setColor] = React.useState(colors.blue[200])
-
-  return (
-    <StorybookTheme>
-      <ColorPicker value={color} onChange={setColor} colors={colorsLight} />
     </StorybookTheme>
   )
 }

@@ -36,8 +36,8 @@ const createThemeFromMUITheme = (name, theme) => {
 }
 
 export const themeColors = {
-  primary: colors.red,
-  secondary: colors.teal,
+  primary: colors.indigo,
+  secondary: colors.emerald,
 }
 
 export const lightTheme = createThemeFromMUITheme('light', createMuiTheme({

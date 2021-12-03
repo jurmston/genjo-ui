@@ -21,7 +21,6 @@ export const Main = ({ ...args }) => {
     <div style={{ width: 300 }}>
       <DateField
         label="Start Date"
-        variant="filled"
         value={value}
         onChange={setValue}
         hasDialog={args.hasDialog}

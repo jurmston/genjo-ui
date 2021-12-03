@@ -37,37 +37,25 @@ export const Primary = () => {
           </Button>
         </Grid>
 
-        <Grid item>
-          <Button variant="white">
-            White Button
-          </Button>
-        </Grid>
-
       </Grid>
 
       <Grid container spacing={2} sx={{ mb: 2 }}>
 
         <Grid item>
-          <Button color="magic" startIcon={<AddIcon />}>
+          <Button color="secondary" startIcon={<AddIcon />}>
             Text Button
           </Button>
         </Grid>
 
         <Grid item>
-          <Button color="magic" variant="contained" startIcon={<AddIcon />}>
+          <Button color="secondary" variant="contained" startIcon={<AddIcon />}>
             Contained Button
           </Button>
         </Grid>
 
         <Grid item>
-          <Button color="magic" variant="outlined" endIcon={<DeleteIcon />}>
+          <Button color="secondary" variant="outlined" endIcon={<DeleteIcon />}>
             Outlined Button
-          </Button>
-        </Grid>
-
-        <Grid item>
-          <Button variant="white" endIcon={<DeleteIcon />}>
-            White Button
           </Button>
         </Grid>
 

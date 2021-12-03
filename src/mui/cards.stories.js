@@ -35,7 +35,7 @@ export const Primary = () => {
       <Grid container spacing={2}>
 
         <Grid item xs={12}>
-          <Card variant="contained">
+          <Card raised>
             <CardMedia
               style={{ height: 300 }}
               image={mountainsImage}

@@ -9,6 +9,8 @@ import TimePicker from '@mui/lab/TimePicker'
 import { DateTime } from 'luxon'
 import TimeIcon from '@mui/icons-material/AccessTimeRounded'
 
+import { AddOnButton } from '../AddOn'
+
 const validFormats = [
   'h:mm a',
   'hh:mm a',
@@ -166,19 +168,17 @@ export const TimeField = ({
           endAdornment: !disablePicker && (
             <>
               {textFieldProps.InputProps?.endAdornment}
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setPickerState(pickerState === 'closed'
-                    ? 'hours'
-                    : pickerState === 'hours'
-                    ? 'minutes'
-                    : 'closed'
-                  )}
-                  color={pickerIsOpen ? 'primary' : 'default'}
-                >
-                  <TimeIcon />
-                </IconButton>
-              </InputAdornment>
+              <AddOnButton
+                position="end"
+                onClick={() => setPickerState(pickerState === 'closed'
+                  ? 'hours'
+                  : pickerState === 'hours'
+                  ? 'minutes'
+                  : 'closed'
+                )}
+              >
+                <TimeIcon />
+              </AddOnButton>
             </>
           ),
         }}

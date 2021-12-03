@@ -40,6 +40,7 @@ export const SnackbarMessage = ({ text, type, kill, shouldMakeRoom }) => {
           sx={{ marginTop: 1, maxWidth: 300 }}
           onClose={() => setIsOnScreen(false)}
           severity={type}
+          variant="filled"
         >
           {text}
         </Alert>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { darken, useTheme } from '@mui/material/styles'
 import MuiRadio from '@mui/material/Radio'
 import Box from '@mui/material/Box'
-import { highlightTransition, createHighlight, baseHighlight } from '../ThemeProvider'
+import { highlightTransition, createHighlight } from '../ThemeProvider'
 
 
 function RadioIcon({ color = 'primary', checked = false, ...props }) {
@@ -23,7 +23,6 @@ function RadioIcon({ color = 'primary', checked = false, ...props }) {
         height: 17,
         minWidth: 17,
         maxHeight: 17,
-        boxShadow: baseHighlight,
         boxSizing: 'border-box',
         transition: highlightTransition,
         border: `1px solid ${theme.palette.divider}`,

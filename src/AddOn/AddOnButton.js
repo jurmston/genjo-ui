@@ -2,7 +2,7 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 import ButtonBase from '@mui/material/ButtonBase'
 import { useTheme } from '@mui/material/styles'
-import { baseHighlight, highlightTransition, createHighlight } from '../ThemeProvider'
+import { highlightTransition, createHighlight } from '../ThemeProvider'
 import { AddOn } from './AddOn'
 
 
@@ -16,7 +16,6 @@ export function AddOnButton({ sx, ...props }) {
       disableRipple
       disableTouchRipple
       sx={{
-        boxShadow: baseHighlight,
         transition: highlightTransition,
         fontWeight: 700,
 

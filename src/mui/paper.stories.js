@@ -9,7 +9,7 @@ export default {
 }
 
 
-const ELEVATIONS = [0, 1, 2, 4, 8, 24]
+const ELEVATIONS = [0, 1, 2, 3, 4, 5, 6]
 
 
 export const Primary = () => {

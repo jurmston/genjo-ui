@@ -1,13 +1,13 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 import TextField from '@mui/material/TextField'
-import InputAdornment from '@mui/material/InputAdornment'
-import IconButton from '@mui/material/IconButton'
 import Popover from '@mui/material/Popover'
 import CalendarPicker from '@mui/lab/CalendarPicker'
 import DatePicker from '@mui/lab/DatePicker'
 import { DateTime } from 'luxon'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+
+import { AddOnButton } from '../AddOn'
 
 export const DEFAULT_FORMAT = DateTime.DATE_MED
 
@@ -154,15 +154,13 @@ export const DateField = ({
         InputProps={{
           ...textFieldProps.InputProps,
           endAdornment: !disablePicker && (
-            <InputAdornment position="end">
-              <IconButton
-                disabled={disabled}
-                onClick={() => setPickerIsOpen(!pickerIsOpen)}
-                color={pickerIsOpen ? 'primary' : 'default'}
-              >
-                <CalendarTodayIcon />
-              </IconButton>
-            </InputAdornment>
+            <AddOnButton
+              position="end"
+              disabled={disabled}
+              onClick={() => setPickerIsOpen(!pickerIsOpen)}
+            >
+              <CalendarTodayIcon />
+            </AddOnButton>
           ),
         }}
       />
@@ -196,7 +194,10 @@ export const DateField = ({
             horizontal: 'left',
           }}
           style={{
-            marginTop: 8,
+            marginTop: 12,
+          }}
+          PaperProps={{
+            elevation: 4,
           }}
         >
           <CalendarPicker

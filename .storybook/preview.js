@@ -51,8 +51,8 @@ export const decorators = [
 
           <ThemeProvider
             mode={mode}
-            primaryColor={themeColors.primaryColor}
-            secondaryColor={themeColors.secondaryColor}
+            primary={themeColors.primary}
+            secondary={themeColors.secondary}
           >
             <LocalizationProvider dateAdapter={AdapterLuxon}>
               <Story {...context} />

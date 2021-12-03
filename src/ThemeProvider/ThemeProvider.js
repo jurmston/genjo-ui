@@ -14,7 +14,7 @@ import ThemeContext from './ThemeContext'
  */
 export const ThemeProvider = ({
   primary: primaryFromProps = colors.indigo,
-  secondary: secondaryFromProps = colors.teal,
+  secondary: secondaryFromProps = colors.orange,
   mode: modeFromProps = 'light',
   children,
 }) => {

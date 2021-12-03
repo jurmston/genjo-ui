@@ -1,7 +1,6 @@
 import React from 'react'
 import Grid from '@mui/material/Grid'
 import { SearchField } from './SearchField'
-import { colors, colorsLight } from '../ThemeProvider/colors'
 
 import { StorybookTheme } from '../../.storybook/components/StorybookTheme'
 
