@@ -1,32 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@mui/styles'
 import Slide from '@mui/material/Slide'
 import Button from '@mui/material/Button'
+import Box from '@mui/material/Box'
 
 import useDimensions from '../useDimensions'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'relative',
-    // left: '50%',
-    // transform: 'translateX(-50%)',
-    width: '100%',
-    height: 120,
-  },
-  card: {
-    zIndex: 9999,
-    position: 'fixed',
-    bottom: 32,
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[8],
-    padding: theme.spacing(2),
-    display: 'flex',
-    alignItems: 'center',
-  },
-}))
 
 export const SaveButtonsDialog = ({
   isIn = false,
@@ -34,14 +14,34 @@ export const SaveButtonsDialog = ({
   onSave,
   children,
 }) => {
-  const classes = useStyles()
 
   const [ref, dim] = useDimensions()
 
   return (
-    <div className={classes.root} ref={ref}>
+    <Box
+      ref={ref}
+      sx={{
+        position: 'relative',
+        width: '100%',
+        height: 120,
+      }}
+    >
       <Slide in={isIn} direction="up">
-        <div className={classes.card} style={{ width: dim.width - 48, left: dim.left + 24 }}>
+        <Box
+          sx={{
+            zIndex: 9999,
+            position: 'fixed',
+            bottom: 32,
+            bgcolor: 'background.paper',
+            borderRadius: 1,
+            boxShadow: 8,
+            padding: 2,
+            display: 'flex',
+            alignItems: 'center',
+            width: dim.width - 48,
+            left: dim.left + 24,
+          }}
+        >
           {children ?? (
             <>
               <Button onClick={onCancel}>Discard Changes</Button>
@@ -53,9 +53,9 @@ export const SaveButtonsDialog = ({
               </Button>
             </>
           )}
-        </div>
+        </Box>
       </Slide>
-    </div>
+    </Box>
   )
 }
 
