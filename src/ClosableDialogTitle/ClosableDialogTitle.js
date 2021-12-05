@@ -1,44 +1,47 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@mui/styles'
 import DialogTitle from '@mui/material/DialogTitle'
+import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-    position: 'relative',
-  },
-  closeButtonContainer: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-  },
-  closeButton: {
-    color: theme.palette.text.secondary,
-  },
-}))
 
 /**
  * A dyanmic content panel that opens on the right side of the viewport.
  */
-export const ClosableDialogTitle = ({ children, onClose, ...other }) => {
-  const classes = useStyles()
-
+export function ClosableDialogTitle({ children, onClose, ...other }) {
   return (
-    <DialogTitle className={classes.root} {...other}>
+    <DialogTitle
+      sx={{
+        m: 0,
+        p: 2,
+        position: 'relative',
+        ...other.sx
+      }}
+      {...other}
+    >
       <Typography variant="h3" component="div">
         {children}
       </Typography>
       {onClose ? (
-        <div className={classes.closeButtonContainer}>
-          <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+        <Box
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              color: 'text.secondary',
+            }}
+          >
             <CloseIcon />
           </IconButton>
-        </div>
+        </Box>
       ) : null}
     </DialogTitle>
   )
@@ -54,5 +57,3 @@ ClosableDialogTitle.propTypes = {
    */
   onClose: PropTypes.func.isRequired,
 }
-
-export default ClosableDialogTitle
