@@ -1,20 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@mui/styles'
 import Typography from '@mui/material/Typography'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import CircleLoader from 'genjo-ui/core/CircleLoader'
-
-const useStyles = makeStyles({
-  container: {
-    height: 200,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
+import Box from '@mui/material/Box'
+import CircleLoader from '../CircleLoader'
 
 export const TableResultsLoader = ({
   colSpan = 1,
@@ -22,22 +12,28 @@ export const TableResultsLoader = ({
   count = 0,
   children = 'No Results',
 }) => {
-  const classes = useStyles()
-
   if (!isLoading && count) {
     return null
   }
 
   return (
     <TableRow>
-      <TableCell colSpan={colSpan} className={classes.root}>
-        <div className={classes.container}>
+      <TableCell colSpan={colSpan}>
+        <Box
+          sx={{
+            height: 200,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           {isLoading ? (
             <CircleLoader />
           ) : typeof children === 'string' ? (
-            <Typography variant="h6" color="textSecondary">{children}</Typography>
+            <Typography variant="h4" color="textSecondary">{children}</Typography>
           ) : children}
-        </div>
+        </Box>
       </TableCell>
     </TableRow>
   )
