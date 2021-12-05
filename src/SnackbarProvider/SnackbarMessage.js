@@ -37,7 +37,7 @@ export const SnackbarMessage = ({ text, type, kill, shouldMakeRoom }) => {
     <Collapse in={isFullHeight} onExited={() => kill()}>
       <Slide in={isOnScreen && !shouldMakeRoom} direction="right" onExited={() => setIsFullHeight(false)}>
         <Alert
-          sx={{ marginTop: 1, maxWidth: 300 }}
+          sx={{ marginTop: 1, maxWidth: 300, boxShadow: 8 }}
           onClose={() => setIsOnScreen(false)}
           severity={type}
           variant="filled"

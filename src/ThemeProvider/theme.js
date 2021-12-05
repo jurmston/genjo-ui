@@ -1,5 +1,5 @@
 import { createTheme as createMuiTheme } from '@mui/material/styles'
-import { colors, createActionPalette } from './colors'
+import { colors } from './colors'
 import { fontFamily, typographyVariants } from './typography'
 import { shadows, popperShadow } from './shadows'
 import { createHighlightSx } from './highlights'
@@ -21,7 +21,7 @@ export const baseUnit = 8
 export const fontFamilyMono = 'ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;'
 
 
-export const createTheme = ({ mode, primary, secondary, grey = colors.stone }) => {
+export const createTheme = ({ mode, primary, secondary, grey = colors.slate }) => {
   const palette = {
     primary,
     secondary,
@@ -31,7 +31,6 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.stone }) =
     info: colors.sky,
     success: colors.green,
     warning: colors.amber,
-    action: createActionPalette({ primary, grey }),
   }
 
   const typography = {
@@ -197,6 +196,16 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.stone }) =
       // --- INPUT ADORNMENT
       MuiInputAdornment: {
         styleOverrides: {
+          root: {
+            // Adjust the default size of the icon button to better fit inside
+            // the input.
+            '& .MuiIconButton-root': {
+              marginTop: 1,
+              height: 22,
+              width: 22,
+            },
+          },
+
           positionStart: {
             marginLeft: 6,
             marginRight: 0,

@@ -398,9 +398,3 @@ export const colors = {
   pink,
   rose,
 }
-
-export function createActionPalette({ primary, grey }) {
-  return {
-    selected: alpha(primary.main, 0.45),
-  }
-}

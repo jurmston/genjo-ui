@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     bottom: 32,
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[4],
+    boxShadow: theme.shadows[8],
     padding: theme.spacing(2),
     display: 'flex',
     alignItems: 'center',

@@ -7,27 +7,23 @@ import InputAdornment from '@mui/material/InputAdornment'
 import SearchIcon from '@mui/icons-material/SearchRounded'
 import CloseIcon from '@mui/icons-material/CloseRounded'
 import useDebounce from '../useDebounce'
+import useSyncedProp from '../useSyncedProp'
 
 
+/**
+ * MuiTextField with a debounced input that exectues a search callback.
+ *
+ * Don't forget to memoize the callback!
+ * @returns
+ */
 export function SearchField({
-  value: valueFromProps,
-  onChange,
+  onSearch,
   delay = 250,
   shouldGrowOnFocus = false,
+  fullWidth,
   ...textFieldProps
 }) {
-  const [inputValue, setInputValue] = React.useState('')
-  const [isFocused, setIsFocused] = React.useState(false)
-
-  function handleFocus(event) {
-    setIsFocused(true)
-    textFieldProps?.onFocus?.(event)
-  }
-
-  function handleBlur(event) {
-    setIsFocused(false)
-    textFieldProps?.onBlur?.(event)
-  }
+  const [inputValue, setInputValue] = useSyncedProp('')
 
   function handleChange(event) {
     setInputValue(event.target.value)
@@ -35,38 +31,39 @@ export function SearchField({
 
   function handleClear() {
     setInputValue('')
+    onSearch('')
   }
 
-  // Synchroize local input value with changes in props value.
-  React.useEffect(
-    () => {
-      setInputValue(valueFromProps)
-    },
-    [valueFromProps]
-  )
-
-  // Update the onChange handler when the input changes after a debounce.
+  // Update the onSearch handler when the input changes after a debounce.
   const debouncedInputValue = useDebounce(inputValue, delay)
   React.useEffect(
     () => {
-      if (valueFromProps !== debouncedInputValue) {
-        onChange(debouncedInputValue)
+      if (debouncedInputValue) {
+        onSearch(debouncedInputValue)
       }
     },
-    [valueFromProps, debouncedInputValue, onChange]
+    [debouncedInputValue, onSearch]
   )
 
   return (
     <TextField
       {...textFieldProps}
-      fullWidth={!shouldGrowOnFocus
-        ? undefined  // rely on theme default
-        : isFocused
-      }
+      fullWidth={shouldGrowOnFocus ? false : fullWidth}
       value={inputValue}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
       onChange={handleChange}
+      sx={{
+        '&:focus-within': {
+          width: shouldGrowOnFocus || fullWidth
+          ? '100%'
+          : 'unset',
+
+          'input': {
+            width: shouldGrowOnFocus || fullWidth
+              ? '100%'
+              : 'unset',
+          },
+        },
+      }}
       InputProps={{
         ...textFieldProps.InputProps,
         startAdornment: (
@@ -87,7 +84,9 @@ export function SearchField({
 }
 
 SearchField.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func,
+  initialValue: PropTypes.string,
+  onSearch: PropTypes.func,
   delay: PropTypes.number,
+  shouldGrowOnFocus: PropTypes.bool,
+  fullWidth: PropTypes.bool,
 }

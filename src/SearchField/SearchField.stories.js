@@ -10,30 +10,34 @@ export default {
 }
 
 export const Primary = () => {
-  const [query, setQuery] = React.useState('')
+  const [queries, setQueries] = React.useState([])
+
+  const handleSearch = React.useCallback(
+    query => {
+      setQueries(q => query ? [...q, query] : [])
+    },
+    [],
+  )
 
   return (
     <StorybookTheme>
-      <Grid container spacing={1} style={{ maxWidth: 400 }}>
+      <Grid container spacing={1} style={{ width: 500 }}>
         <Grid item xs={12}>
           <SearchField
             label="Search"
             placeholder="Start searching..."
-            value={query}
-            onChange={setQuery}
-            helperText={query}
+            onSearch={handleSearch}
+            shouldGrowOnFocus
           />
         </Grid>
 
         <Grid item xs={12} style={{ alignSelf: 'flex-end' }}>
-          <SearchField
-            shouldGrowOnFocus
-            label="Search"
-            placeholder="Start searching..."
-            value={query}
-            onChange={setQuery}
-            helperText={query}
-          />
+          <ul>
+            {queries.length === 0 && <li>No queries yet.</li>}
+            {queries.map((q, i) => (
+              <li key={i}>{q}</li>
+            ))}
+          </ul>
         </Grid>
       </Grid>
     </StorybookTheme>

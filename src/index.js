@@ -149,6 +149,9 @@ export * from './useOpenable'
 export { default as useCurrentLocation } from './useCurrentLocation'
 export * from './useCurrentLocation'
 
-export * from './utils'
+export { default as useSyncedProp } from './useSyncedProp'
+export * from './useSyncedProp'
 
+// Utilities and Misc
+export * from './utils'
 export * from './icons'

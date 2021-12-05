@@ -20,7 +20,7 @@ export function AspectRatioBox({ children, aspectRatio = 1, ...rest }) {
   return (
     <Box
       sx={{
-        overflow: 'hidden',
+        // overflow: 'hidden',
         position: 'relative',
         width: '100%',
         height: 0,

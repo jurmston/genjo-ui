@@ -1,12 +1,12 @@
 export const fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"'
 
 export const letterSpacings  = {
-  tightest: '-0.05em',
-  tight: '-0.025em',
+  tightest: '-0.025em',
+  tight: '-0.015em',
   normal: '0em',
-  wide: '0.025em',
-  wider: '0.05em',
-  widest: '0.1em',
+  wide: '0.015em',
+  wider: '0.025em',
+  widest: '0.05em',
 }
 
 export const lineHeights = {
@@ -32,19 +32,19 @@ export const fontWeights = {
 
 export const typographyVariants = {
   h1: {
-    fontWeight: fontWeights.black,
+    fontWeight: fontWeights.extraBold,
     letterSpacing: letterSpacings.tight,
     lineHeight: lineHeights.tight,
     fontSize: '2.5rem',
   },
   h2: {
-    fontWeight: fontWeights.extraBold,
+    fontWeight: fontWeights.bold,
     letterSpacing: letterSpacings.tight,
     lineHeight: lineHeights.tight,
     fontSize: '2rem',
   },
   h3: {
-    fontWeight: fontWeights.bold,
+    fontWeight: fontWeights.semiBold,
     letterSpacing: letterSpacings.tight,
     lineHeight: lineHeights.tight,
     fontSize: '1.5rem',
@@ -56,7 +56,7 @@ export const typographyVariants = {
     fontSize: '1.25rem',
   },
   h5: {
-    fontWeight: fontWeights.semiBold,
+    fontWeight: fontWeights.medium,
     letterSpacing: letterSpacings.tight,
     lineHeight: lineHeights.tight,
     fontSize: '1rem',
@@ -106,7 +106,7 @@ export const typographyVariants = {
   },
   overline: {
     fontWeight: fontWeights.light,
-    letterSpacing: letterSpacings.normal,
+    letterSpacing: letterSpacings.tight,
     lineHeight: lineHeights.normal,
     fontSize: '0.88rem',
     textTransform: 'uppercase',

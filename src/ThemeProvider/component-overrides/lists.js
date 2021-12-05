@@ -47,6 +47,7 @@ export function createListOverrides({ palette }) {
         margin: 0,
         lineHeight: 1.12,
       },
+
       multiline: {
         margin: 0,
         marginTop: 0,

@@ -9,8 +9,9 @@ export const SimpleTab = withStyles((theme) => ({
     alignItems: 'flex-start',
     padding: 4,
     minWidth: 0,
+    fontWeight: 500,
     marginRight: theme.spacing(2),
-    ...theme.typography.subtitle2,
+    ...theme.typography.button,
   },
   labelIcon: {
     flexDirection: 'row',

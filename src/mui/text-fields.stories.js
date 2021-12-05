@@ -164,6 +164,27 @@ export const Primary = () => {
         </Grid>
 
         <Grid item xs={12}>
+
+            <TextField
+              label="Label"
+              helperText="This text helps."
+              error={error}
+              placeholder="Give me string..."
+              required={required}
+              select
+              SelectProps={{
+                native: true,
+              }}
+            >
+              <option value="1">Item 1</option>
+              <option value="2">Item 2</option>
+              <option value="3">Item 3</option>
+            </TextField>
+
+
+        </Grid>
+
+        <Grid item xs={12}>
           <Stack direction="row" spacing={1}>
 
             <TextField

@@ -28,7 +28,7 @@ export function createButtonOverrides({ typography, palette, shadows }) {
       outlined: {
         boxShadow: shadows[1],
 
-        '&:hover:not(:focus)': {
+        '&:hover': {
           boxShadow: shadows[2],
         },
       },
@@ -36,7 +36,7 @@ export function createButtonOverrides({ typography, palette, shadows }) {
         // border: `1px solid ${colors.grey[300]}`,
         boxShadow: shadows[1],
         border: 0,
-        '&:hover:not(:focus)': {
+        '&:hover:': {
           boxShadow: shadows[2],
         },
       },
@@ -64,6 +64,48 @@ export function createButtonOverrides({ typography, palette, shadows }) {
         ...createHighlightSx(palette.primary.main, 4),
       }
     },
+
+    variants: [
+      {
+        props: { variant: 'outlined' },
+        style: {
+          border: `1px solid currentColor`,
+          boxShadow: shadows[1],
+
+          '&:hover': {
+            boxShadow: shadows[2],
+          },
+        },
+      },
+      {
+        props: { variant: 'contained' },
+        style: {
+          boxShadow: shadows[1],
+          color: '#fff',
+
+          backgroundColor: palette.grey.main,
+
+          '&:hover': {
+            boxShadow: shadows[2],
+            backgroundColor: palette.grey.dark,
+          },
+
+          '&.MuiIconButton-colorPrimary': {
+            backgroundColor: palette.primary.main,
+            '&:hover': {
+              backgroundColor: palette.primary.dark,
+            },
+          },
+
+          '&.MuiIconButton-colorSecondary': {
+            backgroundColor: palette.secondary.main,
+            '&:hover': {
+              backgroundColor: palette.secondary.dark,
+            },
+          },
+        },
+      },
+    ]
   }
 
   return {

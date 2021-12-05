@@ -63,19 +63,19 @@ export const Primary = () => {
 
       <Grid container spacing={2}>
         <Grid item>
-          <IconButton>
+          <IconButton variant="contained">
             <AddIcon />
           </IconButton>
         </Grid>
 
         <Grid item>
-          <IconButton color="primary">
+          <IconButton color="primary" variant="contained">
             <EditIcon />
           </IconButton>
         </Grid>
 
         <Grid item>
-          <IconButton color="secondary">
+          <IconButton color="secondary" variant="contained">
             <DeleteIcon />
           </IconButton>
         </Grid>

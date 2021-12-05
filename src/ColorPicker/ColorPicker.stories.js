@@ -1,9 +1,9 @@
 import React from 'react'
 
+import FormControlLabel from '@mui/material/FormControlLabel'
 import { ColorPicker } from './ColorPicker'
 import { colors } from '../ThemeProvider/colors'
 
-import { StorybookTheme } from '../../.storybook/components/StorybookTheme'
 
 export default {
   title: 'Components/ColorPicker',
@@ -14,8 +14,12 @@ export const Primary = () => {
   const [color, setColor] = React.useState(colors.blue[500])
 
   return (
-    <StorybookTheme>
-      <ColorPicker value={color} onChange={setColor} />
-    </StorybookTheme>
+    <FormControlLabel
+      sx={{ gap: 1 }}
+      control={
+        <ColorPicker value={color} onChange={setColor} />
+      }
+      label="Pick a color"
+    />
   )
 }

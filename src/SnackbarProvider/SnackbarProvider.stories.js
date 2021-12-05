@@ -3,9 +3,9 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
-import DialogTitle from '@mui/material/DialogTitle'
 import SnackbarProvider from './SnackbarProvider'
 import useSnackbar from './useSnackbar'
+import ClosableDialogTitle from '../ClosableDialogTitle'
 
 export default {
   title: 'Providers/SnackbarProvider',
@@ -80,7 +80,9 @@ const TriggerSnackbarButtons = () => {
         onClose={() => setDialogIsOpen(false)}
         maxWidth="xs"
       >
-        <DialogTitle>Test with dialog</DialogTitle>
+        <ClosableDialogTitle onClose={() => setDialogIsOpen(false)}>
+          Test with dialog
+        </ClosableDialogTitle>
         <DialogActions>
           <Button onClick={() => setDialogIsOpen(false)}>Close</Button>
           <Button onClick={() => trigger('success')} variant="contained">Create Message</Button>

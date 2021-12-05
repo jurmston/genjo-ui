@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from '@mui/material/Tooltip'
-import { colors as themeProviderColors, shadows } from '../ThemeProvider'
+import { colors as themeProviderColors } from '../ThemeProvider'
 
 import { ColorPickerMenu } from './ColorPickerMenu'
 import { ColorPickerButton } from './ColorPickerButton'

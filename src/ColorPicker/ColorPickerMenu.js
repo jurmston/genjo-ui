@@ -5,28 +5,15 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import { ColorPickerButton } from './ColorPickerButton'
-import { shadows } from '../ThemeProvider'
 import AddOn, { AddOnButton } from '../AddOn'
 import CheckIcon from '@mui/icons-material/CheckRounded'
+import useSyncedProp from '../useSyncedProp'
 
 
 // From: https://stackoverflow.com/questions/8027423/how-to-check-if-a-string-is-a-valid-hex-color-representation/8027444
 const hexRegEx = /^#([0-9A-F]{3}){1,2}$/i
 const excludeNonHexRegEx = /[^0-9A-F]/gi
 
-
-function useSyncedProp(propValue) {
-  const [syncedProp, setSyncedProp] = React.useState(propValue)
-
-  React.useEffect(
-    () => {
-      setSyncedProp(propValue)
-    },
-    [propValue]
-  )
-
-  return [syncedProp, setSyncedProp]
-}
 
 /** Popover menu for selecting a color. */
 export function ColorPickerMenu({ anchor, close, onChange, value, colors }) {
