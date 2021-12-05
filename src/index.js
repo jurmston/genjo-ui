@@ -52,9 +52,6 @@ export * from './Dropzone'
 export { default as GoogleMapsProvider } from './GoogleMapsProvider'
 export * from './GoogleMapsProvider'
 
-export { default as ListTitle } from './ListTitle'
-export * from './ListTitle'
-
 export { default as LoaderProvider } from './LoaderProvider'
 export * from './LoaderProvider'
 
