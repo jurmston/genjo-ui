@@ -6,8 +6,19 @@ import Typography from '@mui/material/Typography'
 import AscendingIcon from '@mui/icons-material/ArrowDropUpRounded'
 import DescendingIcon from '@mui/icons-material/ArrowDropDownRounded'
 
+import { createHighlightSx } from '../ThemeProvider'
+import { useTheme } from '@mui/material/styles'
 
-export function SortableHeader({ onClick, value, sortingKey, direction = 'asc', children, ...buttonProps }) {
+
+export function SortableHeader({
+  onClick,
+  value,
+  sortingKey,
+  direction = 'asc',
+  children,
+  ...buttonProps
+}) {
+  const theme = useTheme()
 
   const handleClick = React.useCallback(
     event => {
@@ -42,7 +53,13 @@ export function SortableHeader({ onClick, value, sortingKey, direction = 'asc', 
         py: 0.5,
         display: 'flex',
         alignItems: 'center',
-        borderRadius: 999,
+        borderRadius: 1,
+        '&:hover': {
+          '& > p': {
+            color: 'primary.main',
+          },
+        },
+        ...createHighlightSx(theme.palette.primary.main, 1)
       }}
     >
       <Typography
@@ -63,5 +80,9 @@ export function SortableHeader({ onClick, value, sortingKey, direction = 'asc', 
 }
 
 SortableHeader.propTypes = {
-
+  onClick: PropTypes.func,
+  value: PropTypes.string,
+  sortingKey: PropTypes.string,
+  direction: PropTypes.oneOf(['asc', 'desc']),
+  children: PropTypes.string,
 }
