@@ -1,8 +1,6 @@
 import * as React from 'react'
 
-import { makeStyles } from '@mui/styles'
 import Tabs from '@mui/material/Tabs'
-import { useTheme } from '@mui/material/styles'
 import { styled } from '@mui/material/styles'
 
 
