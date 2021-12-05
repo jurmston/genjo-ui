@@ -1,46 +1,38 @@
 import * as React from 'react'
-import { makeStyles } from '@mui/styles'
+import PropTypes from 'prop-types'
 import Tab from '@mui/material/Tab'
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    '&:hover': {
-      opacity: 1,
-    },
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    minHeight: 56,
-    minWidth: 'unset',
 
-    color: theme.palette.text.secondary,
-    textTransform: 'initial',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `0 16px`,
-
-    '&.Mui-selected': {
-      color: theme.palette.primary.main,
-    },
-  },
-
-}))
-
-export const NavTab = props => {
-  const classes = useStyles()
+export const NavTab = ({ sx, ...rest }) => {
 
   return (
     <Tab
-      classes={{
-        root: classes.root,
-        wrapper: classes.wrapper,
-        labelIcon: classes.labelIcon,
+      sx={{
+        '&:hover': {
+          opacity: 1,
+        },
+
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: 56,
+        minWidth: 'unset',
+
+        color: 'text.secondary',
+        textTransform: 'initial',
+        padding: `0 16px`,
+
+        '&.Mui-selected': {
+          color: 'primary.main',
+        },
+        ...sx,
       }}
-      {...props}
+      {...rest}
     />
   )
 }
 
-export default NavTab
+NavTab.propTypes = {
+  sx: PropTypes.object,
+}
