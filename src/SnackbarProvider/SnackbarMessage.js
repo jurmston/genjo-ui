@@ -2,12 +2,13 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 
 import Slide from '@mui/material/Slide'
+import Grow from '@mui/material/Grow'
 import Collapse from '@mui/material/Collapse'
 import Alert from '@mui/material/Alert'
 
-const MAX_DURATION = 7000
-const MIN_DURATION = 2000
-const MS_PER_CHARACTER = 50
+const MAX_DURATION = 8000
+const MIN_DURATION = 3000
+const MS_PER_CHARACTER = 65
 
 /**
  * Calculates the length of time in milliseconds a snackbar message will
@@ -20,7 +21,7 @@ function getMessageDuration(text = '') {
   return Math.max(Math.min(text.length * MS_PER_CHARACTER, MAX_DURATION), MIN_DURATION)
 }
 
-export function SnackbarMessage({ text, type, kill, shouldMakeRoom }) {
+export function SnackbarMessage({ text, type, kill, shouldMakeRoom, direction = 'right' }) {
   const [isOnScreen, setIsOnScreen] = React.useState(true)
   const [isFullHeight, setIsFullHeight] = React.useState(true)
 
@@ -33,9 +34,17 @@ export function SnackbarMessage({ text, type, kill, shouldMakeRoom }) {
     return () => clearTimeout(interval)
   }, [])
 
+  const TransitionComponent = direction === 'up' || direction === 'down'
+    ? Grow
+    : Slide
+
+  const directionProp = direction === 'up' || direction === 'down'
+    ? {}
+    : { direction }
+
   return (
     <Collapse in={isFullHeight} onExited={() => kill()}>
-      <Slide in={isOnScreen && !shouldMakeRoom} direction="right" onExited={() => setIsFullHeight(false)}>
+      <TransitionComponent in={isOnScreen && !shouldMakeRoom} {...directionProp} onExited={() => setIsFullHeight(false)}>
         <Alert
           sx={{ mt: 1, maxWidth: 300, boxShadow: 8 }}
           onClose={() => setIsOnScreen(false)}
@@ -44,7 +53,7 @@ export function SnackbarMessage({ text, type, kill, shouldMakeRoom }) {
         >
           {text}
         </Alert>
-      </Slide>
+      </TransitionComponent>
     </Collapse>
   )
 }

@@ -8,7 +8,7 @@ import { SnackbarMessage } from './SnackbarMessage'
 import Box from '@mui/material/Box'
 
 
-export function SnackbarProvider({ maxMessages = 3, children }) {
+export function SnackbarProvider({ maxMessages = 3, children, hPosition = 'left', vPosition = 'bottom' }) {
   const theme = useTheme()
   const [messages, setMessages] = React.useState([])
   const [reaper, setReaper] = React.useState(new Set())
@@ -38,6 +38,13 @@ export function SnackbarProvider({ maxMessages = 3, children }) {
     }
   }, [reaper, messages])
 
+  const positionProps = React.useMemo(
+    () => hPosition === 'center'
+      ? { left: '50%', transform: 'translateX(-50%)' }
+      : { [hPosition]: 16 },
+    [hPosition]
+  )
+
   return (
     <SnackbarContext.Provider
       value={{
@@ -54,9 +61,9 @@ export function SnackbarProvider({ maxMessages = 3, children }) {
       {messages.length > 0 && (
         <Box
           sx={{
+            ...positionProps,
             position: 'fixed',
-            left: 16,
-            bottom: 16,
+            [vPosition]: 16,
             display: 'flex',
             flexDirection: 'column-reverse',
             transitions: theme.transitions.create('height'),
@@ -67,6 +74,14 @@ export function SnackbarProvider({ maxMessages = 3, children }) {
             <SnackbarMessage
               {...message}
               key={message.id}
+              direction={hPosition === 'left'
+                ? 'right'
+                : hPosition === 'right'
+                ? 'left'
+                : vPosition === 'top'
+                ? 'down'
+                : 'up'
+              }
               kill={() => killMessage(message.id)}
               shouldMakeRoom={index === 0 && messages.length > maxMessages}
             />
@@ -82,4 +97,6 @@ SnackbarProvider.propTypes = {
   children: PropTypes.node,
   /** The maximum number of messages that can appear on the screen. */
   maxMessages: PropTypes.number,
+  hPosition: PropTypes.oneOf(['left', 'right', 'center']),
+  vPosition: PropTypes.oneOf(['top', 'bottom']),
 }

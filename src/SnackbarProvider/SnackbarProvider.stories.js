@@ -92,9 +92,9 @@ const TriggerSnackbarButtons = () => {
   )
 }
 
-export const Main = () => {
+export const Main = args => {
   return (
-    <SnackbarProvider>
+    <SnackbarProvider {...args}>
       <TriggerSnackbarButtons />
     </SnackbarProvider>
   )
