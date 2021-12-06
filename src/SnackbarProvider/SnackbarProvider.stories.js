@@ -3,9 +3,9 @@ import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
-import SnackbarProvider from './SnackbarProvider'
-import useSnackbar from './useSnackbar'
 import ClosableDialogTitle from '../ClosableDialogTitle'
+import { SnackbarProvider } from './SnackbarProvider'
+import { useSnackbar } from './useSnackbar'
 
 export default {
   title: 'Providers/SnackbarProvider',

@@ -20,7 +20,7 @@ function getMessageDuration(text = '') {
   return Math.max(Math.min(text.length * MS_PER_CHARACTER, MAX_DURATION), MIN_DURATION)
 }
 
-export const SnackbarMessage = ({ text, type, kill, shouldMakeRoom }) => {
+export function SnackbarMessage({ text, type, kill, shouldMakeRoom }) {
   const [isOnScreen, setIsOnScreen] = React.useState(true)
   const [isFullHeight, setIsFullHeight] = React.useState(true)
 
@@ -37,7 +37,7 @@ export const SnackbarMessage = ({ text, type, kill, shouldMakeRoom }) => {
     <Collapse in={isFullHeight} onExited={() => kill()}>
       <Slide in={isOnScreen && !shouldMakeRoom} direction="right" onExited={() => setIsFullHeight(false)}>
         <Alert
-          sx={{ marginTop: 1, maxWidth: 300, boxShadow: 8 }}
+          sx={{ mt: 1, maxWidth: 300, boxShadow: 8 }}
           onClose={() => setIsOnScreen(false)}
           severity={type}
           variant="filled"
@@ -62,5 +62,3 @@ SnackbarMessage.propTypes = {
    */
   shouldMakeRoom: PropTypes.bool,
 }
-
-export default SnackbarMessage

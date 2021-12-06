@@ -2,25 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { v4 as uuid } from 'uuid'
-import { makeStyles } from '@mui/styles'
-import SnackbarContext from './SnackbarContext'
+import { useTheme } from '@mui/material/styles'
+import { SnackbarContext } from './SnackbarContext'
 import { SnackbarMessage } from './SnackbarMessage'
+import Box from '@mui/material/Box'
 
-const useStyles = makeStyles(theme => ({
-  container: {
-    position: 'fixed',
-    left: 16,
-    bottom: 16,
-    display: 'flex',
-    flexDirection: 'column-reverse',
-    transitions: theme.transitions.create('height'),
-    zIndex: theme.zIndex.snackbar,
-  },
-}))
 
-const SnackbarProvider = ({ maxMessages = 3, children }) => {
-  const classes = useStyles()
-
+export function SnackbarProvider({ maxMessages = 3, children }) {
+  const theme = useTheme()
   const [messages, setMessages] = React.useState([])
   const [reaper, setReaper] = React.useState(new Set())
 
@@ -63,7 +52,17 @@ const SnackbarProvider = ({ maxMessages = 3, children }) => {
       {children}
 
       {messages.length > 0 && (
-        <div className={classes.container}>
+        <Box
+          sx={{
+            position: 'fixed',
+            left: 16,
+            bottom: 16,
+            display: 'flex',
+            flexDirection: 'column-reverse',
+            transitions: theme.transitions.create('height'),
+            zIndex: 'snackbar',
+          }}
+        >
           {messages.slice(0, maxMessages).map((message, index) => (
             <SnackbarMessage
               {...message}
@@ -72,7 +71,7 @@ const SnackbarProvider = ({ maxMessages = 3, children }) => {
               shouldMakeRoom={index === 0 && messages.length > maxMessages}
             />
           ))}
-        </div>
+        </Box>
       )}
     </SnackbarContext.Provider>
   )
@@ -84,5 +83,3 @@ SnackbarProvider.propTypes = {
   /** The maximum number of messages that can appear on the screen. */
   maxMessages: PropTypes.number,
 }
-
-export default SnackbarProvider
