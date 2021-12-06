@@ -1,10 +1,11 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@mui/styles'
+import Box from '@mui/material/Box'
 import { useGoogleMaps } from '../GoogleMapsProvider'
 import { MapContext } from './MapContext'
 import { composePosition, attachEventListeners } from './utils'
+import AspectRatioBox from '../AspectRatioBox'
 
 
 const VALID_MAP_EVENTS = new Set([
@@ -35,34 +36,11 @@ const mapListenerProps = [...VALID_MAP_EVENTS].reduce((result, handle) => {
   return result
 }, {})
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    borderRadius: theme.shape.borderRadius,
-    overflow: 'hidden',
-    position: 'relative',
-    width: '100%',
-    height: 0,
-    padding: 0,
-    paddingBottom: props => `${props.aspectRatio * 100}%`,
-  },
-
-  container: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-  },
-
-  map: {
-    position: 'absolute',
-    inset: 0,
-  }
-}))
 
 
 export const MapComponent = ({
   children,
-  aspectRatio = 9 / 16,
-  styles,
+  aspectRatio = 16 / 9,
 
   // Google Map Props
   zoom = 14,
@@ -70,7 +48,6 @@ export const MapComponent = ({
   disableDoubleClickZoom = false,
   ...listeners
 }) => {
-  const classes = useStyles({ aspectRatio })
   const { status, google } = useGoogleMaps()
   const mapContainerRef = React.useRef()
 
@@ -114,14 +91,17 @@ export const MapComponent = ({
         map,
       }}
     >
-      <div className={classes.root} styles={styles}>
-        <div className={classes.container}>
-          <div ref={mapContainerRef} className={classes.map}>
-            Loading...
-          </div>
-        </div>
+      <AspectRatioBox
+        aspectRatio={aspectRatio}
+      >
+        <Box
+          ref={mapContainerRef}
+          sx={{ position: 'absolute', inset: 0, borderRadius: 1 }}
+        >
+          Loading...
+        </Box>
         {children}
-      </div>
+      </AspectRatioBox>
     </MapContext.Provider>
   )
 }
