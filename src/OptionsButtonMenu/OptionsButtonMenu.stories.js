@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { OptionsButtonMenu } from './OptionsButtonMenu'
 
@@ -17,7 +16,7 @@ export const Primary = () => {
 
   return (
     <StorybookTheme>
-      <div style={{ display: 'flex', width: 300 }} onClick={() => alert('Container clicked')}>
+      <div style={{ display: 'flex', width: 300 }}>
         <div style={{ flex: 1 }}>Other content</div>
         <div>
           <OptionsButtonMenu
