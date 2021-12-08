@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Dropzone from './Dropzone'
+import { Dropzone } from './Dropzone'
 
 export default {
   title: 'Components/Dropzone',
