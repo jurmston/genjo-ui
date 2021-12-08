@@ -1,4 +1,4 @@
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import Tabs from '@mui/material/Tabs'
 
 

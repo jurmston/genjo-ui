@@ -54,9 +54,14 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.slate }) =
       MuiAutocomplete: {
         styleOverrides: {
           root: {
+            // Correct additional padding mui adds to autocompletes
             '& .MuiFilledInput-root': {
               padding: 0,
-            }
+            },
+
+            '& .MuiOutlinedInput-root': {
+              padding: 0,
+            },
           },
 
           tag: {
@@ -190,7 +195,7 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.slate }) =
 
       // Styled Inputs: Input, FilledInput, OutlinedInput
       ...createInputOverrides({ mode, palette }),
-      ...createListOverrides({ palette }),
+      ...createListOverrides({ palette, typography }),
       ...createButtonOverrides({ palette, typography, shadows }),
 
       // --- INPUT ADORNMENT

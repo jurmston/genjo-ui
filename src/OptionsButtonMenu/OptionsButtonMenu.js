@@ -1,71 +1,19 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { makeStyles } from '@mui/styles'
+import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 import ButtonBase from '@mui/material/ButtonBase'
 import OptionsIcon from '@mui/icons-material/MoreHorizRounded'
 import { Menu } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 
 
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    position: 'relative',
-    boxSizing: 'border-box',
-  },
-  button: {
-    flex: 1,
-    width: 34,
-    fontSize: 14,
-    color: theme.palette.action.active,
-    padding: `4px 8px`,
-    boxSizing: 'border-box',
-    '&:hover': {
-      // Fixes issue with right border disappearing on hover
-      borderRight: `1px solid ${theme.palette.divider}`,
-      backgroundColor: theme.palette.grey[100],
-    },
-  },
-
-  optionsButton: {
-    borderTopRightRadius: 4,
-    borderBottomRightRadius: 4,
-  },
-
-  actionsContainer: {
-    backgroundColor: theme.palette.common.white,
-    opacity: props => props.shouldShow ? 1 : 0,
-    boxShadow: props => props.shouldShow ? '0 2px 10px 0 rgb(21 27 38 / 10%)' : 'none',
-    display: props => props.shouldShow ? 'flex' : 'none',
-    position: 'absolute',
-    right: 0,
-    transition: theme.transitions.create('opacity'),
-    borderRadius: 4,
-    overflow: 'hidden',
-    border: `1px solid ${theme.palette.divider}`,
-    boxSizing: 'border-box',
-  },
-
-  actionButton: {
-    flex: 1,
-    borderRight: `1px solid ${theme.palette.divider}`,
-  },
-
-  menu: {
-    marginTop: 8,
-  },
-}))
-
-
-
-export function OptionsButtonMenu({ show = false, actions, children, ...buttonGroupProps }) {
+export function OptionsButtonMenu({ show = false, actions, children }) {
+  const theme = useTheme()
   const [menuAnchor, setMenuAnchor] = React.useState(null)
   const [isHovering, setIsHovering] = React.useState(false)
 
-  const classes = useStyles({
-    shouldShow: show || isHovering || Boolean(menuAnchor),
-  })
+  const shouldShow = show || isHovering || Boolean(menuAnchor)
 
   const handleCloseMenu = React.useCallback(
     event => {
@@ -101,42 +49,91 @@ export function OptionsButtonMenu({ show = false, actions, children, ...buttonGr
     event.stopPropagation()
   }
 
+  const buttonSx = React.useMemo(
+    () => ({
+      flex: 1,
+      width: 34,
+      fontSize: 14,
+      color: 'action.active',
+      py: 0.5,
+      px: 1,
+      padding: `4px 8px`,
+      boxSizing: 'border-box',
+      '&:hover': {
+        // Fixes issue with right border disappearing on hover
+        borderRight: 1,
+        borderRightColor: 'divider',
+        backgroundColor: 'grey.100',
+      },
+    }),
+    [],
+  )
+
   return (
     <>
-      <div
-        className={classes.root}
+      <Box
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleContainerClick}
         onKeyPress={handleContainerClick}
         role="button"
         tabIndex={0}
+        sx={{
+          position: 'relative',
+          boxSizing: 'border-box',
+        }}
       >
-        <div className={classes.actionsContainer}>
+        <Box
+          sx={{
+            backgroundColor: 'common.white',
+            opacity: shouldShow ? 1 : 0,
+            boxShadow: shouldShow ? '0 2px 10px 0 rgb(21 27 38 / 10%)' : 'none',
+            display: shouldShow ? 'flex' : 'none',
+            position: 'absolute',
+            right: 0,
+            transition: theme.transitions.create('opacity'),
+            borderRadius: 1,
+            overflow: 'hidden',
+            border: 1,
+            borderColor: 'divider',
+            boxSizing: 'border-box',
+          }}
+        >
           {actions.map((action, index) => (
             <Tooltip key={index} title={action.title}>
               <ButtonBase
                 key={index}
-                className={clsx(classes.actionButton, classes.button)}
                 onClick={action.onClick}
+                sx={{
+                  ...buttonSx,
+                  flex: 1,
+                  borderRight: 1,
+                  borderRightColor: 'divider',
+                }}
               >
                 {action.icon}
               </ButtonBase>
             </Tooltip>
           ))}
 
-          <div className={classes.button} />
-        </div>
+          <Box sx={buttonSx} />
+        </Box>
 
         <ButtonBase
-          className={clsx(classes.button, classes.optionsButton)}
           onClick={handleOpenMenu}
+          sx={{
+            ...buttonSx,
+            borderTopRightRadius: 4,
+            borderBottomRightRadius: 4,
+          }}
         >
           <OptionsIcon />
         </ButtonBase>
 
         <Menu
-          className={classes.menu}
+          sx={{
+            mt: 1,
+          }}
           open={Boolean(menuAnchor)}
           onClose={handleCloseMenu}
           anchorEl={menuAnchor}
@@ -151,7 +148,7 @@ export function OptionsButtonMenu({ show = false, actions, children, ...buttonGr
         >
           {children}
         </Menu>
-      </div>
+      </Box>
 
 
     </>
@@ -159,9 +156,17 @@ export function OptionsButtonMenu({ show = false, actions, children, ...buttonGr
 }
 
 OptionsButtonMenu.propTypes = {
+  /** List of action objects that describe how to render the ButtonGroup. */
   actions: PropTypes.arrayOf(PropTypes.shape({
+    /** Title of the action. */
     title: PropTypes.string,
+    /** Icon to display in the button. */
     icon: PropTypes.node,
+    /** Callback when clicking the button. */
     onClick: PropTypes.func,
   })),
+  /** If `true`, the action buttons will be shown. */
+  show: PropTypes.bool,
+  /** The content of the Menu component (e.g. MenuItems). */
+  children: PropTypes.node,
 }

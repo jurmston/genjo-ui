@@ -51,6 +51,7 @@ export function ColorPickerMenu({ anchor, close, onChange, value, colors }) {
         marginTop: -1,
         marginLeft: -1,
       }}
+      disablePortal
       open={!!anchor}
       onClose={close}
       anchorEl={anchor}
@@ -70,8 +71,8 @@ export function ColorPickerMenu({ anchor, close, onChange, value, colors }) {
         <Box
           sx={{
             backgroundColor: displayColor,
-            height: 32,
-            width: 32,
+            height: 42,
+            width: 42,
             borderRadius: 1,
             boxShadow: 2,
           }}
@@ -81,8 +82,8 @@ export function ColorPickerMenu({ anchor, close, onChange, value, colors }) {
             style={{
               // maxWidth: 32 * 6,
               display: 'grid',
-              gridTemplateColumns: 'repeat(6, 22px)',
-              gridTemplateRows: 'repeat(3, 22px) 1fr',
+              gridTemplateColumns: 'repeat(6, 28px)',
+              gridTemplateRows: 'repeat(3, 28px) 1fr',
               gap: 8,
               alignItems: 'center',
               flexWrap: 'wrap',

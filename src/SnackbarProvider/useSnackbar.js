@@ -1,5 +1,5 @@
 import * as React from 'react'
-import SnackbarContext from './SnackbarContext'
+import { SnackbarContext } from './SnackbarContext'
 
 export const useSnackbar = () => {
   const context = React.useContext(SnackbarContext)
@@ -10,5 +10,3 @@ export const useSnackbar = () => {
 
   return context
 }
-
-export default useSnackbar
