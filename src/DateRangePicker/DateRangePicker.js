@@ -1,77 +1,15 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@mui/styles'
 import StaticDatePicker from '@mui/lab/StaticDatePicker'
 import PickersDay from '@mui/lab/PickersDay'
 import TextField from '@mui/material/TextField'
-import { DateTime } from 'luxon'
-import clsx from 'clsx'
+import Box from '@mui/material/Box'
 
-const useStyles = makeStyles(theme => ({
-  isFirstDay: {},
-  isLastDay: {},
 
-  hoverHighlight: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: 0,
-    backgroundColor: theme.palette.grey[100],
-
-    '&$isFirstDay': {
-      borderTopLeftRadius: '50%',
-      borderBottomLeftRadius: '50%',
-    },
-
-    '&$isLastDay': {
-      borderTopRightRadius: '50%',
-      borderBottomRightRadius: '50%',
-    },
-  },
-
-  selectionHighlight: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: 0,
-    backgroundColor: theme.palette.primary.main,
-
-    '&$isFirstDay': {
-      borderTopLeftRadius: '50%',
-      borderBottomLeftRadius: '50%',
-    },
-
-    '&$isLastDay': {
-      borderTopRightRadius: '50%',
-      borderBottomRightRadius: '50%',
-    },
-  },
-
-  selectionDay: {
-    backgroundColor: theme.palette.primary.main,
-
-    '&$isFirstDay': {
-      backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.common.white,
-    },
-
-    '&$isLastDay': {
-      backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.common.white,
-    },
-  },
-
-  hoverDay: {
-    backgroundColor: theme.palette.grey[100],
-  },
-}))
-
-export const DateRangePicker = ({ start = null, end = null, onChange }) => {
+export function DateRangePicker({ start = null, end = null, onChange }) {
   const [currentSelection, setCurrentSelection] = React.useState('none')
   const [hoveredDay, setHoveredDay] = React.useState(null)
-
-  const classes = useStyles()
 
   // Create all the datetime points for the hover and selection comparisons.
   const startStart = start?.startOf('day')
@@ -139,22 +77,38 @@ export const DateRangePicker = ({ start = null, end = null, onChange }) => {
     return (
       <div style={{ position: 'relative' }} key={date.toISO()}>
         {isInHoverRange && (
-          <div
-            className={clsx(
-              classes.hoverHighlight,
-              isFirstDayHover && classes.isFirstDay,
-              isLastDayHover && classes.isLastDay
-            )}
+          <Box
+            sx={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              borderRadius: 0,
+              backgroundColor: 'grey.100',
+
+              borderTopLeftRadius: isFirstDayHover ? '50%' : 0,
+              borderBottomLeftRadius: isFirstDayHover ? '50%' : 0,
+
+              borderTopRightRadius: isLastDayHover ? '50%' : 0,
+              borderBottomRightRadius: isLastDayHover ? '50%' : 0,
+            }}
           />
         )}
 
         {isInRange && (
-          <div
-            className={clsx(
-              classes.selectionHighlight,
-              isFirstDay && classes.isFirstDay,
-              isLastDay && classes.isLastDay
-            )}
+          <Box
+            sx={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              borderRadius: 0,
+              backgroundColor: 'primary.main',
+
+              borderTopLeftRadius: isFirstDay ? '50%' : 0,
+              borderBottomLeftRadius: isFirstDay ? '50%' : 0,
+
+              borderTopRightRadius: isLastDay ? '50%' : 0,
+              borderBottomRightRadius: isLastDay ? '50%' : 0,
+            }}
           />
         )}
 
@@ -164,13 +118,20 @@ export const DateRangePicker = ({ start = null, end = null, onChange }) => {
           selected={false}
           onMouseEnter={() => setHoveredDay(date)}
           onMouseLeave={() => setHoveredDay(null)}
-          style={{ position: 'relative' }}
-          className={clsx({
-            [classes.selectionDay]: isInRange,
-            [classes.isFirstDay]: isFirstDay,
-            [classes.isLastDay]: isLastDay,
-            [classes.hoverDay]: isInHoverRange,
-          })}
+          sx={{
+            position: 'relative',
+            backgroundColor: !isInRange
+              ? 'transparent'
+              : isFirstDay || isLastDay
+              ? 'primary.dark'
+              : isInHoverRange
+              ? 'grey.100'
+              : 'primary.main',
+
+            color: isInRange || isFirstDay || isLastDay
+              ? 'common.white'
+              : 'text.secondary',
+          }}
         />
       </div>
     )
@@ -189,6 +150,8 @@ export const DateRangePicker = ({ start = null, end = null, onChange }) => {
   )
 }
 
-DateRangePicker.propTypes = {}
-
-export default DateRangePicker
+DateRangePicker.propTypes = {
+  start: PropTypes.any,
+  end: PropTypes.any,
+  onChange: PropTypes.func,
+}

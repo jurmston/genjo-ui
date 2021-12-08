@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { fromEvent } from 'file-selector'
-import { makeStyles } from '@mui/styles'
 import Typography from '@mui/material/Typography'
 import ButtonBase from '@mui/material/ButtonBase'
 
@@ -15,37 +14,6 @@ import Spacer from '../Spacer'
 
 const IMAGE_TYPES = ['png', 'jpg', 'jpeg', 'gif', 'svg']
 
-const useStyles = makeStyles(theme => ({
-  fileInput: {
-    position: 'fixed',
-    top: -9999,
-    left: -9999,
-    height: 0,
-    width: 0,
-  },
-  dropzone: {
-    height: props => (props.isResponsive ? '100%' : 250),
-    width: props => (props.isResponsive ? '100%' : 250),
-    padding: 16,
-    border: props =>
-      props.isDragging ? `1px solid ${theme.palette.primary.main}` : `1px solid ${theme.palette.grey[300]}`,
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: props => (props.isDragging ? theme.palette.primary[50] : theme.palette.grey[100]),
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    '&:hover': {
-      border: `2px solid ${theme.palette.secondary.main}`,
-      backgroundColor: `2px solid ${theme.palette.grey[50]}`,
-    },
-  },
-  dropzoneIcon: {
-    fontSize: theme.typography.h3.fontSize,
-    color: props => (props.hasError ? theme.palette.error.main : theme.palette.grey[300]),
-  },
-}))
 
 function validateFile({ file, allowedExtensions, maxFileSize }) {
   if (!file) {
@@ -63,7 +31,7 @@ function validateFile({ file, allowedExtensions, maxFileSize }) {
   }
 }
 
-export const Dropzone = ({
+export function Dropzone({
   onChange,
   allowedExtensions: allowedExtensionsFromProps = [],
   maxFileSize = '5 M',
@@ -72,7 +40,7 @@ export const Dropzone = ({
   maxFileCount = 1,
   label = '+ Add Files',
   isLoading = false,
-}) => {
+}) {
   const allowedExtensions = !isImage
     ? allowedExtensionsFromProps
     : allowedExtensionsFromProps.length
@@ -83,11 +51,6 @@ export const Dropzone = ({
   const containerRef = React.useRef()
   const [errors, setErrors] = React.useState(null)
   const [isDragging, setIsDragging] = React.useState(null)
-  const classes = useStyles({
-    isResponsive,
-    isDragging,
-    hasError: errors?.length,
-  })
 
   // Stop the global event from dropping the file.
   const onWindowDrop = event => {
@@ -182,8 +145,39 @@ export const Dropzone = ({
   const IconComponent = errors?.length ? WarningIcon : isImage ? PhotoIcon : DescriptionIcon
 
   return (
-    <ButtonBase ref={containerRef} className={classes.dropzone} onClick={focusInput}>
-      {isLoading ? <CircleLoader size={48} /> : <IconComponent className={classes.dropzoneIcon} />}
+    <ButtonBase
+      ref={containerRef}
+      onClick={focusInput}
+      sx={{
+        height: isResponsive ? '100%' : 250,
+        width: isResponsive ? '100%' : 250,
+        padding: 2,
+        border: theme => isDragging
+          ? `1px solid ${theme.palette.primary.main}`
+          : `1px solid ${theme.palette.grey[300]}`,
+        borderRadius: 1,
+        backgroundColor: theme => isDragging ? theme.palette.primary[50] : theme.palette.grey[100],
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
+        '&:hover': {
+          border: theme => `2px solid ${theme.palette.secondary.main}`,
+          backgroundColor: theme => `2px solid ${theme.palette.grey[50]}`,
+        },
+      }}
+    >
+      {isLoading ? (
+        <CircleLoader size={48} />
+      ) : (
+        <IconComponent
+          sx={{
+            typography: 'h3',
+            color: theme => errors?.length ? theme.palette.error.main : theme.palette.grey[300],
+          }}
+        />
+      )}
 
       <Spacer axis="vertical" size={16} />
 
@@ -200,7 +194,13 @@ export const Dropzone = ({
       )}
       <input
         disabled={isLoading}
-        className={classes.fileInput}
+        style={{
+          position: 'fixed',
+          top: -9999,
+          left: -9999,
+          height: 0,
+          width: 0,
+        }}
         type="file"
         ref={inputRef}
         multiple={maxFileCount > 1}
@@ -227,5 +227,3 @@ Dropzone.propTypes = {
   maxFileCount: PropTypes.number,
   label: PropTypes.string,
 }
-
-export default Dropzone
