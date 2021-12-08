@@ -1,7 +1,7 @@
 import React from 'react'
 
 import NavTab from '../NavTab'
-import NavTabs from './NavTabs'
+import { NavTabs } from './NavTabs'
 
 import HomeIcon from '@mui/icons-material/HomeRounded'
 import ProjectsIcon from '@mui/icons-material/SquareFootRounded'

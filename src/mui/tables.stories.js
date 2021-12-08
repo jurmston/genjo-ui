@@ -1,15 +1,7 @@
 import React from 'react'
 
-import Grid from '@mui/material/Grid'
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
-import MenuItem from '@mui/material/MenuItem'
 import Avatar from '@mui/material/Avatar'
-import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import Table from '@mui/material/Table'
 import TableHead from '@mui/material/TableHead'
@@ -19,8 +11,7 @@ import TableCell from '@mui/material/TableCell'
 import TableFooter from '@mui/material/TableFooter'
 
 import SortableHeader from '../SortableHeader'
-
-import ChecklistIcon from '@mui/icons-material/PlaylistAddRounded'
+import TableResultsLoader from '../TableResultsLoader'
 
 import axios from 'axios'
 
@@ -30,21 +21,33 @@ export default {
 }
 
 export const Primary = () => {
-  const [people, setPeople] = React.useState([])
+  const [people, setPeople] = React.useState(null)
 
   const [sortBy, setSortBy] = React.useState({ value: '', direction: 'asc' })
 
-  console.log(sortBy)
+  const [showNoResults, setShowNoResult] = React.useState(false)
 
   React.useEffect(
     () => {
+      if (showNoResults) {
+        return
+      }
+
       (async () => {
         const response = await axios.get('https://randomuser.me/api/?results=25')
 
         setPeople(response?.data?.results ?? [])
       })()
     },
-    []
+    [showNoResults]
+  )
+
+  React.useEffect(
+    () => {
+      if (showNoResults) {
+        setPeople(null)
+      }
+    }
   )
 
   return (
@@ -76,14 +79,30 @@ export const Primary = () => {
         </TableHead>
 
         <TableBody>
-          {people.map((person, index) => (
-            <TableRow key={index}>
-              <TableCell>{`${person.firstName} ${person.lastName}`}</TableCell>
+          {people?.map((person, index) => (
+            <TableRow key={index} {...console.log(person)}>
+              <TableCell>
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Avatar
+                    sx={{ height: 28, width: 28 }}
+                    src={person.picture.thumbnail}
+                  />
+                  <span>
+                    {`${person.name.first} ${person.name.last}`}
+                  </span>
+                </Stack>
+              </TableCell>
               <TableCell>{person.email}</TableCell>
               <TableCell>{person.cell}</TableCell>
               <TableCell>{person.location.country}</TableCell>
             </TableRow>
           ))}
+
+          <TableResultsLoader
+            colSpan={4}
+            isLoading={showNoResults ? false : people === null}
+            count={people?.length ?? 0}
+          />
         </TableBody>
 
         <TableFooter>
@@ -104,6 +123,12 @@ export const Primary = () => {
           </TableRow>
         </TableFooter>
       </Table>
+
+      <Button
+        onClick={() => setShowNoResult(s => !s)}
+      >
+        Toggle Results
+      </Button>
     </div>
   )
 }

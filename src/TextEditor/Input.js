@@ -1,26 +1,34 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
+import Box from '@mui/material/Box'
 import isHotkey from 'is-hotkey'
-import { Editable, useSlate } from 'slate-react'
+import { Editable, useSlate, ReactEditor } from 'slate-react'
 
 import useTextEditor from './useTextEditor'
-import { toggleMark } from './utils'
+import { toggleMark, toggleBlock } from './utils'
 import { Element } from './Element'
 import { Leaf } from './Leaf'
+import { getTextSx } from './styles'
 
-import { useMessageStyles } from './styles'
 
-const HOTKEYS = {
+const MARK_HOTKEYS = {
   'mod+b': 'bold',
   'mod+i': 'italic',
-  'mod+shift+x': 'strikeThrough',
+  'mod+u': 'underline',
+}
+
+const BLOCK_HOTKEYS = {
+  'mod+option+1': 'heading-one',
+  'mod+option+2': 'heading-two',
+  'mod+option+3': 'block-quote',
+  'mod+shift+7': 'numbered-list',
+  'mod+shift+8': 'bulleted-list',
+  'mod+shift+9': 'checklist',
 }
 
 export const Input = ({ minHeight, maxHeight }) => {
-  const { readOnly, setIsFocused } = useTextEditor()
-
-  const messageClasses = useMessageStyles({ minHeight, maxHeight })
+  const { readOnly, toggleLink, variant } = useTextEditor()
 
   const editor = useSlate()
   const renderElement = React.useCallback(props => <Element {...props} />, [])
@@ -28,18 +36,21 @@ export const Input = ({ minHeight, maxHeight }) => {
 
   const messageRef = React.useRef()
 
+  const sx = React.useMemo(
+    () => getTextSx({ minHeight, maxHeight, variant }),
+    [minHeight, maxHeight]
+  )
+
   return (
-    <div
-      className={messageClasses.message}
+    <Box
       ref={messageRef}
+      sx={sx}
     >
       <Editable
         readOnly={readOnly}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         spellCheck
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         onKeyDown={event => {
           // The psuedo-input created by slate-js does not automatically
           // scroll to the cursor position when it goes below the message
@@ -68,18 +79,33 @@ export const Input = ({ minHeight, maxHeight }) => {
             messageRef.current?.scroll(0, scrollTop + scrollDelta)
           }
 
-          for (const hotkey in HOTKEYS) {
+          for (const hotkey in MARK_HOTKEYS) {
             if (isHotkey(hotkey, event)) {
               event.preventDefault()
-              const mark = HOTKEYS[hotkey]
+              const mark = MARK_HOTKEYS[hotkey]
               toggleMark(editor, mark)
+              return
             }
+          }
+
+          for (const hotkey in BLOCK_HOTKEYS) {
+            if (isHotkey(hotkey, event)) {
+              event.preventDefault()
+              const block = BLOCK_HOTKEYS[hotkey]
+              toggleBlock(editor, block)
+              return
+            }
+          }
+
+          if (isHotkey('mod+shift+l', event)) {
+            event.preventDefault()
+            toggleLink()
           }
 
 
         }}
       />
-    </div>
+    </Box>
   )
 }
 

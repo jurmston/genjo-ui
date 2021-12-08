@@ -7,29 +7,14 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
-import { makeStyles } from '@mui/styles'
 
 import SearchIcon from '@mui/icons-material/SearchRounded'
 import CloseIcon from '@mui/icons-material/CloseRounded'
 
 import { usePlacesAutocomplete, useGeocoder } from '../GoogleMapsProvider'
 
-import { colors } from '../ThemeProvider'
 import useDebounce from '../useDebounce'
 
-const useStyles = makeStyles({
-  // input: {
-  //   ...theme.typography.subtitle1,
-  //   padding: 12,
-  // },
-  checkIcon: {
-    marginLeft: 8,
-    color: colors.green[500],
-  },
-  searchIcon: {
-    marginLeft: 8,
-  },
-})
 
 export const SearchLocationsField = ({
   value: valueFromProps,
@@ -40,7 +25,6 @@ export const SearchLocationsField = ({
   componentsMap,
   ...textFieldProps
 }) => {
-  const classes = useStyles()
   const [options, setOptions] = React.useState([])
   const [isLoading, setIsLoading] = React.useState(false)
 
@@ -188,7 +172,6 @@ export const SearchLocationsField = ({
           }}
           inputProps={{
             ...params.inputProps,
-            className: classes.input,
             autoComplete: 'new-password',
           }}
         />

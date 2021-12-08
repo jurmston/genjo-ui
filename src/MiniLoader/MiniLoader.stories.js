@@ -6,10 +6,10 @@ export default {
   title: 'Components/MiniLoader',
   component: MiniLoader,
   argTypes: {
-    variant: {
+    color: {
       control: {
         type: 'radio',
-        options: ['default', 'primary', 'secondary'],
+        options: ['grey.500', 'primary.main', 'secondary.main', 'success.main', 'info.main', 'warning.main', 'error.main'],
       },
     },
     width: {

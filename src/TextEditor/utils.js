@@ -1,5 +1,6 @@
 import { Editor, Transforms, Element } from 'slate'
 
+
 /** Returns a new empty slate value */
 export function getEmptyValue() {
   return [
@@ -10,7 +11,8 @@ export function getEmptyValue() {
   ]
 }
 
-const LIST_TYPES = ['numbered-list', 'bulleted-list']
+const LIST_TYPES = ['numbered-list', 'bulleted-list', 'checklist']
+const CHECKLIST_TYPE = 'checklist'
 
 /** Returns `true` if the block is active. */
 export function isBlockActive(editor, block) {
@@ -27,14 +29,19 @@ export function isMarkActive(editor, format) {
   return marks ? marks[format] === true : false
 }
 
+export function isColorActive(editor, color) {
+  const marks = Editor.marks(editor)
+  return marks ? marks[color] === true : false
+}
+
 /** Toggles an editor mark */
-export function toggleMark(editor, format) {
+export function toggleMark(editor, format, value = true) {
   const isActive = isMarkActive(editor, format)
 
   if (isActive) {
     Editor.removeMark(editor, format)
   } else {
-    Editor.addMark(editor, format, true)
+    Editor.addMark(editor, format, value)
   }
 }
 
@@ -42,6 +49,7 @@ export function toggleMark(editor, format) {
 export function toggleBlock(editor, format) {
   const isActive = isBlockActive(editor, format)
   const isList = LIST_TYPES.includes(format)
+  const isChecklist = format === CHECKLIST_TYPE
 
   Transforms.unwrapNodes(editor, {
     match: n => LIST_TYPES.includes(!Editor.isEditor(n) && Element.isElement(n) && n.type),
@@ -49,7 +57,13 @@ export function toggleBlock(editor, format) {
   })
 
   const newProperties = {
-    type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+    type: isActive
+      ? 'paragraph'
+      : !isList
+      ? format
+      : isChecklist
+      ? 'checklist-item'
+      : 'list-item',
   }
 
   Transforms.setNodes(editor, newProperties)
@@ -70,4 +84,14 @@ export function getCurrentNodeType(editor) {
 export function getCurrentWord(editor) {
   const text = Editor.string(editor, [])
   return text.substr(text.lastIndexOf(' ') + 1)
+}
+
+
+export function renderHotkey(hotkey = '') {
+  const isMac = /Mac|iPod|iPhone|iPad/.test(window?.navigator?.platform ?? '')
+
+  return hotkey
+    .replace('mod', isMac ? '⌘' : 'Ctrl')
+    .replace('option', isMac ? '⌥' : 'Alt')
+    .replace('shift', 'Shift')
 }

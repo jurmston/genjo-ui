@@ -32,9 +32,9 @@ export const withDeleteBackwards = editor => {
         if (block.type !== 'paragraph' && Point.equals(selection.anchor, start)) {
           Transforms.setNodes(editor, { type: 'paragraph' })
 
-          if (block.type === 'list-item') {
+          if (block.type === 'list-item' || block.type === 'checklist-item') {
             Transforms.unwrapNodes(editor, {
-              match: n => LIST_TYPES.includes(!Editor.isEditor(n) && Element.isElement(n) && n.type),
+              match: n => console.log('y', n.type, n) || LIST_TYPES.includes(n?.type),
               split: true,
             })
           }

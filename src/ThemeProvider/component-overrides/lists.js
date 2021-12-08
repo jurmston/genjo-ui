@@ -1,4 +1,4 @@
-export function createListOverrides({ palette }) {
+export function createListOverrides({ palette, typography }) {
   const MuiList = {
     defaultProps: {
       disablePadding: true,
@@ -56,6 +56,14 @@ export function createListOverrides({ palette }) {
 
       inset: {
         paddingLeft: 32,
+      },
+
+      primary: {
+        ...typography.body2,
+      },
+
+      secondary: {
+        ...typography.caption,
       }
     },
   }

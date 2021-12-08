@@ -1,1 +1,2 @@
-export { default } from './SaveButtonsDialog'
+export { SaveButtonsDialog as default } from './SaveButtonsDialog'
+export * from './SaveButtonsDialog'

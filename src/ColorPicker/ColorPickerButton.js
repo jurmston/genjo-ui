@@ -27,8 +27,8 @@ export function ColorPickerButton({
           backgroundColor: color,
           color: theme.palette.white,
           boxShadow: shadows[2],
-          minWidth: 22,
-          minHeight: 22,
+          minWidth: 28,
+          minHeight: 28,
           '&:hover': {
             backgroundColor: alpha(color || '#fff', 0.5),
           },

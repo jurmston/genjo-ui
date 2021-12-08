@@ -34,11 +34,20 @@ const ColorPicker = ({
   onChange,
   label,
   colors = defaultColors,
+  children: childrenFromProps,
 }) => {
 
   const [anchor, setAnchor] = React.useState(null)
 
   const close = () => setAnchor(null)
+
+  function handleClick(event) {
+    setAnchor(event.currentTarget)
+  }
+
+  const children = childrenFromProps
+    ? React.cloneElement(childrenFromProps, { onClick: handleClick })
+    : <ColorPickerButton color={value} onClick={handleClick} />
 
   return (
     <div
@@ -52,10 +61,7 @@ const ColorPicker = ({
       <div>
         <Tooltip title="Click to Change Color">
           <div>
-            <ColorPickerButton
-              color={value}
-              onClick={event => setAnchor(event.currentTarget)}
-            />
+            {children}
           </div>
         </Tooltip>
       </div>
