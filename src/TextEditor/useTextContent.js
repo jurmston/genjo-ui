@@ -33,7 +33,11 @@ function deserialize(value) {
  * @returns {*}
  */
 export function useTextContent(serializedValue = '') {
-  const [value, setValue] = React.useState(createContent())
+  const [value, setValue] = React.useState(deserialize(serializedValue))
+
+  // An incrementing key that updates on saves or resets to allow the
+  // TextEditor to render with a new initial value.
+  const [resetKey, setResetKey] = React.useState(0)
 
   const parsedOriginalTextContent = React.useMemo(
     () => deserialize(serializedValue),
@@ -53,7 +57,10 @@ export function useTextContent(serializedValue = '') {
   )
 
   const reset = React.useCallback(
-    () => setValue(parsedOriginalTextContent),
+    () => {
+      setValue(parsedOriginalTextContent)
+      setResetKey(k => k + 1)
+    },
     [parsedOriginalTextContent]
   )
 
@@ -62,5 +69,6 @@ export function useTextContent(serializedValue = '') {
     setValue,
     isDirty,
     reset,
+    resetKey,
   }
 }

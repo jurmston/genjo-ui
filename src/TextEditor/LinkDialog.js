@@ -6,7 +6,6 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import { useSlate } from 'slate-react'
 
 import ClosableDialogTitle from '../ClosableDialogTitle'
 import { insertLink } from './plugins/links'
@@ -14,10 +13,10 @@ import { insertLink } from './plugins/links'
 import { Editor } from 'slate'
 
 
-export const LinkDialog = ({ isOpen, onClose, selection }) => {
+export const LinkDialog = ({ isOpen, onClose, selection, editor }) => {
   const [url, setUrl] = React.useState('')
 
-  const editor = useSlate()
+  // const editor = useSlate()
 
   React.useEffect(
     () => {
@@ -29,33 +28,40 @@ export const LinkDialog = ({ isOpen, onClose, selection }) => {
     [isOpen, selection]
   )
 
+  function handleSubmit(event) {
+
+    event.preventDefault()
+    insertLink(editor, url, selection)
+    onClose()
+  }
+
   return (
-    <Dialog open={isOpen} onClose={onClose} maxWidth="xs" fullWidth>
-      <ClosableDialogTitle onClose={onClose}>Edit Link</ClosableDialogTitle>
-      <DialogContent>
-        <TextField
-          variant="filled"
-          label="URL"
-          value={url}
-          onChange={event => setUrl(event.target.value)}
-        />
-      </DialogContent>
+    <Dialog open={isOpen} onClose={onClose} maxWidth="xs" fullWidth disablePortal>
+      <form onSubmit={handleSubmit}>
+        <ClosableDialogTitle onClose={onClose}>Edit Link</ClosableDialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus={true/* eslint-disable-line jsx-a11y/no-autofocus*/}
+            variant="filled"
+            label="URL"
+            value={url}
+            onChange={event => setUrl(event.target.value)}
+          />
+        </DialogContent>
 
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <DialogActions>
+          <Button onClick={onClose}>Cancel</Button>
 
-        <Button
-          disabled={!url}
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            insertLink(editor, url, selection)
-            onClose()
-          }}
-        >
-          Save
-        </Button>
-      </DialogActions>
+          <Button
+            disabled={!url}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   )
 }
@@ -64,4 +70,5 @@ LinkDialog.propTypes = {
   isOpen: PropTypes.bool,
   onClose: PropTypes.func,
   selection: PropTypes.object,
+  editor: PropTypes.any,
 }

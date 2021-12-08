@@ -46,7 +46,7 @@ export const isLinkActive = editor => {
     match: n =>
       !Editor.isEditor(n) && Element.isElement(n) && n.type === 'link',
   })
-  return !!link
+  return Boolean(link)
 }
 
 export const unwrapLink = editor => {

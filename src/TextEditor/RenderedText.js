@@ -1,21 +1,25 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-// import COMPONENT from '@mui/material/COMPONENT'
+import Box from '@mui/material/Box'
 import { Element } from './Element'
 import { Leaf } from './Leaf'
 import { createEditor } from 'slate'
 import { Slate, Editable,withReact } from 'slate-react'
-import { useMessageStyles } from './styles'
+import { getTextSx } from './styles'
 
 export function RenderedText({ value = [] }) {
-  const classes = useMessageStyles()
   const editor = React.useMemo(() => withReact(createEditor()), [])
   const renderElement = React.useCallback(props => <Element {...props} />, [])
   const renderLeaf = React.useCallback(props => <Leaf {...props} />, [])
 
+  const sx = React.useMemo(
+    () => getTextSx(),
+    []
+  )
+
   return (
-    <div className={classes.message}>
+    <Box sx={sx}>
       <Slate editor={editor} value={value}>
         <Editable
           readOnly
@@ -23,7 +27,7 @@ export function RenderedText({ value = [] }) {
           renderLeaf={renderLeaf}
         />
       </Slate>
-    </div>
+    </Box>
   )
 }
 

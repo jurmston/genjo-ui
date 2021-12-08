@@ -195,7 +195,7 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.slate }) =
 
       // Styled Inputs: Input, FilledInput, OutlinedInput
       ...createInputOverrides({ mode, palette }),
-      ...createListOverrides({ palette }),
+      ...createListOverrides({ palette, typography }),
       ...createButtonOverrides({ palette, typography, shadows }),
 
       // --- INPUT ADORNMENT

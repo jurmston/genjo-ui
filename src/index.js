@@ -22,9 +22,6 @@ export * from './NavTab'
 export { default as NavTabs } from './NavTabs'
 export * from './NavTabs'
 
-export { default as Shell } from './Shell'
-export * from './Shell'
-
 export { default as ThemeProvider } from './ThemeProvider'
 export * from './ThemeProvider'
 
@@ -54,18 +51,6 @@ export * from './GoogleMapsProvider'
 
 export { default as LoaderProvider } from './LoaderProvider'
 export * from './LoaderProvider'
-
-export { default as MenuPanelItem } from './MenuPanelItem'
-export * from './MenuPanelItem'
-
-export { default as MenuPanelLoader } from './MenuPanelLoader'
-export * from './MenuPanelLoader'
-
-export { default as MenuPanelTitle } from './MenuPanelTitle'
-export * from './MenuPanelTitle'
-
-export { default as Message } from './Message'
-export * from './Message'
 
 export { default as MiniLoader } from './MiniLoader'
 export * from './MiniLoader'
