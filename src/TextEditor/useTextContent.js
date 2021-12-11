@@ -52,6 +52,7 @@ export function useTextContent(serializedValue = '') {
   React.useEffect(
     () => {
       setValue(parsedOriginalTextContent)
+      setResetKey(k => k + 1)
     },
     [parsedOriginalTextContent]
   )
