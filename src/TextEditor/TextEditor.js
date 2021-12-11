@@ -116,8 +116,8 @@ export const TextEditor = ({
   const renderLeaf = React.useCallback(props => <Leaf {...props} />, [])
 
   const showButtonPanel = React.useMemo(
-    () => isFocused || !hideButtonPanel,
-    [isFocused, hideButtonPanel],
+    () => !readOnly && (isFocused || !hideButtonPanel),
+    [isFocused, hideButtonPanel, readOnly],
   )
 
   return (

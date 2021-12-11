@@ -1,5 +1,6 @@
 import * as React from 'react'
 import Button from '@mui/material/Button'
+import Stack from '@mui/material/Stack'
 import { TextEditor } from './TextEditor'
 import SaveButtonsDialog from '../SaveButtonsDialog'
 import { RenderedText } from './RenderedText'
@@ -14,6 +15,8 @@ export default {
 
 export const Primary = (args) => {
   const [isShowingRenderedText, { toggle }] = useOpenable()
+  const [isReadOnly, { toggle: toggleReadOnly }] = useOpenable()
+
 
   const [value, setValue] = useStoredState({
     key: 'genjoTextEditorValue',
@@ -34,18 +37,26 @@ export const Primary = (args) => {
 
   return (
     <>
-        <Button variant="outlined" onClick={toggle} sx={{ mb: 2 }}>
+      <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+        <Button variant="outlined" onClick={toggle}>
           {isShowingRenderedText ? 'Show Editor' : 'Show Text'}
         </Button>
 
+        <Button variant="outlined" onClick={toggleReadOnly}>
+          {isReadOnly ? 'Read Only' : 'Editable'}
+        </Button>
+      </Stack>
+
         {isShowingRenderedText ? (
-            <RenderedText
+          <RenderedText
+            key={resetKey}
             value={textContent}
           />
         ) : (
           <TextEditor
             {...args}
             key={resetKey}
+            readOnly={isReadOnly}
             initialValue={textContent}
             onChange={setTextContent}
             minHeight={200}

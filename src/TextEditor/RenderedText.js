@@ -20,7 +20,7 @@ export function RenderedText({ value = [] }) {
 
   return (
     <Box sx={sx}>
-      <Slate editor={editor} value={value}>
+      <Slate editor={editor} value={value} onChange={() => {}}>
         <Editable
           readOnly
           renderElement={renderElement}

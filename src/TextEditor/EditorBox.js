@@ -6,7 +6,7 @@ import { useTextEditor } from './useTextEditor'
 
 
 export function EditorBox({ children }) {
-  const { handleFocus, readOnly, variant } = useTextEditor()
+  const { handleFocus, variant } = useTextEditor()
 
   return (
     <Box
@@ -17,7 +17,7 @@ export function EditorBox({ children }) {
       sx={{
         overflow: 'hidden',
         position: 'relative',
-        border: readOnly || variant !== 'contained' ? 'none' : 1,
+        border: variant !== 'contained' ? 'none' : 1,
         borderColor: 'divider',
         borderRadius: 1,
         backgroundColor: 'background.default',
