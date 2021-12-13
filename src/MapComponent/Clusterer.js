@@ -27,8 +27,6 @@ export function Clusterer({ children = [] }) {
           ...listeners
         } = child.props
 
-        console.log({icon})
-
         const marker = createMarker({
           google,
           map,
