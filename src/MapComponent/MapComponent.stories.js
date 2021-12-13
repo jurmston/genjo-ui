@@ -14,6 +14,7 @@ import GoogleMapsProvider from '../GoogleMapsProvider'
 
 import { GoogleMapsWrapper } from '../../.storybook/components/GoogleMapsWrapper'
 import getRandomUsers from '../../.storybook/utils/getRandomUsers'
+import './styles.css'
 
 export default {
   title: 'Components/MapComponent',

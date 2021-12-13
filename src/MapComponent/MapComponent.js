@@ -6,7 +6,7 @@ import { useGoogleMaps } from '../GoogleMapsProvider'
 import { MapContext } from './MapContext'
 import { composePosition, attachEventListeners } from './utils'
 import AspectRatioBox from '../AspectRatioBox'
-import './styles.css'
+
 
 
 const VALID_MAP_EVENTS = new Set([
