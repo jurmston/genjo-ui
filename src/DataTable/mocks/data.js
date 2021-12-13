@@ -1,6 +1,6 @@
 import randomWords from 'random-words'
 import { DateTime } from 'luxon'
-import getRandomUser from '../../../.storybook/utils/getRandomUser'
+import getRandomUsers from '../../../.storybook/utils/getRandomUsers'
 
 
 function getRandomIntInclusive(min, max) {
@@ -17,7 +17,7 @@ const TEST_DISCIPLINES = ['Engineering', 'Local Government', 'Homeowner', 'Archi
 
 export function createDataSet(recordCount = 1000, contactsCount = 100) {
   const names = randomWords(recordCount)
-  const contacts = getRandomUser(contactsCount)
+  const contacts = getRandomUsers(contactsCount)
 
   const records = []
 

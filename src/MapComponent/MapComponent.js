@@ -6,6 +6,7 @@ import { useGoogleMaps } from '../GoogleMapsProvider'
 import { MapContext } from './MapContext'
 import { composePosition, attachEventListeners } from './utils'
 import AspectRatioBox from '../AspectRatioBox'
+import './styles.css'
 
 
 const VALID_MAP_EVENTS = new Set([
@@ -63,6 +64,13 @@ export const MapComponent = ({
         center: composedCenter,
         disableDoubleClickZoom,
       })
+
+      const myoverlay = new google.maps.OverlayView()
+      myoverlay.draw = function () {
+        //this assigns an id to the markerlayer Pane, so it can be referenced by CSS
+        this.getPanes().markerLayer.id='genjo--map-component--marker-layer'
+      }
+      myoverlay.setMap(newMap)
 
       attachEventListeners({
         target: newMap,

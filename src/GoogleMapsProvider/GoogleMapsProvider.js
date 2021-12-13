@@ -4,6 +4,14 @@ import { GoogleMapsContext } from './GoogleMapsContext'
 
 export const DEFAULT_GOOGLE_MAPS_SCRIPT_ID = 'google-maps-script'
 
+// Add `google` as a global variable so that it can be accessed
+// by maps libraries like @googlemaps/markerclusterer
+/* eslint-disable no-unused-vars */
+/* global google */
+const google = window.google
+/* eslint-enable */
+
+
 export function GoogleMapsProvider({
   scriptId = DEFAULT_GOOGLE_MAPS_SCRIPT_ID,
   apiKey,

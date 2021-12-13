@@ -2,7 +2,7 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 
 import { useMap } from './useMap'
-import { composePosition, attachEventListeners } from './utils'
+import { composePosition, createMarker } from './utils'
 
 
 const VALID_MARKER_EVENTS = new Set([
@@ -28,6 +28,7 @@ export const Marker = ({
   label,
   title,
   draggable,
+  infoWindow,
   ...listeners
 }) => {
   const { map, google } = useMap()
@@ -36,20 +37,16 @@ export const Marker = ({
   React.useEffect(
     () => {
       if (map && google && !marker) {
-        const composedPosition = composePosition({ position, google })
-
-        const newMarker = new google.maps.Marker({
-          position: composedPosition,
+        const newMarker = createMarker({
+          google,
           map,
+          position,
           icon,
           label,
           title,
           draggable,
-        })
-
-        attachEventListeners({
-          target: newMarker,
-          ...listeners,
+          infoWindow,
+          listeners,
         })
 
         setMarker(newMarker)
@@ -74,7 +71,7 @@ export const Marker = ({
 
 Marker.propTypes = {
   position: PropTypes.object,
-  icon: PropTypes.node,
+  icon: PropTypes.object,
   label: PropTypes.string,
   title: PropTypes.string,
   draggable: PropTypes.bool,

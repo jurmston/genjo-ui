@@ -110,6 +110,7 @@
     ]
   },
   "dependencies": {
+    "@googlemaps/markerclusterer": "^1.0.17",
     "dom-helpers": "^5.2.0",
     "file-selector": "^0.2.4",
     "is-hotkey": "^0.1.8",
