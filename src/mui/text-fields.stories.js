@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
+import Autocomplete from '@mui/material/Autocomplete'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import ToggleButton from '@mui/material/ToggleButton'
@@ -24,8 +25,8 @@ export const Primary = () => {
   const [error, setError] = React.useState(false)
 
   return (
-    <div style={{ width: 450 }}>
-      <Grid container spacing={2}>
+    <div style={{ width: 550 }}>
+      <Grid container spacing={1}>
         <Grid item>
           <Button
             variant="contained"
@@ -46,7 +47,8 @@ export const Primary = () => {
       </Grid>
 
       <Typography variant="h6">Simple</Typography>
-      <Grid container spacing={2}>
+
+      <Grid container spacing={1}>
 
         <Grid item xs={12}>
           <TextField
@@ -87,8 +89,8 @@ export const Primary = () => {
       <div style={{ marginTop: 32 }} />
 
       <Typography variant="h6">Everything Bagel</Typography>
-      <Grid container spacing={2}>
 
+      <Grid container spacing={1}>
         <Grid item xs={12}>
           <TextField
             label="Label"
@@ -198,6 +200,34 @@ export const Primary = () => {
           </Stack>
         </Grid>
       </Grid>
+
+      <Grid container spacing={1} alignItems="center">
+        <Grid item xs={4}>
+          <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={['White Christmas', 'The Godfather', 'Fifth Element']}
+            fullWidth
+            renderInput={(params) => <TextField {...params} placeholder="Autocomplete" />}
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField
+            placeholder="Regular field..."
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField
+            select
+          >
+            <MenuItem value="Yes">Yes</MenuItem>
+            <MenuItem value="No">No</MenuItem>
+          </TextField>
+        </Grid>
+      </Grid>
+
 
       <div style={{ marginBottom: 400 }} />
     </div>

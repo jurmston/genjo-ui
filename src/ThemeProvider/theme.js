@@ -69,15 +69,20 @@ export const createTheme = ({ mode, primary, secondary, grey = colors.slate }) =
             maxWidth: 'calc(100% - 4px)',
           },
           input: {
-            padding: 6,
+            padding: `4px 6px !important`,
           },
+
+          endAdornment: {
+            right: '6px !important',
+          },
+
           inputRoot: {
             '&[class*="MuiOutlinedInput-root"]': {
               padding: 0,
               paddingTop: 0,
               paddingLeft: 0,
               '& $input': {
-                padding: 6,
+                padding: 0,
               },
             },
           },
