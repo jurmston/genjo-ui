@@ -42,6 +42,7 @@ export const CurrencyField = ({
   onChange,
   thousandsSeparator = ',',
   value,
+  textAlign = 'right',
   ...textFieldProps
 }) => {
   // Flag to indicate that the negative sign was pressed, but the value is
@@ -118,8 +119,8 @@ export const CurrencyField = ({
       inputProps={{
         ...textFieldProps.inputProps,
         style: {
+          textAlign,
           ...textFieldProps.inputProps?.style,
-          textAlign: 'right',
         },
       }}
     />
@@ -145,6 +146,8 @@ CurrencyField.propTypes = {
   thousandsSeparator: PropTypes.string,
   /** The integer value of the input. */
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  /** The text alignment of the input */
+  textAlign: PropTypes.string,
 }
 
 export default CurrencyField
