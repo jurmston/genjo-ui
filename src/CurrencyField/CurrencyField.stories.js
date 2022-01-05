@@ -4,19 +4,10 @@ import { CurrencyField } from './CurrencyField'
 export default {
   title: 'Components/CurrencyField',
   component: CurrencyField,
-  argTypes: {
-    variant: {
-      defaultValue: 'filled',
-      control: {
-        type: 'select',
-        options: ['filled', 'standard', 'outlined'],
-      },
-    },
-  },
 }
 
 export const Main = ({ ...args }) => {
-  const [value, setValue] = React.useState('25')
+  const [value, setValue] = React.useState(0)
 
   return (
     <div style={{ width: 300 }}>
@@ -27,8 +18,7 @@ export const Main = ({ ...args }) => {
 }
 
 Main.args = {
-  currencySymbol: '$',
-  decimalPlaces: 2,
-  decimalSeparator: '.',
-  thousandsSeparator: ',',
+  currency: 'USD',
+  locale: 'en-US',
+  disableNegativeNumbers: false,
 }
