@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import Tooltip from '@mui/material/Tooltip'
 import ButtonBase from '@mui/material/ButtonBase'
 import OptionsIcon from '@mui/icons-material/MoreHorizRounded'
-import { Menu } from '@mui/material'
+import Menu from '@mui/material/Menu'
 import { useTheme } from '@mui/material/styles'
 
 
