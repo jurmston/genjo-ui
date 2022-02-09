@@ -32,6 +32,8 @@ export const TextEditor = ({
   buttonPanelPosition = 'bottom',
   variant = 'contained',
   hideButtonPanel = false,
+  onBlur,
+  onFocus,
 }) => {
   const [isFocused, setIsFocused] = React.useState(false)
 
@@ -52,10 +54,12 @@ export const TextEditor = ({
    * tabs to (typoically) non-interactive elements like wrappers.
    */
   const handleFocus = React.useCallback(
-    () => {
+    event => {
       if (!isFocused) {
         setIsFocused(true)
       }
+
+      onFocus?.(event)
     },
     [isFocused],
   )
@@ -69,6 +73,8 @@ export const TextEditor = ({
       if (!event.currentTarget.contains(event.relatedTarget)) {
         setIsFocused(false)
       }
+
+      onBlur?.(event)
     },
     []
   )
@@ -169,6 +175,8 @@ TextEditor.propTypes = {
   /** The initial JSON value of the content */
   initialValue: PropTypes.any,
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  onFocus: PropTypes.func,
   minHeight: PropTypes.number,
   maxHeight: PropTypes.number,
   variant: PropTypes.oneOf(['contained', 'open']),
