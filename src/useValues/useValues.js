@@ -6,7 +6,7 @@ export function useValues(initialValues = {}, deps = []) {
   const [isReady, setIsReady] = React.useState(false)
   const [originalValues, setOriginalValues] = React.useState({})
 
-  const setFieldValue = React.useCallback((field, value) => setValues({ ...values, [field]: value }), [values])
+  const setFieldValue = React.useCallback((field, value) => setValues(v => ({ ...v, [field]: value })), [])
 
   const resetValues = React.useCallback(() => {
     setValues({ ...initialValues })
