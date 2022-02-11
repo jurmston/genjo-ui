@@ -21,9 +21,14 @@ export const DateTimeRangeField = ({
   label = '',
   error = false,
   helperText = '',
+  timezone = '',
   ...textFieldProps
 }) => {
   const start = (startFromProps && !startFromProps.invalid ? startFromProps : DateTime.local().startOf('hour'))
+
+  if (timezone) {
+    start.setZone(timezone)
+  }
 
   const end = (endFromProps && !endFromProps.invalid ? endFromProps : start.plus({ hours: 1 }))
 
@@ -208,4 +213,5 @@ DateTimeRangeField.propTypes = {
   variant: PropTypes.oneOf(['filled', 'outlined', 'standard']),
   helperText: PropTypes.string,
   error: PropTypes.bool,
+  timezone: PropTypes.string,
 }
