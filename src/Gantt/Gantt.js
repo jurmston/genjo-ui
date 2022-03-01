@@ -1,12 +1,29 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import { DateTime } from 'luxon'
-// import COMPONENT from '@mui/material/COMPONENT'
 import './styles.css'
 
+import { safeDivide } from '../utils/math'
+import { GanttContext } from './GanttContext'
+import { GanttSvg } from './GanttSvg'
+import { GanttTask } from './GanttTask'
+import { GanttArrow } from './GanttArrow'
+import {
+  getBarDimensions,
+  initializeStartAndEnd,
+  initializeDrawOptions,
+  handleScroll,
+  applyDragPosition,
+} from './utils'
 
-const COLUMN_WIDTH = 38
+const COLUMN_WIDTHS = {
+  day: 38,
+  week: 24,
+  month: 10,
+}
+
+const BUFFER_DAYS = 360
+
 const HEADER_HEIGHT = 50
 const PADDING = 16
 const BAR_HEIGHT = 28
@@ -17,59 +34,250 @@ const HANDLE_BUFFER = 3
 const ARROW_CURVE = 5
 
 
-function getBarDimensions({ task, start }) {
-  const deltaDays = task.start.diff(start).as('days')
-  const numDays = task.end.diff(start).as('days')
+function calculateTaskBoundries(tasks) {
+  const result = {}
 
-  const height = BAR_HEIGHT
-  const width = numDays * COLUMN_WIDTH
-  const x = deltaDays * COLUMN_WIDTH
-  const y = HEADER_HEIGHT + PADDING + task.index * (height + PADDING)
+  // First pass, min/max of each task
+  for (let task of tasks) {
+    result[task.id] = {
+      start: task.start,
+      end: task.end,
+      min: null,
+    }
+  }
 
-  return { height, width, x, y }
+  // Second pass, min/max adjusted based on deps
+  for (let task of tasks) {
+    for (let dep of task.dependencies) {
+      // Calculate the new
+      const depStart = dep.type === 'START'
+        ? result[dep.taskId].start.plus({ days: dep.buffer ?? 0 })
+        : result[dep.taskId].end.plus({ days: dep.buffer ?? 0 })
+
+      result[task.id].min = depStart > result[task.id].min
+        ? depStart
+        : result[task.id].min
+    }
+  }
+
+  return result
+}
+
+/**
+ *
+ * Dependency Naming:
+ *   Task(Before Task) -> Dep(from: Before Task, to: After Task) -> Task(After Task)
+ *   Node -> Edge -> Node
+ *
+ * TODO: Probably should detect and prevent cycles.
+ *
+ * @param {*} param0
+ * @returns
+ */
+function loadData({ tasks, start, options }) {
+  const tasksResult = {}
+  const depsResult = []
+
+  tasks.forEach((task, index) => {
+    const dimensions = getBarDimensions({ index, task, start, options })
+
+    tasksResult[task.id] = {
+      ...task,
+      index,
+      minX: 0,
+      drawKey: 0,
+      originalDimensions: dimensions,
+      dimensions,
+      beforeTasks: [],
+      afterTasks: [],
+    }
+
+    // First pass, initialize the dependencies
+    task.dependencies.forEach(dep => {
+      const { taskId: from, ...rest } = dep
+      depsResult.push({ drawKey: 0, to: task.id, from, ...rest })
+    })
+
+    // Dependency second pass, calculate mix/max and attach before/after ids
+    depsResult.forEach(dep => {
+      tasksResult[dep.from].afterTasks.push(dep.to)
+      tasksResult[dep.to].beforeTasks.push(dep.from)
+
+      // Min
+      const { dimensions: fromDimensions, minX: currentMinX } = tasksResult[dep.from]
+      const { x: fromX, width: fromWidth } = fromDimensions
+
+      const newMinX = dep.type === 'START'
+        ? fromX + (dep.buffer || 0) * options.columnWidth
+        : fromX + fromWidth + (dep.buffer || 0) * options.columnWidth
+
+      tasksResult[dep.to].minX = Math.max(0, currentMinX, newMinX)
+    })
+  })
+
+  console.log(tasksResult)
+
+  return {
+    tasks: tasksResult,
+    dependencies: depsResult,
+    drag: null,
+  }
 }
 
 
-function Bar({ start, task: taskFromProps, index }) {
+export function Gantt({
+  tasks: tasksFromProps = [],
+  mode = 'day',
+  buffer = 360,
+  onChanges,
+  options: optionsFromProps = {},
+}) {
+  const containerRef = React.useRef(null)
 
-  const [task, setTask] = React.useState(taskFromProps)
-  const [isResizing, setIsResizing] = React.useState(false)
-  const [initialX, setInitialX] = React.useState(xFromProps)
-  const [x, setX] = React.useState(xFromProps)
-
-  console.log({ start })
-
-  const { height, width, x: xFromProps, y } = React.useMemo(
-    () => getBarDimensions({ start, task }),
-    [task, start],
+  const { start, end, first } = React.useMemo(
+    () => initializeStartAndEnd({ tasks: tasksFromProps, mode, buffer }),
+    [],
   )
 
+  const options = React.useMemo(
+    () => initializeDrawOptions(optionsFromProps, mode),
+    [],
+  )
+
+  const [state, setState] = React.useState({ tasks: {}, drag: null, dependencies: [] })
   React.useEffect(
     () => {
-      setTask(taskFromProps)
-      setInitialX(xFromProps)
-      setX(xFromProps)
-      setIsResizing(false)
+      setState(loadData({ tasks: tasksFromProps, start, options }))
     },
-    [taskFromProps, xFromProps]
+    [tasksFromProps, start, options]
   )
 
-  function handleMouseDown() {
-    setInitialX(x)
-    setIsResizing(true)
-  }
+  // const [dependencies, setDependencies] = React.useState({})
+
+  const todayX = React.useMemo(
+    () => start
+      ? first.startOf(mode).diff(start).as('days') * options.columnWidth
+      : 0,
+    [start, mode, options]
+  )
+
+  const startDrag = React.useCallback(
+    (event, taskId, dragMode) => {
+      event.preventDefault()
+      event.stopPropagation()
+
+      setState(s => ({
+        ...s,
+        drag: {
+          taskId,
+          mode: dragMode,
+          initialX: event.clientX,
+          x: event.clientX,
+          initialScroll: containerRef.current?.scrollLeft ?? 0,
+          updatedTasks: {},
+        },
+      }))
+    },
+    [containerRef],
+  )
 
   function handleMouseMove(event) {
-    setX(event.clientX)
+    if (!state.drag) {
+      return
+    }
+
+    // Check if scroll should be triggered
+    handleScroll(event, containerRef)
+
+    setState(s => {
+      const task = { ...s.tasks[s.drag.taskId] }
+      task.drawKey += 1
+      task.dimensions = applyDragPosition({
+        minX: task.minX,
+        dim: task.originalDimensions,
+        drag: s.drag,
+        options,
+        containerRef,
+      })
+
+      const updatedTasks = { [task.id]: true }
+
+      // If dragging, move any dependent (to) tasks out.
+      const toTasks = s.drag.mode === 'bar'
+        ? task.afterTasks.reduce((result, toTaskId) => {
+          const toTask = { ...s.tasks[toTaskId] }
+
+          toTask.drawKey += 1
+          toTask.dimensions = applyDragPosition({
+            minX: toTask.minX,
+            dim: toTask.originalDimensions,
+            drag: s.drag,
+            options,
+            containerRef,
+          })
+
+          updatedTasks[toTask.id] = true
+          result[toTask.id] = toTask
+
+          return result
+        }, {})
+        : {}
+
+      return {
+        ...s,
+        tasks: {
+          ...s.tasks,
+          ...toTasks,
+          [s.drag.taskId]: task,
+        },
+        drag: {
+          ...s.drag,
+          x: event.clientX,
+          updatedTasks: {
+            ...s.drag.updatedTasks,
+            ...updatedTasks,
+          }
+        },
+      }
+    })
   }
 
   function handleMouseUp() {
-    setIsResizing(false)
+    if (!state.drag) {
+      return
+    }
+
+    setState(s => {
+      const changes = Object.keys(s.drag.updatedTasks).map(taskId => {
+        const task = s.tasks[taskId]
+
+        const progress = state.drag.mode === 'progress'
+          ? Math.max(
+            0,
+            Math.min(
+              100,
+              100 * safeDivide(task.dimensions.progress, task.dimensions.width),
+            )
+          )
+          : task.progress
+
+        const daysFromStart = Math.floor(task.dimensions.x / options.columnWidth)
+        const taskDays = Math.floor(task.dimensions.width / options.columnWidth)
+        const newStart = start.plus({ days: daysFromStart })
+        const newEnd = start.plus({ days: daysFromStart + taskDays })
+
+        return { id: task.id, index: task.index, start: newStart, end: newEnd, progress }
+      })
+
+      onChanges?.(changes)
+      return { ...s, drag: null }
+    })
   }
 
+  // Update the drag callbacks
   React.useEffect(
     () => {
-      if (isResizing) {
+      if (state?.drag?.mode) {
         window.addEventListener('mousemove', handleMouseMove)
         window.addEventListener('mouseup', handleMouseUp)
 
@@ -79,400 +287,58 @@ function Bar({ start, task: taskFromProps, index }) {
         }
       }
     },
-    [isResizing]
+    [state?.drag?.mode]
   )
 
-  const progress = task.progress / 100
-  const progressWidth = width * progress
-
-  const progressPolygonPoints = [
-    x + progressWidth - 5,
-    y + height,
-    x + progressWidth + 5,
-    y + height,
-    x + progressWidth,
-    y + height - 8.66,
-  ].join(',')
-
-  return (
-    <g className="GenjoGantt__bar-wrapper">
-      <g className="GenjoGantt__bar-group">
-        <rect
-          x={x}
-          y={y}
-          width={width}
-          height={height}
-          rx={4}
-          ry={4}
-          className="GenjoGantt__bar"
-        />
-
-        <rect
-          x={x}
-          y={y}
-          width={progressWidth}
-          height={height}
-          rx={4}
-          ry={4}
-          className="GenjoGantt__progress"
-        />
-
-        <text
-          x={x + width / 2}
-          y={y + height / 2}
-          className="GenjoGantt__label"
-        >
-          {task.label}
-        </text>
-      </g>
-
-      <g className="GenjoGantt__handle-group">
-        <rect
-          x={x + width - HANDLE_WIDTH}
-          y={y + 1}
-          width={HANDLE_WIDTH}
-          height={height - HANDLE_BUFFER}
-          rx={3}
-          ry={3}
-          className="GenjoGantt__handle"
-        />
-
-        <rect
-          onMouseDown={handleMouseDown}
-          x={x + 1}
-          y={y + 1}
-          width={HANDLE_WIDTH}
-          height={height - HANDLE_BUFFER}
-          rx={3}
-          ry={3}
-          className="GenjoGantt__handle"
-        />
-
-        <polygon
-          points={progressPolygonPoints}
-          className="GenjoGantt__handle"
-        />
-      </g>
-    </g>
-  )
-}
-
-
-function Arrow({ start, dep }) {
-
-  const fromDim = getBarDimensions({ start, task: dep.fromTask })
-  const toDim = getBarDimensions({ start, task: dep.toTask })
-
-  const path = React.useMemo(
+  React.useLayoutEffect(
     () => {
-      let startX = fromDim.x + fromDim.width / 2
-
-      const condition = () => toDim.x < startX + PADDING
-        && startX > fromDim.x + PADDING
-
-      while(condition()) {
-        startX -= 10
-      }
-
-      const startY = HEADER_HEIGHT
-        + BAR_HEIGHT
-        + (PADDING + BAR_HEIGHT) * dep.fromTask.index
-        + PADDING
-
-      const endX = toDim.x - PADDING / 2
-
-      const endY = HEADER_HEIGHT
-        + BAR_HEIGHT / 2
-        + (PADDING + BAR_HEIGHT) * dep.toTask.index
-        + PADDING
-
-      const fromIsBelowTo = dep.fromTask.index > dep.toTask.index
-
-      const clockwise = fromIsBelowTo ? 1 : 0
-      const curveY = fromIsBelowTo ? -ARROW_CURVE : ARROW_CURVE
-      const offset = fromIsBelowTo
-        ? endY + ARROW_CURVE
-        : endY - ARROW_CURVE
-
-      const down1 = PADDING / 2 - ARROW_CURVE
-      const down2 = toDim.y + toDim.height / 2 - curveY
-
-      const left = toDim.x - PADDING
-
-      return toDim.x < fromDim.x + PADDING
-        ? `
-          M ${startX} ${startY}
-          v ${down1}
-          a ${ARROW_CURVE} ${ARROW_CURVE} 0 0 1 -${ARROW_CURVE} ${ARROW_CURVE}
-          H ${left}
-          a ${ARROW_CURVE} ${ARROW_CURVE} 0 0 ${clockwise} -${ARROW_CURVE} ${curveY}
-          V ${down2}
-          a ${ARROW_CURVE} ${ARROW_CURVE} 0 0 ${clockwise} ${ARROW_CURVE} ${curveY}
-          L ${endX} ${endY}
-          m -5 -5
-          l 5 5
-          l -5 5
-        `
-        : `
-          M ${startX} ${startY}
-          V ${offset}
-          a ${ARROW_CURVE} ${ARROW_CURVE} 0 0 ${clockwise} ${ARROW_CURVE} ${curveY}
-          L ${endX} ${endY}
-          m -5 -5
-          l 5 5
-          l -5 5
-        `
+      containerRef.current.scrollLeft = todayX
     },
-    [fromDim, toDim],
+    [containerRef, todayX]
   )
 
   return (
-    <path
-      d={path}
-      className="GenjoGantt__arrow"
-    />
-  )
-}
-
-
-export function Gantt({
-  tasks = [],
-  mode = 'daily',
-}) {
-
-  const [state, setState] = React.useState({
-    start: DateTime.now().minus({ days: 5 }),
-    end: DateTime.now().plus({ days: 5 }),
-    height: 0,
-    width: 0,
-    numDays: 0,
-    dates: [],
-  })
-
-  const [tasksById, setTasksById] = React.useState({})
-  React.useEffect(
-    () => setTasksById(tasks.reduce((result, task, index) => {
-      result[task.id] = {
-        ...task,
-        start: DateTime.fromISO(task.start).startOf('day'),
-        end: DateTime.fromISO(task.end).startOf('day'),
-        index,
-      }
-
-      return result
-    }, {})),
-    [tasks],
-  )
-
-  const dependencies = React.useMemo(
-    () => {
-      let result = []
-      for (let task of tasks) {
-        for (let dep of task.dependencies) {
-          result.push({
-            id: `${dep.taskId}__${task.id}`,
-            fromTask: tasksById[dep.taskId],
-            toTask: tasksById[task.id],
-            type: dep.type ?? 'FINISH',
-            buffer: dep.buffer ?? 0,
-          })
-        }
-      }
-
-      return result
-    },
-    [tasks]
-  )
-
-  React.useEffect(
-    () => {
-      let start = null
-      let end = null
-
-      for (let task of tasks) {
-        const taskStart = DateTime.fromISO(task.start).startOf('day')
-        const taskEnd = DateTime.fromISO(task.end).startOf('day')
-
-        start = !start || taskStart < start
-          ? taskStart
-          : start
-
-        end = !end || taskEnd > end
-          ? taskEnd
-          : end
-      }
-
-      const height = HEADER_HEIGHT
-        + PADDING
-        + tasks.length * (BAR_HEIGHT + PADDING)
-
-      const startWithBuffer = start.minus({ days: 7 })
-      const endWithBuffer = end.plus({ days: 7 })
-      const numDays = endWithBuffer.diff(startWithBuffer).as('days')
-      const dates = Array.from({ length: numDays }).map((_, index) =>
-        startWithBuffer.plus({ days: index })
-      )
-
-      const width = dates.length * COLUMN_WIDTH
-
-      setState({
-        start: startWithBuffer,
-        end: endWithBuffer,
-        height,
-        width,
-        numDays,
-        dates,
-      })
-    },
-    [tasks]
-  )
-
-  const todayX = state.start
-    ? DateTime.now().startOf('day').diff(state.start).as('days') * COLUMN_WIDTH
-    : 0
-
-  return (
-    <div className="GenjoGantt__container">
-      <svg width={state.width} height={state.height + PADDING + BUFFER} className="GenjoGantt__root">
-        <g className="GenjoGantt__grid">
-          <rect
-            x={0}
-            y={0}
-            width={state.width}
-            height={state.height}
-            className="GenjoGantt__grid__background"
-          />
-
-          {/* ROWS LAYER */}
-          <g>
-            {tasks.map((task, index) => {
-              const rowY = HEADER_HEIGHT + (PADDING / 2) + index * (BAR_HEIGHT + PADDING)
-
-              return (
-                <rect
-                  key={`row__${task.id}`}
-                  x={0}
-                  y={rowY}
-                  width={state.width}
-                  height={BAR_HEIGHT + PADDING}
-                  className="GenjoGantt__grid__row"
-                />
-              )
-            })}
-          </g>
-
-          {/* LINES */}
-          <g>
-            {tasks.map((task, index) => {
-              const rowY = HEADER_HEIGHT + (PADDING / 2) + index * (BAR_HEIGHT + PADDING)
-
-              return (
-                <line
-                  key={`line__${task.id}`}
-                  x1={0}
-                  x2={state.width}
-                  y1={rowY + BAR_HEIGHT + PADDING}
-                  y2={rowY + BAR_HEIGHT + PADDING}
-                  className="GenjoGantt__grid__line"
-                />
-              )
-            })}
-          </g>
-
-          {/* HEADER */}
-          <rect
-            x={0}
-            y={0}
-            width={state.width}
-            height={HEADER_HEIGHT + HEADER_BUFFER}
-            className="GenjoGantt__grid__header"
-          />
-
-          {/* TICKS */}
-          {state.dates.map((date, index)=> {
-
-            // Put a border on monday and saturday
-            const isThick = date.weekday === 1 || date.weekday === 6
-
-            const tickX = COLUMN_WIDTH * index
-            const tickY = HEADER_HEIGHT + PADDING / 2
-            const tickHeight = (BAR_HEIGHT + PADDING) * tasks.length
-
-            return (
-              <path
-                key={index}
-                d={`M ${tickX} ${tickY} v ${tickHeight}`}
-                className={clsx(
-                  'GenjoGantt__grid__tick',
-                  isThick && 'GenjoGantt__grid__thick-tick',
-                )}
-              />
-            )
-          })}
-
-          {/* HIGHLIGHTS */}
-          <rect
-            x={todayX}
-            y={0}
-            width={COLUMN_WIDTH}
-            height={(BAR_HEIGHT + PADDING) * tasks.length + HEADER_HEIGHT + PADDING / 2}
-            className="GenjoGantt__grid__today-highlight"
-          />
-        </g>
-
-        <g className="GenjoGantt__dates">
-          {state.dates.map((date, index) => (
-            <>
-              {date.day === 1 && (
-                <text
-                x={index * COLUMN_WIDTH + COLUMN_WIDTH * date.daysInMonth / 2}
-                y={HEADER_HEIGHT - 25}
-                className="GenjoGantt__dates__upper-text"
-                >
-                  {date.toFormat('MMMM')}
-                </text>
-              )}
-
-              <text
-                y={HEADER_HEIGHT}
-                x={index * COLUMN_WIDTH + COLUMN_WIDTH / 2}
-                className="GenjoGantt__dates__lower-text"
-              >
-                {date.day}
-              </text>
-            </>
-          ))}
-        </g>
-
-        <g className="GenjoGantt__arrow">
-          {dependencies.map(dep => Boolean(dep.fromTask) && Boolean(dep.toTask) && (
-            <Arrow key={dep.id} start={state.start} dep={dep} />
-          ))}
-        </g>
-
-        <g className="GenjoGantt__progress">
-
-        </g>
-
-        <g className="GenjoGantt__bar">
-          {tasks.map((task, index) => Boolean(tasksById[task.id]) && (
-            <Bar
-              key={task.id}
-              task={tasksById[task.id]}
-              index={index}
-              start={state.start}
+    <GanttContext.Provider
+      value={{
+        numTasks: tasksFromProps.length,
+        start,
+        end,
+        ...state,
+        // dependencies,
+        mode,
+        options,
+        containerRef,
+        startDrag,
+      }}
+    >
+      <div className="GenjoGantt__container" ref={containerRef}>
+        <GanttSvg>
+          {state.dependencies.map(dep => (
+            <GanttArrow
+              key={`${dep.from}__${dep.to}`}
+              dep={dep}
             />
           ))}
-        </g>
 
-        <g className="GenjoGantt__details">
+          {Object.values(state.tasks).map(task => (
+            <GanttTask
+              key={task.id}
+              task={task}
+            />
+          ))}
+        </GanttSvg>
+      </div>
 
-        </g>
-      </svg>
-    </div>
+      {/*<ButtonGroup>
+        <Button variant={mode === 'day' ? 'contained' : 'outlined'} onClick={() => dispatch({ type: 'SET_MODE', mode: 'day' })}>Daily</Button>
+        <Button variant={mode === 'week' ? 'contained' : 'outlined'} onClick={() => dispatch({ type: 'SET_MODE', mode: 'week' })}>Weekly</Button>
+        <Button variant={mode === 'month' ? 'contained' : 'outlined'} onClick={() => dispatch({ type: 'SET_MODE', mode: 'month' })}>Monthly</Button>
+      </ButtonGroup>*/}
+    </GanttContext.Provider>
   )
 }
 
 Gantt.propTypes = {
-  mode: PropTypes.oneOf(['monthly', 'daily', 'weekly']),
+  mode: PropTypes.oneOf(['month', 'day', 'week']),
+  tasks: PropTypes.arrayOf(PropTypes.object),
 }

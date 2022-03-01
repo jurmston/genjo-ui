@@ -93,6 +93,10 @@
   box-sizing: border-box;
 }
 
+.Genjo__bar-wrapper {
+  cursor: pointer;
+}
+
 .GenjoGantt__bar-wrapper:hover .GenjoGantt__bar {
   stroke-width: 2;
 }
