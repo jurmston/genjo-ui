@@ -4,10 +4,13 @@ import { useGantt } from './useGantt'
 
 function GanttArrowInner({ dep }) {
   const { options, tasks } = useGantt()
-  const { padding, headerHeight, barHeight, arrowCurve } = options
+  const { padding, headerHeight, barHeight, arrowCurve, rowHeight, barPadding } = options
 
-  const { index: fromIndex, dimensions: { x: fromX, width: fromWidth }} = tasks[dep.from]
-  const { index: toIndex, dimensions: { x: toX, y: toY }} = tasks[dep.to]
+  const fromTask = tasks[dep.from]
+  const toTask = tasks[dep.to]
+
+  const { index: fromIndex, dimensions: { x: fromX, width: fromWidth }} = fromTask
+  const { index: toIndex, dimensions: { x: toX, y: toY }} = toTask
 
   const path = React.useMemo(
     () => {
@@ -22,15 +25,14 @@ function GanttArrowInner({ dep }) {
 
       const startY = headerHeight
         + barHeight
-        + (padding + barHeight) * fromIndex
-        + padding
+        + rowHeight * fromIndex
 
       const endX = toX - padding / 2
 
       const endY = headerHeight
+        + rowHeight * toIndex
+        + barPadding
         + barHeight / 2
-        + (padding + barHeight) * toIndex
-        + padding
 
       const fromIsBelowTo = fromIndex > toIndex
 
@@ -71,6 +73,12 @@ function GanttArrowInner({ dep }) {
     },
     [fromX, fromIndex, fromWidth, toIndex, toX, toY, options],
   )
+
+  // If either task doesn't have a start, the arrows render in strange ways.
+  // Better to hide them.
+  if (!toTask.hasStart) {
+    return null
+  }
 
   return (
     <path

@@ -4,16 +4,16 @@ import { useGantt} from './useGantt'
 
 export function GanttRow({ index, width }) {
   const { options } = useGantt()
-  const { headerHeight, padding, barHeight } = options
+  const { headerHeight, rowHeight } = options
 
-  const rowY = headerHeight + (padding / 2) + index * (barHeight + padding)
+  const rowY = headerHeight + index * rowHeight
 
   return (
     <rect
       x={0}
       y={rowY}
       width={width}
-      height={barHeight + padding}
+      height={rowHeight}
       className="GenjoGantt__grid__row"
     />
   )

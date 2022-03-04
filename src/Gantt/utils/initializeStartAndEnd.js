@@ -1,28 +1,38 @@
 import { DateTime } from 'luxon'
 
 
-export function initializeStartAndEnd({ tasks, mode = 'day', buffer = 360 }) {
+export function initializeStartAndEnd({ data, mode = 'day', options }) {
   let start = DateTime.now()
   let end = DateTime.now()
 
-  for (let task of tasks) {
+  for (let task of data) {
     // Update the min/max start and end dates.
-    start = task.start < start
-      ? task.start
-      : start
+    if (task.start) {
+      start = task.start < start
+        ? task.start
+        : start
+    }
 
-    end = task.end > end
-      ? task.end
-      : end
+    if (task.end) {
+      end = task.end > end
+        ? task.end
+        : end
+    }
   }
 
-  const startWithBuffer = start.minus({ days: buffer }).startOf(mode)
+  const startWithBuffer = start.minus({ days: options.bufferDays }).startOf(mode)
 
-  const endWithBuffer = end.plus({ days: buffer }).endOf(mode)
+  const endWithBuffer = end.plus({ days: options.bufferDays }).endOf(mode)
+
+  const numDays = endWithBuffer.endOf('day').diff(startWithBuffer.startOf('day')).as('days')
+
+  const width = options.columnWidth * numDays
 
   return {
     first: start,
     start: startWithBuffer,
     end: endWithBuffer,
+    width,
+    numDays,
   }
 }

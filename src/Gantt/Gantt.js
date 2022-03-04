@@ -1,184 +1,372 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
-import { DateTime } from 'luxon'
 import './styles.css'
 
-import { safeDivide } from '../utils/math'
+import ButtonGroup from '@mui/material/ButtonGroup'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+
 import { GanttContext } from './GanttContext'
 import { GanttSvg } from './GanttSvg'
 import { GanttTask } from './GanttTask'
 import { GanttArrow } from './GanttArrow'
+import { GanttToday } from './GanttToday'
+import { GanttDragDate } from './GanttDragDate'
+import { GanttMilestone } from './GanttMilestone'
 import {
-  getBarDimensions,
   initializeStartAndEnd,
   initializeDrawOptions,
   handleScroll,
-  applyDragPosition,
+  dragTask,
+  loadData,
+  dragMilestone,
+  getDependentIds,
+  getTaskChanges,
+  getMilestoneChanges,
 } from './utils'
 
-const COLUMN_WIDTHS = {
-  day: 38,
-  week: 24,
-  month: 10,
-}
 
-const BUFFER_DAYS = 360
-
-const HEADER_HEIGHT = 50
-const PADDING = 16
-const BAR_HEIGHT = 28
-const BUFFER = 100
-const HEADER_BUFFER = 10
-const HANDLE_WIDTH = 6
-const HANDLE_BUFFER = 3
-const ARROW_CURVE = 5
-
-
-function calculateTaskBoundries(tasks) {
-  const result = {}
-
-  // First pass, min/max of each task
-  for (let task of tasks) {
-    result[task.id] = {
-      start: task.start,
-      end: task.end,
-      min: null,
-    }
-  }
-
-  // Second pass, min/max adjusted based on deps
-  for (let task of tasks) {
-    for (let dep of task.dependencies) {
-      // Calculate the new
-      const depStart = dep.type === 'START'
-        ? result[dep.taskId].start.plus({ days: dep.buffer ?? 0 })
-        : result[dep.taskId].end.plus({ days: dep.buffer ?? 0 })
-
-      result[task.id].min = depStart > result[task.id].min
-        ? depStart
-        : result[task.id].min
-    }
-  }
-
-  return result
-}
-
-/**
- *
- * Dependency Naming:
- *   Task(Before Task) -> Dep(from: Before Task, to: After Task) -> Task(After Task)
- *   Node -> Edge -> Node
- *
- * TODO: Probably should detect and prevent cycles.
- *
- * @param {*} param0
- * @returns
- */
-function loadData({ tasks, start, options }) {
-  const tasksResult = {}
-  const depsResult = []
-
-  tasks.forEach((task, index) => {
-    const dimensions = getBarDimensions({ index, task, start, options })
-
-    tasksResult[task.id] = {
-      ...task,
-      index,
-      minX: 0,
-      drawKey: 0,
-      originalDimensions: dimensions,
-      dimensions,
-      beforeTasks: [],
-      afterTasks: [],
-    }
-
-    // First pass, initialize the dependencies
-    task.dependencies.forEach(dep => {
-      const { taskId: from, ...rest } = dep
-      depsResult.push({ drawKey: 0, to: task.id, from, ...rest })
-    })
-
-    // Dependency second pass, calculate mix/max and attach before/after ids
-    depsResult.forEach(dep => {
-      tasksResult[dep.from].afterTasks.push(dep.to)
-      tasksResult[dep.to].beforeTasks.push(dep.from)
-
-      // Min
-      const { dimensions: fromDimensions, minX: currentMinX } = tasksResult[dep.from]
-      const { x: fromX, width: fromWidth } = fromDimensions
-
-      const newMinX = dep.type === 'START'
-        ? fromX + (dep.buffer || 0) * options.columnWidth
-        : fromX + fromWidth + (dep.buffer || 0) * options.columnWidth
-
-      tasksResult[dep.to].minX = Math.max(0, currentMinX, newMinX)
-    })
+function initializeState({ data, mode, options }) {
+  const initializedOptions = initializeDrawOptions({
+    options,
+    mode,
   })
 
-  console.log(tasksResult)
+  const { start, end, first, width, numDays } = initializeStartAndEnd({
+    data,
+    mode,
+    options: initializedOptions,
+  })
+
+  const { tasks, dependencies, milestones } = loadData({
+    data,
+    start,
+    end,
+    options: initializedOptions,
+  })
 
   return {
-    tasks: tasksResult,
-    dependencies: depsResult,
+    numTasks: Object.keys(tasks).length,
+    options: initializedOptions,
+    mode,
+    start,
+    end,
+    first,
+    tasks,
+    dependencies,
+    milestones,
     drag: null,
+    width,
+    numDays,
+    changes: null,
   }
 }
+
+
+function reducer(state, action) {
+  switch (action.type) {
+
+    case 'RELOAD_DATA': {
+      const { tasks, dependencies, milestones } = loadData({
+        data: action.data,
+        start: state.start,
+        end: state.end,
+        options: state.options,
+      })
+
+      return {
+        ...state,
+        changes: null,
+        tasks,
+        dependencies,
+        milestones,
+      }
+    }
+
+    case 'CHANGE_MODE': {
+      return initializeState({
+        data: action.data,
+        mode: action.mode,
+        options: action.options,
+      })
+    }
+
+    case 'START_DRAG': {
+
+      const { event, dragMode, draggableId, containerRef } = action
+
+      const affectedTasks = dragMode === 'milestone'
+        ? []
+        : dragMode === 'bar'
+        ? [draggableId, ...getDependentIds(state.tasks, state.tasks[draggableId])]
+        : [draggableId]
+
+      const affectedMilestones = dragMode === 'milestone'
+        ? [draggableId]
+        : dragMode === 'bar'
+        ? affectedTasks.map(taskId => state.tasks[taskId].milestones).flat()
+        : []
+
+      const mainTask = state.tasks[draggableId]
+
+      // Tracking date so the user can quickly tell where the drag cursor is.
+      let date = dragMode === 'milestone'
+        ? state.milestones[draggableId].date
+        : dragMode === 'end'
+        ? mainTask.end
+        : mainTask.start
+
+      let initialX = event.clientX
+      let currentDragMode = dragMode
+
+      const updatedTasks = {}
+
+      if (dragMode === 'bar' && mainTask && (!mainTask.hasStart || !mainTask.hasEnd)) {
+        const dim = event.target.getBoundingClientRect()
+        const clickX = event.clientX - dim.left
+
+        const originalX = mainTask.originalDimensions.x
+        const originalWidth = mainTask.originalDimensions.width
+
+        const minX = Math.max(mainTask.minX, mainTask.minMilestoneX)
+        const maxX = mainTask.maxMilestoneX
+
+        if (!mainTask.hasStart && !mainTask.hasEnd) {  // Neither start or end
+          // Create a new start either at the click or the required minX
+          const newX = minX ? Math.min(minX, clickX) : clickX
+
+          const newWidth = Math.max(
+            state.options.columnWidth,
+            clickX - newX,
+            maxX ? maxX - newX : 0,
+          )
+
+          mainTask.originalDimensions.width = newWidth
+          mainTask.originalDimensions.x = newX
+          mainTask.dimensions.width = newWidth
+          mainTask.dimensions.x = newX
+
+          initialX = newX + dim.left
+          currentDragMode = 'end'
+        } else if (!mainTask.hasStart) {  // No start
+          // Create a new start either at the click or the required minX
+          const newX = minX ? Math.min(minX, clickX) : clickX
+
+          const newWidth = Math.max(
+            state.options.columnWidth,
+            originalWidth - newX,
+          )
+
+          mainTask.originalDimensions.width = newWidth
+          mainTask.originalDimensions.x = newX
+          mainTask.dimensions.width = newWidth
+          mainTask.dimensions.x = newX
+
+          // The cursor should think it started at the new start.
+          initialX = newX + dim.left
+          currentDragMode = 'start'
+        } else {  // No end
+          // Create a new start either at the click or the required maxX
+          const newWidth = Math.max(
+            state.options.columnWidth,
+            clickX,
+            maxX < Infinity ? maxX - originalX : 0,
+          )
+
+          console.log(clickX, originalX + newWidth + dim.left)
+
+          mainTask.originalDimensions.width = newWidth
+          mainTask.originalDimensions.x = originalX
+          mainTask.dimensions.width = newWidth
+          mainTask.dimensions.x = originalX
+
+          // The cursor should start from the new end
+          // initialX = originalX + newWidth + dim.left
+          currentDragMode = 'end'
+        }
+
+        updatedTasks[draggableId] = mainTask
+      }
+
+      // If the drag date is at the start, adjust by a day
+      if (currentDragMode !== 'end' && currentDragMode !== 'milestone') {
+        date = date.plus({ days: 1 })
+      }
+
+      return {
+        ...state,
+        tasks: { ...state.tasks, ...updatedTasks },
+        drag: {
+          wasDragged: false,
+          draggableId,
+          mode: currentDragMode,
+          initialX,
+          x: event.clientX,
+          date,
+          initialScroll: containerRef.current?.scrollLeft ?? 0,
+          affectedTasks,
+          affectedMilestones,
+        },
+      }
+    }
+
+    case 'DRAG_MOVE': {
+      const { event, containerRef } = action
+
+      const drag = { ...state.drag, x: event.clientX }
+
+      const item = state.tasks[drag.draggableId] || state.milestones[drag.draggableId]
+
+      if (item) {
+        // Calculate the drag date
+        const dateX = item.dimensions.x + (drag.mode === 'end' ? item.dimensions.width : 0)
+        const newDate = state.start.plus({
+          days: dateX / state.options.columnWidth + ((drag.mode === 'end' || drag.mode === 'milestone') ? 0 : 1)
+        })
+        drag.date = newDate
+      }
+
+      const updatedTasks = {}
+      const updatedMilestones = {}
+
+      drag?.affectedTasks?.forEach(taskId => {
+        const task = { ...state.tasks[taskId] }
+
+        dragTask({
+          task,
+          drag,
+          options: state.options,
+          containerRef,
+        })
+
+        updatedTasks[taskId] = task
+      })
+
+      drag?.affectedMilestones?.forEach(milestoneId => {
+        const milestone = { ...state.milestones[milestoneId] }
+
+        dragMilestone({
+          task: updatedTasks[milestone.taskId] || state.tasks[milestone.taskId],
+          milestone,
+          drag,
+          options: state.options,
+          containerRef,
+        })
+
+        updatedMilestones[milestoneId] = milestone
+      })
+
+      drag.wasDragged = true
+
+      return {
+        ...state,
+        drag,
+        tasks: { ...state.tasks, ...updatedTasks },
+        milestones: { ...state.milestones, ...updatedMilestones },
+      }
+    }
+
+    case 'END_DRAG': {
+      const changes = state.drag.wasDragged
+        ? [state.drag.mode, getTaskChanges(state), getMilestoneChanges(state)]
+        : null
+
+      return { ...state, changes, drag: null }
+    }
+
+    default: {
+      throw new Error(`Invalid action type: ${action.type}`)
+    }
+  }
+}
+
+
 
 
 export function Gantt({
-  tasks: tasksFromProps = [],
-  mode = 'day',
-  buffer = 360,
+  tasks: dataFromProps = [],
+  mode: modeFromProps = 'month',
+  title = '',
   onChanges,
   options: optionsFromProps = {},
+  onTaskClick,
+  onMilestoneClick,
+  selectedId = null,
+  actions,
 }) {
   const containerRef = React.useRef(null)
 
-  const { start, end, first } = React.useMemo(
-    () => initializeStartAndEnd({ tasks: tasksFromProps, mode, buffer }),
-    [],
+  const [state, dispatch] = React.useReducer(
+    reducer,
+    initializeState({
+      data: dataFromProps,
+      mode: modeFromProps,
+      options: optionsFromProps,
+    }),
   )
 
-  const options = React.useMemo(
-    () => initializeDrawOptions(optionsFromProps, mode),
-    [],
+  const [containerDim, setContainerDim] = React.useState({ start: 0, end: 0 })
+  React.useLayoutEffect(
+    () => {
+      if (!containerRef.current) {
+        return
+      }
+
+      setContainerDim({
+        start: containerRef.current.scrollLeft,
+        end: containerRef.current.scrollLeft + containerRef.current.clientWidth,
+      })
+    },
+    [containerRef.current]
   )
 
-  const [state, setState] = React.useState({ tasks: {}, drag: null, dependencies: [] })
   React.useEffect(
     () => {
-      setState(loadData({ tasks: tasksFromProps, start, options }))
+      dispatch({ type: 'RELOAD_DATA', data: dataFromProps })
     },
-    [tasksFromProps, start, options]
+    [dataFromProps]
   )
 
-  // const [dependencies, setDependencies] = React.useState({})
-
   const todayX = React.useMemo(
-    () => start
-      ? first.startOf(mode).diff(start).as('days') * options.columnWidth
+    () => state.start
+      ? state.first.startOf(state.mode).diff(state.start).as('days') * state.options.columnWidth
       : 0,
-    [start, mode, options]
+    [state.start, state.mode, state.options]
   )
 
   const startDrag = React.useCallback(
-    (event, taskId, dragMode) => {
+    (event, draggableId, dragMode) => {
       event.preventDefault()
       event.stopPropagation()
 
-      setState(s => ({
-        ...s,
-        drag: {
-          taskId,
-          mode: dragMode,
-          initialX: event.clientX,
-          x: event.clientX,
-          initialScroll: containerRef.current?.scrollLeft ?? 0,
-          updatedTasks: {},
-        },
-      }))
+      dispatch({
+        type: 'START_DRAG',
+        event,
+        draggableId,
+        dragMode,
+        containerRef,
+      })
     },
     [containerRef],
+  )
+
+  const handleTaskClick = React.useCallback(
+    (event, taskId) => {
+      event.preventDefault()
+      event.stopPropagation()
+
+      onTaskClick?.(event, taskId)
+    }
+  )
+
+  const handleMilstoneClick = React.useCallback(
+    (event, milestoneId) => {
+      event.preventDefault()
+      event.stopPropagation()
+
+      onMilestoneClick?.(event, milestoneId)
+    }
   )
 
   function handleMouseMove(event) {
@@ -189,89 +377,36 @@ export function Gantt({
     // Check if scroll should be triggered
     handleScroll(event, containerRef)
 
-    setState(s => {
-      const task = { ...s.tasks[s.drag.taskId] }
-      task.drawKey += 1
-      task.dimensions = applyDragPosition({
-        minX: task.minX,
-        dim: task.originalDimensions,
-        drag: s.drag,
-        options,
-        containerRef,
-      })
-
-      const updatedTasks = { [task.id]: true }
-
-      // If dragging, move any dependent (to) tasks out.
-      const toTasks = s.drag.mode === 'bar'
-        ? task.afterTasks.reduce((result, toTaskId) => {
-          const toTask = { ...s.tasks[toTaskId] }
-
-          toTask.drawKey += 1
-          toTask.dimensions = applyDragPosition({
-            minX: toTask.minX,
-            dim: toTask.originalDimensions,
-            drag: s.drag,
-            options,
-            containerRef,
-          })
-
-          updatedTasks[toTask.id] = true
-          result[toTask.id] = toTask
-
-          return result
-        }, {})
-        : {}
-
-      return {
-        ...s,
-        tasks: {
-          ...s.tasks,
-          ...toTasks,
-          [s.drag.taskId]: task,
-        },
-        drag: {
-          ...s.drag,
-          x: event.clientX,
-          updatedTasks: {
-            ...s.drag.updatedTasks,
-            ...updatedTasks,
-          }
-        },
-      }
+    dispatch({
+      type: 'DRAG_MOVE',
+      event,
+      containerRef,
     })
   }
 
-  function handleMouseUp() {
-    if (!state.drag) {
-      return
-    }
+  const handleMouseUp = React.useCallback(
+    () => {
+      if (!state.drag) {
+        return
+      }
 
-    setState(s => {
-      const changes = Object.keys(s.drag.updatedTasks).map(taskId => {
-        const task = s.tasks[taskId]
+      dispatch({ type: 'END_DRAG' })
+    },
+    [state.drag]
+  )
 
-        const progress = state.drag.mode === 'progress'
-          ? Math.max(
-            0,
-            Math.min(
-              100,
-              100 * safeDivide(task.dimensions.progress, task.dimensions.width),
-            )
-          )
-          : task.progress
+  React.useEffect(
+    () => {
+      if (state.changes) {
+        console.log('Changes updating', state.changes)
+        onChanges?.(...state.changes)
+      }
+    },
+    [state.changes]
+  )
 
-        const daysFromStart = Math.floor(task.dimensions.x / options.columnWidth)
-        const taskDays = Math.floor(task.dimensions.width / options.columnWidth)
-        const newStart = start.plus({ days: daysFromStart })
-        const newEnd = start.plus({ days: daysFromStart + taskDays })
-
-        return { id: task.id, index: task.index, start: newStart, end: newEnd, progress }
-      })
-
-      onChanges?.(changes)
-      return { ...s, drag: null }
-    })
+  function changeMode(newMode) {
+    dispatch({ type: 'CHANGE_MODE', data: dataFromProps, mode: newMode, options: optionsFromProps })
   }
 
   // Update the drag callbacks
@@ -300,40 +435,96 @@ export function Gantt({
   return (
     <GanttContext.Provider
       value={{
-        numTasks: tasksFromProps.length,
-        start,
-        end,
         ...state,
-        // dependencies,
-        mode,
-        options,
+        selectedId,
         containerRef,
         startDrag,
+        handleTaskClick,
+        handleMilstoneClick,
+        todayX,
+        containerDim,
       }}
     >
-      <div className="GenjoGantt__container" ref={containerRef}>
-        <GanttSvg>
-          {state.dependencies.map(dep => (
-            <GanttArrow
-              key={`${dep.from}__${dep.to}`}
-              dep={dep}
-            />
-          ))}
+      <Stack direction="row" alignItems="center" spacing={1} sx={{ p: 2 }}>
+        <Typography variant="h3">{title}</Typography>
 
-          {Object.values(state.tasks).map(task => (
-            <GanttTask
-              key={task.id}
-              task={task}
-            />
-          ))}
-        </GanttSvg>
+        {actions}
+
+        <div style={{ flex: 1 }} />
+
+        <ButtonGroup>
+          <Button variant={state.mode === 'day' ? 'contained' : 'outlined'} onClick={() => changeMode('day')}>Daily</Button>
+          <Button variant={state.mode === 'week' ? 'contained' : 'outlined'} onClick={() => changeMode('week')}>Weekly</Button>
+          <Button variant={state.mode === 'month' ? 'contained' : 'outlined'} onClick={() => changeMode('month')}>Monthly</Button>
+          <Button variant={state.mode === 'quarter' ? 'contained' : 'outlined'} onClick={() => changeMode('quarter')}>Quarterly</Button>
+        </ButtonGroup>
+      </Stack>
+
+      <div style={{ position: 'relative' }}>
+        <div
+          className="GenjoGantt__container"
+          ref={containerRef}
+        >
+          <GanttSvg>
+            {state.dependencies.map(dep => (
+              <GanttArrow
+                key={`${dep.from}__${dep.to}`}
+                dep={dep}
+              />
+            ))}
+
+            {Object.values(state.tasks).map(task => (
+              <GanttTask
+                key={task.id}
+                task={task}
+              />
+            ))}
+
+            {Object.values(state.milestones).map(milestone => (
+              <GanttMilestone
+                key={milestone.id}
+                milestone={milestone}
+              />
+            ))}
+
+            <GanttToday />
+
+            {Boolean(state.drag) && <GanttDragDate />}
+
+          </GanttSvg>
+        </div>
+
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+          {Object.values(state.tasks).map((task, index) => [
+            !task.hasStart && (
+              <div
+                key={`no-start-${task.id}`}
+                style={{
+                  height: state.options.barHeight + 4,
+                  width: 30,
+                  position: 'absolute',
+                  left: 0,
+                  top: task.dimensions.y - 2,
+                  background: 'linear-gradient(90deg, rgba(255,255,255,1) 3%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.2) 60%, rgba(255,255,255,0) 100%)',
+                }}
+              />
+            ),
+            !task.hasEnd && (
+              <div
+                key={`no-end-${task.id}`}
+                style={{
+                  height: state.options.barHeight,
+                  width: 30,
+                  position: 'absolute',
+                  right: 0,
+                  top: task.dimensions.y,
+                  background: 'linear-gradient(270deg, rgba(255,255,255,1) 3%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.2) 60%, rgba(255,255,255,0) 100%)',
+                }}
+              />
+            ),
+          ])}
+        </div>
       </div>
-
-      {/*<ButtonGroup>
-        <Button variant={mode === 'day' ? 'contained' : 'outlined'} onClick={() => dispatch({ type: 'SET_MODE', mode: 'day' })}>Daily</Button>
-        <Button variant={mode === 'week' ? 'contained' : 'outlined'} onClick={() => dispatch({ type: 'SET_MODE', mode: 'week' })}>Weekly</Button>
-        <Button variant={mode === 'month' ? 'contained' : 'outlined'} onClick={() => dispatch({ type: 'SET_MODE', mode: 'month' })}>Monthly</Button>
-      </ButtonGroup>*/}
     </GanttContext.Provider>
   )
 }

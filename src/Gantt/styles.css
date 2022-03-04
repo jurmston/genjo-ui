@@ -11,11 +11,19 @@
   --row-selected-bg-color: #fff8e1;
   --header-selected-color: #2196f3;
   --header-selected-bg-color: #e8eaf6;
+
+  --palette--task: #4338ca;
+  --border-color: #8D99A6;
+}
+
+.GenjoGantt__grid__background {
+  fill: #fff;
 }
 
 .GenjoGantt__container {
   width: 100%;
   overflow: auto;
+  position: relative;
 }
 
 .GenjoGantt__svg {
@@ -31,6 +39,10 @@
   box-sizing: border-box;
 }
 
+.GenjoGantt__grid__row:nth-child(even) {
+  fill: #eee;
+}
+
 .GenjoGantt__grid__line {
   stroke: #ebeff2;
   box-sizing: border-box;
@@ -44,13 +56,20 @@
 }
 
 .GenjoGantt__grid__tick {
-  stroke: #e0e0e0;
-  stroke-width: .2;
+  stroke: #c2c2c2;
+  stroke-width: 1;
+  box-sizing: border-box;
+  stroke-linecap: round;
+}
+
+.GenjoGantt__grid__tick {
+  stroke: #c2c2c2;
+  stroke-width: 1;
   box-sizing: border-box;
 }
 
 .GenjoGantt__grid__tick.GenjoGantt__grid__thick-tick {
-  stroke-width: .4;
+  stroke-width: 2;
 }
 
 .GenjoGantt__grid__today-highlight {
@@ -63,20 +82,30 @@
   fill: #333;
   font-size: 12px;
   text-anchor: middle;
+  dominant-baseline: central;
 }
 
 .GenjoGantt__dates__upper-text {
   fill: #555;
   font-size: 12px;
   text-anchor: middle;
+  dominant-baseline: central;
 }
 
 .GenjoGantt__bar {
-  fill: #b8c2cc;
-  stroke: #8D99A6;
+  fill: #919aa3;
+  box-sizing: border-box;
+  cursor: pointer;
+  filter: drop-shadow(1px 1px 1px rgb(0 0 0 / 0.25));
+}
+
+.GenjoGantt__milestone {
+  fill: #e7a831;
+  stroke: var(--border-color);
   stroke-width: 0;
   transition: stroke-width .3s ease;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .GenjoGantt__progress {
@@ -85,34 +114,41 @@
 }
 
 .GenjoGantt__handle {
-  fill: #ddd;
+  fill: rgb(223, 139, 61);
+  stroke-width: 0;
   cursor: ew-resize;
   opacity: 0;
-  visibility: hidden;
   transition: opacity .3s ease;
   box-sizing: border-box;
+  filter: drop-shadow(1px 1px 1px rgb(0 0 0 / 0.25)),
 }
 
 .Genjo__bar-wrapper {
   cursor: pointer;
 }
 
-.GenjoGantt__bar-wrapper:hover .GenjoGantt__bar {
-  stroke-width: 2;
+.Genjo__milestone-wrapper {
+  cursor: pointer;
 }
 
-.GenjoGantt__bar-wrapper:hover .GenjoGantt__handle {
+.GenjoGantt__bar-wrapper:hover .GenjoGantt__handle, .GenjoGantt__handle_dragging {
   opacity: 1;
-  visibility: visible;
 }
 
 .GenjoGantt__label {
-  fill: #fff;
+  stroke-width: 0;
+  fill: rgb(51, 50, 50);
   dominant-baseline: central;
-  text-anchor: middle;
+  text-anchor: start;
   font-size: 12px;
   font-weight: 700;
   box-sizing: border-box;
+  pointer-events: none;
+}
+
+.GenjoGantt__outside_label {
+  fill: #666;
+  filter: none;
 }
 
 .GenjoGantt__arrow {
