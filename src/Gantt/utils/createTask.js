@@ -26,6 +26,7 @@ export function createTask({ index, start, end, data, options }) {
 
   return {
     id: data.id,
+    type: data.type || 'TASK',
     label: data.label,
     start: data.start || start,
     end: data.end || end,

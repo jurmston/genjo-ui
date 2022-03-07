@@ -24,6 +24,7 @@
   width: 100%;
   overflow: auto;
   position: relative;
+  flex: 1;
 }
 
 .GenjoGantt__svg {
@@ -114,13 +115,10 @@
 }
 
 .GenjoGantt__handle {
-  fill: rgb(223, 139, 61);
   stroke-width: 0;
   cursor: ew-resize;
   opacity: 0;
-  transition: opacity .3s ease;
-  box-sizing: border-box;
-  filter: drop-shadow(1px 1px 1px rgb(0 0 0 / 0.25)),
+  transition: transform 400ms ease-in-out, opacity 400ms ease-in-out;
 }
 
 .Genjo__bar-wrapper {
@@ -131,7 +129,36 @@
   cursor: pointer;
 }
 
-.GenjoGantt__bar-wrapper:hover .GenjoGantt__handle, .GenjoGantt__handle_dragging {
+.GenjoGantt__progressHandle {
+  cursor: ew-resize;
+  opacity: 0;
+  transition: transform 400ms ease-in-out, opacity 400ms ease-in-out;
+}
+
+.GenjoGantt__depHandle {
+  cursor: point;
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: transform 400ms ease-in-out, opacity 400ms ease-in-out;
+}
+
+.GenjoGantt__bar-wrapper:hover .GenjoGantt__depHandle, .GenjoGantt__depHandle.GenjoGantt__handle_dragging {
+  opacity: 1;
+  transform: translateX(0px);
+}
+
+.GenjoGantt__bar-wrapper:hover .GenjoGantt__progressHandle, .GenjoGantt__progressHandle.GenjoGantt__handle_dragging {
+  opacity: 1;
+  transform: translateY(8px);
+}
+
+.GenjoGantt__bar-wrapper:hover .GenjoGantt__handle, .GenjoGantt__handle.GenjoGantt__handle_dragging {
+  transform: translateX(-10px);
+  opacity: 1;
+}
+
+.GenjoGantt__bar-wrapper:hover .GenjoGantt__handle_end, .GenjoGantt__handle_end.GenjoGantt__handle_dragging {
+  transform: translateX(10px);
   opacity: 1;
 }
 

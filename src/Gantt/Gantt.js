@@ -13,7 +13,12 @@ import { GanttTask } from './GanttTask'
 import { GanttArrow } from './GanttArrow'
 import { GanttToday } from './GanttToday'
 import { GanttDragDate } from './GanttDragDate'
+import { GanttDepDragLine } from './GanttDepDragLine'
 import { GanttMilestone } from './GanttMilestone'
+import { GanttPhase } from './GanttPhase'
+import { GanttMenu } from './GanttMenu'
+
+
 import {
   initializeStartAndEnd,
   initializeDrawOptions,
@@ -57,6 +62,7 @@ function initializeState({ data, mode, options }) {
     dependencies,
     milestones,
     drag: null,
+    depDrag: null,
     width,
     numDays,
     changes: null,
@@ -90,6 +96,40 @@ function reducer(state, action) {
         mode: action.mode,
         options: action.options,
       })
+    }
+
+    case 'START_DEP_DRAG': {
+      const { x, y, taskId } = action
+      return {
+        ...state,
+        depDrag: {
+          taskId,
+          initialX: x,
+          initialY: y,
+          x,
+          y,
+        }
+      }
+    }
+
+    case 'DEP_DRAG_MOVE': {
+      const { x, y } = action
+
+      return {
+        ...state,
+        depDrag: {
+          ...state.depDrag,
+          x,
+          y,
+        }
+      }
+    }
+
+    case 'END_DEP_DRAG': {
+      return {
+        ...state,
+        depDrag: null,
+      }
     }
 
     case 'START_DRAG': {
@@ -294,8 +334,23 @@ export function Gantt({
   onMilestoneClick,
   selectedId = null,
   actions,
+  readOnly = false,
+  disableProgressEdit = false,
+  onAddDependency,
 }) {
   const containerRef = React.useRef(null)
+  const svgRef = React.useRef(null)
+  const headerRef = React.useRef(null)
+
+  const svgPoint = React.useMemo(
+    () => {
+      if (svgRef.current) {
+        console.log('Creating SVG point...')
+        return svgRef.current.createSVGPoint()
+      }
+    },
+    [svgRef.current]
+  )
 
   const [state, dispatch] = React.useReducer(
     reducer,
@@ -357,7 +412,8 @@ export function Gantt({
       event.stopPropagation()
 
       onTaskClick?.(event, taskId)
-    }
+    },
+    [onTaskClick]
   )
 
   const handleMilstoneClick = React.useCallback(
@@ -366,11 +422,16 @@ export function Gantt({
       event.stopPropagation()
 
       onMilestoneClick?.(event, milestoneId)
-    }
+    },
+    [onMilestoneClick]
   )
 
   function handleMouseMove(event) {
-    if (!state.drag) {
+    if (!state.drag || readOnly) {
+      return
+    }
+
+    if (state.drag.mode === 'progress' && disableProgressEdit) {
       return
     }
 
@@ -425,6 +486,53 @@ export function Gantt({
     [state?.drag?.mode]
   )
 
+
+  function startDepDrag(event, taskId, x, y) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    dispatch({ type: 'START_DEP_DRAG', x, y, taskId })
+  }
+
+  function handleDepMouseMove(event) {
+    if (!svgPoint) {
+      return
+    }
+
+    // Check if scroll should be triggered
+    handleScroll(event, containerRef)
+
+    svgPoint.x = event.clientX
+    svgPoint.y = event.clientY
+
+    const result = svgPoint.matrixTransform(svgRef.current.getScreenCTM().inverse())
+
+    dispatch({
+      type: 'DEP_DRAG_MOVE',
+      x: result.x,
+      y: result.y,
+    })
+  }
+
+  function handleDepMouseUp(event) {
+    dispatch({ type: 'END_DEP_DRAG' })
+  }
+
+  React.useEffect(
+    () => {
+      if (state?.depDrag) {
+        window.addEventListener('mousemove', handleDepMouseMove)
+        window.addEventListener('mouseup', handleDepMouseUp)
+
+        return () => {
+          window.removeEventListener('mousemove', handleDepMouseMove)
+          window.removeEventListener('mouseup', handleDepMouseUp)
+        }
+      }
+    },
+    [state?.depDrag]
+  )
+
   React.useLayoutEffect(
     () => {
       containerRef.current.scrollLeft = todayX
@@ -438,92 +546,92 @@ export function Gantt({
         ...state,
         selectedId,
         containerRef,
+        svgRef,
+        headerRef,
         startDrag,
         handleTaskClick,
         handleMilstoneClick,
         todayX,
         containerDim,
+        readOnly,
+        disableProgressEdit,
+        startDepDrag,
+        onAddDependency,
       }}
     >
-      <Stack direction="row" alignItems="center" spacing={1} sx={{ p: 2 }}>
-        <Typography variant="h3">{title}</Typography>
+      <div
+        style={{
+          position: 'relative',
+        }}
+      >
+        <Stack ref={headerRef} direction="row" alignItems="center" spacing={1} sx={{ p: 2 }}>
+          <Typography variant="h3">{title}</Typography>
 
-        {actions}
+          {actions}
 
-        <div style={{ flex: 1 }} />
+          <div style={{ flex: 1 }} />
 
-        <ButtonGroup>
-          <Button variant={state.mode === 'day' ? 'contained' : 'outlined'} onClick={() => changeMode('day')}>Daily</Button>
-          <Button variant={state.mode === 'week' ? 'contained' : 'outlined'} onClick={() => changeMode('week')}>Weekly</Button>
-          <Button variant={state.mode === 'month' ? 'contained' : 'outlined'} onClick={() => changeMode('month')}>Monthly</Button>
-          <Button variant={state.mode === 'quarter' ? 'contained' : 'outlined'} onClick={() => changeMode('quarter')}>Quarterly</Button>
-        </ButtonGroup>
-      </Stack>
+          <ButtonGroup>
+            <Button variant={state.mode === 'day' ? 'contained' : 'outlined'} onClick={() => changeMode('day')}>Daily</Button>
+            <Button variant={state.mode === 'week' ? 'contained' : 'outlined'} onClick={() => changeMode('week')}>Weekly</Button>
+            <Button variant={state.mode === 'month' ? 'contained' : 'outlined'} onClick={() => changeMode('month')}>Monthly</Button>
+            <Button variant={state.mode === 'quarter' ? 'contained' : 'outlined'} onClick={() => changeMode('quarter')}>Quarterly</Button>
+          </ButtonGroup>
+        </Stack>
 
-      <div style={{ position: 'relative' }}>
         <div
-          className="GenjoGantt__container"
-          ref={containerRef}
+          style={{
+            position: 'relative',
+            display: 'flex',
+            flexWrap: 'nowrap',
+          }}
         >
-          <GanttSvg>
-            {state.dependencies.map(dep => (
-              <GanttArrow
-                key={`${dep.from}__${dep.to}`}
-                dep={dep}
-              />
-            ))}
 
-            {Object.values(state.tasks).map(task => (
-              <GanttTask
-                key={task.id}
-                task={task}
-              />
-            ))}
 
-            {Object.values(state.milestones).map(milestone => (
-              <GanttMilestone
-                key={milestone.id}
-                milestone={milestone}
-              />
-            ))}
+          <GanttMenu />
 
-            <GanttToday />
+          <div
+            className="GenjoGantt__container"
+            ref={containerRef}
+          >
+            <GanttSvg ref={svgRef}>
+              {state.dependencies.map(dep => (
+                <GanttArrow
+                  key={`${dep.from}__${dep.to}`}
+                  dep={dep}
+                />
+              ))}
 
-            {Boolean(state.drag) && <GanttDragDate />}
+              {Object.values(state.tasks).map(task => task.type === 'PHASE' ? (
+                <GanttPhase
+                  key={task.id}
+                  task={task}
+                />
+              ) : (
+                <GanttTask
+                  key={task.id}
+                  task={task}
+                />
+              ))}
 
-          </GanttSvg>
+              {Object.values(state.milestones).map(milestone => (
+                <GanttMilestone
+                  key={milestone.id}
+                  milestone={milestone}
+                />
+              ))}
+
+              <GanttToday />
+
+              {Boolean(state.drag) && <GanttDragDate />}
+              {Boolean(state.depDrag) && <GanttDepDragLine />}
+
+            </GanttSvg>
+
+          </div>
+
         </div>
 
-        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-          {Object.values(state.tasks).map((task, index) => [
-            !task.hasStart && (
-              <div
-                key={`no-start-${task.id}`}
-                style={{
-                  height: state.options.barHeight + 4,
-                  width: 30,
-                  position: 'absolute',
-                  left: 0,
-                  top: task.dimensions.y - 2,
-                  background: 'linear-gradient(90deg, rgba(255,255,255,1) 3%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.2) 60%, rgba(255,255,255,0) 100%)',
-                }}
-              />
-            ),
-            !task.hasEnd && (
-              <div
-                key={`no-end-${task.id}`}
-                style={{
-                  height: state.options.barHeight,
-                  width: 30,
-                  position: 'absolute',
-                  right: 0,
-                  top: task.dimensions.y,
-                  background: 'linear-gradient(270deg, rgba(255,255,255,1) 3%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.2) 60%, rgba(255,255,255,0) 100%)',
-                }}
-              />
-            ),
-          ])}
-        </div>
       </div>
     </GanttContext.Provider>
   )

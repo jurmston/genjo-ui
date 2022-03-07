@@ -3,7 +3,7 @@ import { useGantt } from './useGantt'
 
 
 function GanttArrowInner({ dep }) {
-  const { options, tasks } = useGantt()
+  const { options, tasks, selectedId, drag } = useGantt()
   const { padding, headerHeight, barHeight, arrowCurve, rowHeight, barPadding } = options
 
   const fromTask = tasks[dep.from]
@@ -84,6 +84,11 @@ function GanttArrowInner({ dep }) {
     <path
       d={path}
       className="GenjoGantt__arrow"
+      style={{
+        stroke: selectedId === dep.from || drag?.draggableId === dep.from
+          ? '#f00'
+          : '#ccc',
+      }}
     />
   )
 }

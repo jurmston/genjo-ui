@@ -9,7 +9,7 @@ import { GanttDependencyHandle } from './GanttDependencyHandle'
 import { GanttResizeHandle } from './GanttResizeHandle'
 
 
-function GanttTaskInner({
+function GanttPhaseInner({
   index,
   task,
 }) {
@@ -136,11 +136,11 @@ function GanttTaskInner({
 
         <rect
           x={x}
-          y={y}
+          y={y + 4}
           width={width}
-          height={barHeight}
-          rx={4}
-          ry={4}
+          height={barHeight - 8}
+          rx={(barHeight - 8) / 2}
+          ry={(barHeight - 8) / 2}
           className="GenjoGantt__bar"
           style={{
             fill: isDone ? task.color : lightColor,
@@ -176,11 +176,11 @@ function GanttTaskInner({
             <clipPath id={`clip-task-progress-${task.id}`}>
               <rect
                 x={x + (isSelected ? 1 : 0)}
-                y={y + (isSelected ? 1 : 0)}
+                y={y + 4 + (isSelected ? 1 : 0)}
                 width={width - (isSelected ? 2 : 0)}
-                height={barHeight - (isSelected ? 2 : 0)}
-                rx={4}
-                ry={4}
+                height={barHeight - 8 - (isSelected ? 2 : 0)}
+                rx={(barHeight - 8) / 2}
+                ry={(barHeight - 8)/ 2}
               />
             </clipPath>
 
@@ -299,4 +299,4 @@ function taskPropsAreEqual(prevProps, nextProps) {
 }
 
 
-export const GanttTask = React.memo(GanttTaskInner, taskPropsAreEqual)
+export const GanttPhase = React.memo(GanttPhaseInner, taskPropsAreEqual)

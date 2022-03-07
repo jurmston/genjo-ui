@@ -7,7 +7,7 @@ import { GanttRow } from './GanttRow'
 import { useGantt } from './useGantt'
 
 
-export function GanttSvg({ children }) {
+export const GanttSvg = React.forwardRef(({ children }, ref) => {
   const { numTasks, options, start, end, mode, drag, containerRef, todayX } = useGantt()
 
   const {
@@ -46,7 +46,7 @@ export function GanttSvg({ children }) {
   }
 
   return (
-    <svg width={width} height={height} className="GenjoGantt__root">
+    <svg ref={ref} width={width} height={height} className="GenjoGantt__root">
         <rect
           x={0}
           y={0}
@@ -179,7 +179,9 @@ export function GanttSvg({ children }) {
 
     </svg>
   )
-}
+})
+
+GanttSvg.displayName = 'GanttSvg'
 
 GanttSvg.propTypes = {
   children: PropTypes.node,

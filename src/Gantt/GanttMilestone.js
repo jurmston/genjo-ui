@@ -51,6 +51,9 @@ function GanttMilestoneInner({ milestone }) {
   const dragIntervalRef = React.useRef(null)
 
   function handleMouseDown(event) {
+    event.preventDefault()
+    event.stopPropagation()
+
     if (taskIsDone || isDone) {
       return
     }
@@ -99,8 +102,8 @@ function GanttMilestoneInner({ milestone }) {
         r={(barHeight - 2) / 2}
         style={{
           fill: '#fff',
-          // strokeWidth: 2,
-          // stroke: task.color,
+          strokeWidth: 2,
+          stroke: task.color,
           filter: 'drop-shadow(1px 1px 1px rgb(0 0 0 / 0.25))',
         }}
       />
