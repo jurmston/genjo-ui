@@ -10,7 +10,7 @@ import {
 } from './utils/constants'
 
 
-export function GanttResizeHandle({ task, position }) {
+export function GanttResizeHandle({ task, position, color }) {
   const { startDrag, drag } = useGantt()
 
   const { x, y } = React.useMemo(
@@ -38,7 +38,7 @@ export function GanttResizeHandle({ task, position }) {
         Boolean(drag?.taskId === task.id) && 'GenjoGantt__handle_dragging',
       )}
       style={{
-        fill: task.color,
+        fill: color,
       }}
     />
   )

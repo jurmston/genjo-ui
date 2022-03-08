@@ -1,11 +1,11 @@
 import { DateTime } from 'luxon'
 
 
-export function initializeStartAndEnd({ data, mode = 'day', options }) {
+export function initializeStartAndEnd({ rowData, milestoneData, mode = 'day', options }) {
   let start = DateTime.now()
   let end = DateTime.now()
 
-  for (let task of data) {
+  for (let task of rowData) {
     // Update the min/max start and end dates.
     if (task.start) {
       start = task.start < start
@@ -20,9 +20,22 @@ export function initializeStartAndEnd({ data, mode = 'day', options }) {
     }
   }
 
-  const startWithBuffer = start.minus({ days: options.bufferDays }).startOf(mode)
+  for (let milestone of milestoneData) {
+    // Update the min/max start and end dates.
+    if (milestone.date) {
+      start = milestone.date < start
+        ? milestone.date
+        : start
 
-  const endWithBuffer = end.plus({ days: options.bufferDays }).endOf(mode)
+      end = milestone.date > end
+        ? milestone.date
+        : end
+    }
+  }
+
+  const startWithBuffer = start.minus({ days: options.bufferDays }).startOf('week')
+
+  const endWithBuffer = end.plus({ days: options.bufferDays }).endOf('week')
 
   const numDays = endWithBuffer.endOf('day').diff(startWithBuffer.startOf('day')).as('days')
 

@@ -76,7 +76,7 @@ function GanttArrowInner({ dep }) {
 
   // If either task doesn't have a start, the arrows render in strange ways.
   // Better to hide them.
-  if (!toTask.hasStart) {
+  if (!toTask.hasStart || !toTask.hasEnd || !fromTask.hasStart || !fromTask.hasEnd) {
     return null
   }
 

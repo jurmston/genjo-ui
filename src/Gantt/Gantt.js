@@ -32,20 +32,22 @@ import {
 } from './utils'
 
 
-function initializeState({ data, mode, options }) {
+function initializeState({ rowData, milestoneData, mode, options }) {
   const initializedOptions = initializeDrawOptions({
     options,
     mode,
   })
 
   const { start, end, first, width, numDays } = initializeStartAndEnd({
-    data,
+    rowData,
+    milestoneData,
     mode,
     options: initializedOptions,
   })
 
   const { tasks, dependencies, milestones } = loadData({
-    data,
+    rowData,
+    milestoneData,
     start,
     end,
     options: initializedOptions,
@@ -75,7 +77,8 @@ function reducer(state, action) {
 
     case 'RELOAD_DATA': {
       const { tasks, dependencies, milestones } = loadData({
-        data: action.data,
+        rowData: action.rowData,
+        milestoneData: action.milestoneData,
         start: state.start,
         end: state.end,
         options: state.options,
@@ -136,19 +139,23 @@ function reducer(state, action) {
 
       const { event, dragMode, draggableId, containerRef } = action
 
+      const mainTask = state.tasks[draggableId]
+
       const affectedTasks = dragMode === 'milestone'
         ? []
-        : dragMode === 'bar'
-        ? [draggableId, ...getDependentIds(state.tasks, state.tasks[draggableId])]
-        : [draggableId]
+        : dragMode !== 'bar'
+        ? [draggableId]
+        : mainTask.type === 'PROJECT'
+        ? [draggableId, ...Object.values(state.tasks).filter(task => task.project === draggableId).map(task => task.id)]
+        : mainTask.type === 'PHASE'
+        ? [draggableId, ...Object.values(state.tasks).filter(task => task.phase === draggableId).map(task => task.id)]
+        : [draggableId, ...getDependentIds(state.tasks, state.tasks[draggableId])]
 
       const affectedMilestones = dragMode === 'milestone'
         ? [draggableId]
         : dragMode === 'bar'
         ? affectedTasks.map(taskId => state.tasks[taskId].milestones).flat()
         : []
-
-      const mainTask = state.tasks[draggableId]
 
       // Tracking date so the user can quickly tell where the drag cursor is.
       let date = dragMode === 'milestone'
@@ -213,8 +220,6 @@ function reducer(state, action) {
             clickX,
             maxX < Infinity ? maxX - originalX : 0,
           )
-
-          console.log(clickX, originalX + newWidth + dim.left)
 
           mainTask.originalDimensions.width = newWidth
           mainTask.originalDimensions.x = originalX
@@ -325,18 +330,19 @@ function reducer(state, action) {
 
 
 export function Gantt({
-  tasks: dataFromProps = [],
+  rows: rowData = [],
+  milestones: milestoneData = [],
   mode: modeFromProps = 'month',
   title = '',
   onChanges,
   options: optionsFromProps = {},
   onTaskClick,
   onMilestoneClick,
-  selectedId = null,
   actions,
   readOnly = false,
   disableProgressEdit = false,
   onAddDependency,
+  users,
 }) {
   const containerRef = React.useRef(null)
   const svgRef = React.useRef(null)
@@ -355,7 +361,8 @@ export function Gantt({
   const [state, dispatch] = React.useReducer(
     reducer,
     initializeState({
-      data: dataFromProps,
+      rowData,
+      milestoneData,
       mode: modeFromProps,
       options: optionsFromProps,
     }),
@@ -376,12 +383,12 @@ export function Gantt({
     [containerRef.current]
   )
 
-  React.useEffect(
-    () => {
-      dispatch({ type: 'RELOAD_DATA', data: dataFromProps })
-    },
-    [dataFromProps]
-  )
+  // React.useEffect(
+  //   () => {
+  //     dispatch({ type: 'RELOAD_DATA', rowData, milestoneData })
+  //   },
+  //   [rowData, milestoneData]
+  // )
 
   const todayX = React.useMemo(
     () => state.start
@@ -544,7 +551,6 @@ export function Gantt({
     <GanttContext.Provider
       value={{
         ...state,
-        selectedId,
         containerRef,
         svgRef,
         headerRef,
@@ -557,6 +563,7 @@ export function Gantt({
         disableProgressEdit,
         startDepDrag,
         onAddDependency,
+        users,
       }}
     >
       <div
@@ -572,10 +579,10 @@ export function Gantt({
           <div style={{ flex: 1 }} />
 
           <ButtonGroup>
-            <Button variant={state.mode === 'day' ? 'contained' : 'outlined'} onClick={() => changeMode('day')}>Daily</Button>
             <Button variant={state.mode === 'week' ? 'contained' : 'outlined'} onClick={() => changeMode('week')}>Weekly</Button>
             <Button variant={state.mode === 'month' ? 'contained' : 'outlined'} onClick={() => changeMode('month')}>Monthly</Button>
             <Button variant={state.mode === 'quarter' ? 'contained' : 'outlined'} onClick={() => changeMode('quarter')}>Quarterly</Button>
+            <Button variant={state.mode === 'year' ? 'contained' : 'outlined'} onClick={() => changeMode('year')}>Yearly</Button>
           </ButtonGroup>
         </Stack>
 
@@ -602,17 +609,17 @@ export function Gantt({
                 />
               ))}
 
-              {Object.values(state.tasks).map(task => task.type === 'PHASE' ? (
+              {Object.values(state.tasks).map(task => (task.type === 'PHASE' || task.type === 'PROJECT') ? (
                 <GanttPhase
                   key={task.id}
                   task={task}
                 />
-              ) : (
+              ) : (task.hasStart && task.hasEnd) ? (
                 <GanttTask
                   key={task.id}
                   task={task}
                 />
-              ))}
+              ) : null)}
 
               {Object.values(state.milestones).map(milestone => (
                 <GanttMilestone

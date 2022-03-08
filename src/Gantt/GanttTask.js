@@ -8,6 +8,21 @@ import checkIcon from './icons/check.svg'
 import { GanttDependencyHandle } from './GanttDependencyHandle'
 import { GanttResizeHandle } from './GanttResizeHandle'
 
+import { colors } from '../ThemeProvider'
+
+
+const MAX_USERS = 3
+
+
+const defaultTaskColor = colors.stone[400]
+
+const taskColorsByStatus = {
+  IN_PROGRESS: colors.indigo[500],
+  DONE: colors.green[500],
+  STUCK: colors.red[400],
+  ON_HOLD: colors.yellow[400],
+}
+
 
 function GanttTaskInner({
   index,
@@ -19,12 +34,12 @@ function GanttTaskInner({
     startDrag,
     drag,
     containerRef,
-    selectedId,
     handleTaskClick,
     containerDim,
     startDepDrag,
     depDrag,
     onAddDependency,
+    users,
   } = useGantt()
 
   const {
@@ -38,7 +53,7 @@ function GanttTaskInner({
     textHeight,
   } = options
 
-  const { width, x, y, progressWidth } = task.dimensions
+  const { width, x, y } = task.dimensions
   // const progressPolygonPoints = React.useMemo(() => [
   //     x + progress - 5,
   //     y + barHeight,
@@ -52,18 +67,28 @@ function GanttTaskInner({
 
   const isMissingDates = !task.hasStart || !task.hasEnd
   const isDone = task.status === 'DONE'
-  const isSelected = selectedId === task.id
 
   const hideStartHandle = Boolean(drag?.mode || depDrag) && drag?.mode !== 'start'
   const hideEndHandle = Boolean(drag?.mode || depDrag) && drag?.mode !== 'end'
-  const hideProgressHandle = isMissingDates || (Boolean(drag?.mode || depDrag) && drag?.mode !== 'progress')
   const hideDepHandle = Boolean(drag?.mode || depDrag)
 
-  const lightColor = lighten(task.color, 0.5)
-  const darkColor = darken(task.color, 0.25)
+  const color = taskColorsByStatus[task.status] || defaultTaskColor
+  const darkColor = darken(color, 0.25)
   const iconSize = 12
 
   const dragIntervalRef = React.useRef(null)
+
+  const isFaded = React.useMemo(
+    () => {
+      const dragCondition = Boolean(drag)
+        && (![task.project, task.phase, task.id].includes(drag?.draggableId))
+
+      const depDragCondition = false
+
+      return dragCondition || depDragCondition
+    },
+    [drag, depDrag, task]
+  )
 
   const handleHandleMouseDown = handle => event => {
     event.preventDefault()
@@ -121,6 +146,7 @@ function GanttTaskInner({
       className="GenjoGantt__bar-wrapper"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      style={{ opacity: isFaded ? 0.5 : 1 }}
     >
       <g className="GenjoGantt__bar-group">
         {/* Underbar used to pickup the hover event in the gap between bar and handles */}
@@ -143,100 +169,86 @@ function GanttTaskInner({
           ry={4}
           className="GenjoGantt__bar"
           style={{
-            fill: isDone ? task.color : lightColor,
-            stroke: darkColor,
-            strokeWidth: isSelected ? 2 : 0,
+            fill: color,
           }}
         />
 
-        {isMissingDates && !isDone && width !== progressWidth && (
-          <>
-            <pattern id={`${task.id}-no-dates-stripes`} patternUnits="userSpaceOnUse" width={20} height={20} patternTransform="rotate(135)">
-              <line x1={0} y={0} x2={0} y2={20} stroke="rgb(255 255 255 / 35%)" strokeWidth={20} />
-            </pattern>
+        <g className="GenjoGantt__label_group">
+          {task?.users?.map((userId, userIndex) => {
+            const user = users[userId]
 
-            <rect
-              x={x}
-              y={y}
-              width={width}
-              height={barHeight}
-              rx={4}
-              ry={4}
-              className="GenjoGantt__bar"
-              style={{
-                fill: `url(#${task.id}-no-dates-stripes)`,
-                opactiy: 0.15,
-              }}
-            />
-          </>
-        )}
+            return (
+              <React.Fragment key={user.id}>
+                <circle
+                  key={user.id}
+                  cx={x + width + 48 + (task.users.length - userIndex - 1) * 16}
+                  cy={y + barHeight / 2}
+                  r={12}
+                  style={{
+                    stroke: '#fff',
+                    strokeWidth: 2,
+                    fill: user.color,
+                  }}
+                />
 
-        {!isDone && !isMissingDates && (
-          <>
-            <clipPath id={`clip-task-progress-${task.id}`}>
-              <rect
-                x={x + (isSelected ? 1 : 0)}
-                y={y + (isSelected ? 1 : 0)}
-                width={width - (isSelected ? 2 : 0)}
-                height={barHeight - (isSelected ? 2 : 0)}
-                rx={4}
-                ry={4}
-              />
-            </clipPath>
+                <text
+                  x={x + width + 48 + (task.users.length - userIndex - 1) * 16}
+                  y={y + barHeight / 2}
+                  style={{
+                    textAnchor: 'middle',
+                    dominantBaseline: 'central',
+                    fill: '#fff',
+                    fontSize: 10,
+                  }}
+                >
+                  {user.fullName.slice(0, 2).toUpperCase()}
+                </text>
 
-            <rect
-              clipPath={`url(#clip-task-progress-${task.id})`}
-              x={x}
-              y={y}
-              width={progressWidth}
-              height={barHeight}
-              className="GenjoGantt__progress"
-              style={{
-                fill: task.color,
-              }}
-            />
-          </>
-        )}
+                {Boolean(user.avatar) && (
+                  <>
+                    <clipPath id={`task-user-${task.id}-${user.id}`}>
+                      <circle
+                        key={user.id}
+                        cx={x + width + 48 + (task.users.length - userIndex - 1) * 16}
+                        cy={y + barHeight / 2}
+                        r={12}
+                      />
+                    </clipPath>
 
-        {isDone && (
-          <>
-            <circle
-              r={8}
-              cx={x + width}
-              cy={y}
-              style={{
-                fill: '#fff',
-                stroke: darkColor,
-                strokeWidth: 2,
-              }}
-            />
+                    <image
+                      href={user.avatar}
+                      clipPath={`url(#task-user-${task.id}-${user.id})`}
+                      x={x + width + 48 + (task.users.length - userIndex - 1) * 16 - 12}
+                      y={y + barHeight / 2 - 12}
+                      height={24}
+                      width={24}
+                      style={{
 
-            <image
-              href={checkIcon}
-              x={x + width - iconSize / 2}
-              y={y - iconSize / 2}
-              height={iconSize}
-              width={iconSize}
-              style={{
-                filter: 'invert(57%) sepia(93%) saturate(397%) hue-rotate(90deg) brightness(91%) contrast(89%)',
-              }}
-            />
-          </>
-        )}
+                      }}
+                    />
+                  </>
+                )}
 
-        <text
-          x={x + width + 10}
-          y={y + barHeight / 2}
-          className={clsx(
-            'GenjoGantt__label',
-          )}
-          ref={textRef}
-          style={{
-            fontSize: textSize,
-          }}
-        >
-          {task.label}
-        </text>
+
+
+              </React.Fragment>
+            )
+          })}
+
+          <text
+            x={x + width + 48 + (task?.users?.length * 16) + (task?.users?.length > 0 ? 4 : 0)}
+            y={y + barHeight / 2}
+            className={clsx(
+              'GenjoGantt__label',
+            )}
+            ref={textRef}
+            style={{
+              fontSize: textSize,
+            }}
+          >
+            {task.label}
+          </text>
+        </g>
       </g>
 
       {!isDone && (
@@ -245,6 +257,7 @@ function GanttTaskInner({
             <GanttResizeHandle
               task={task}
               position="start"
+              color={darkColor}
             />
           )}
 
@@ -252,22 +265,7 @@ function GanttTaskInner({
             <GanttResizeHandle
               task={task}
               position="end"
-            />
-          )}
-
-          {!hideProgressHandle && (
-            <circle
-              onMouseDown={handleHandleMouseDown('progress')}
-              r={5}
-              cx={x + progressWidth}
-              cy={y + barHeight}
-              className={clsx(
-                'GenjoGantt__progressHandle',
-                Boolean(drag?.taskId === task.id) && 'GenjoGantt__handle_dragging',
-              )}
-              style={{
-                fill: task.color,
-              }}
+              color={darkColor}
             />
           )}
 
@@ -282,6 +280,7 @@ function GanttTaskInner({
               <GanttDependencyHandle
                 x={x + width + 22}
                 y={y + barHeight / 2}
+                color={darkColor}
               />
             </g>
           )}

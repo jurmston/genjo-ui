@@ -1,6 +1,15 @@
-export function createTask({ index, start, end, data, options }) {
-  const taskDays = (data.end || end).diff(data.start || start).as('days')
-  const daysFromStart = (data.start || start).diff(start).as('days') + 1
+export function createTask({
+  index,
+  start,
+  end,
+  row,
+  options,
+}) {
+  const taskStart = row.start ? row.start.startOf('week') : start
+  const taskEnd = row.end ? row.end.endOf('week') : end
+
+  const taskDays = taskEnd.diff(taskStart).as('days')
+  const daysFromStart = taskStart.diff(start).as('days')
 
   const { columnWidth, headerHeight, rowHeight, barPadding } = options
 
@@ -8,42 +17,35 @@ export function createTask({ index, start, end, data, options }) {
   const x = daysFromStart * columnWidth
   const y = headerHeight + index * rowHeight + barPadding
 
-  const progressWidth = data.progress * width / 100
+  const progressWidth = row.progress * width / 100
 
-  function milestonesMinReducer(currentMin, milestone) {
-    const daysFromStart = milestone.date.diff(start).as('days')
-    const milestoneX = options.columnWidth * daysFromStart
-    return Math.min(milestoneX, currentMin)
-  }
-
-  function milestonesMaxReducer(currentMax, milestone) {
-    const daysFromStart = milestone.date.diff(start).as('days') + 1
-    const milestoneX = options.columnWidth * daysFromStart
-    return Math.max(milestoneX, currentMax)
-  }
-
-  const milestones = data?.milestones ?? []
+  const milestones = row?.milestones ?? []
+  const users = row?.users ?? []
 
   return {
-    id: data.id,
-    type: data.type || 'TASK',
-    label: data.label,
-    start: data.start || start,
-    end: data.end || end,
-    hasStart: Boolean(data.start),
-    hasEnd: Boolean(data.end),
-    color: data.color || '#6366f1',
-    status: data.status || 'NOT_STARTED',
+    id: row.id,
+    type: row.type || 'TASK',
+    label: row.label,
+    start: taskStart,
+    end: taskEnd,
+    project: row.project || null,
+    phase: row.phase || null,
+    hasStart: Boolean(row.start),
+    hasEnd: Boolean(row.end),
+    color: row.color || '#6366f1',
+    status: row.status || 'NOT_STARTED',
     index,
     minX: 0,
-    progress: data.progress,
-    minMilestoneX: milestones.reduce(milestonesMinReducer, Infinity),
-    maxMilestoneX: milestones.reduce(milestonesMaxReducer, 0),
+    chip: row?.chip || '',
+    progress: row.progress,
+    minMilestoneX: Infinity,
+    maxMilestoneX: 0,
     drawKey: 0,
     dimensions: { width, x, y, progressWidth },
     originalDimensions: { width, x, y, progressWidth },
     beforeTasks: [],
     afterTasks: [],
     milestones: milestones.map(milestone => milestone.id),
+    users,
   }
 }

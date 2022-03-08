@@ -15,10 +15,10 @@ export function getTaskChanges(state) {
       100,
     ))
 
-    const daysFromStart = Math.round(task.dimensions.x / state.options.columnWidth) - 1
-    const taskDays = Math.round(task.dimensions.width / state.options.columnWidth)
-    const newStart = state.start.plus({ days: daysFromStart })
-    const newEnd = state.start.plus({ days: daysFromStart + taskDays })
+    const daysFromStart = Math.round(task.dimensions.x / state.options.columnWidth)
+    const taskDays = Math.round(task.dimensions.width / state.options.columnWidth) - 1
+    const newStart = state.start.plus({ days: daysFromStart }).startOf('week')
+    const newEnd = state.start.plus({ days: daysFromStart + taskDays }).endOf('week')
 
     return {
       id: task.id,

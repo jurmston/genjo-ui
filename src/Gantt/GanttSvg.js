@@ -64,7 +64,7 @@ export const GanttSvg = React.forwardRef(({ children }, ref) => {
           style={{ fill: '#fff' }}
         />
         {/* ROWS LAYER */}
-        {/*<g>
+        {<g>
           {Array.from({ length: numTasks }).map((_, index) => (
             <GanttRow
               key={`row__${index}`}
@@ -72,11 +72,11 @@ export const GanttSvg = React.forwardRef(({ children }, ref) => {
               width={width}
             />
           ))}
-          </g>*/}
+          </g>}
 
         {/* LINES */}
         <g style={{ pointerEvents: 'none' }}>
-          {Array.from({ length: numTasks }).map((_, index) => {
+          {/*Array.from({ length: numTasks }).map((_, index) => {
             const rowY = (
               + options.headerHeight
               + index * options.rowHeight
@@ -92,14 +92,15 @@ export const GanttSvg = React.forwardRef(({ children }, ref) => {
                 className="GenjoGantt__grid__line"
               />
             )
-          })}
+          })*/}
 
           {/* TICKS */}
           {dates.map((date, index) => {
             const isFull = (mode === 'day' && date.weekday === 1)
               || (mode === 'month' && date.day === 1)
               || (mode === 'week' && date.weekday === 1)
-              || (mode === 'quarter' && date.month % 3 === 0 && date.day === 1)
+              || (mode === 'quarter' && (date.month - 1) % 3 === 0 && date.day === 1)
+              || (mode === 'year' && date.month === 1 && date.day === 1)
 
             const tickX = columnWidth * index
             const tickY = options.tickStart + (isFull ? 0 : options.tickDelta)
@@ -134,14 +135,22 @@ export const GanttSvg = React.forwardRef(({ children }, ref) => {
 
         {dates.map((date, index) => {
           const hasUpperText = date.day === 1 && (
-            mode === 'quarter' ? date.month % 3 === 0 : true
+            mode === 'year'
+              ? date.month === 1
+              : mode === 'quarter'
+              ? (date.month - 1) % 3 === 0
+              : true
           )
 
-          const upperTextDays = mode === 'quarter'
+          const upperTextDays = mode === 'year'
+            ? date.endOf('year').diff(date.startOf('year')).as('days')
+            : mode === 'quarter'
             ? date.endOf('quarter').diff(date.startOf('quarter')).as('days')
             : date.daysInMonth
 
-          const upperTextFormatTokens = mode === 'quarter'
+          const upperTextFormatTokens = mode === 'year'
+            ? 'y'
+            : mode === 'quarter'
             ? 'Qq y'
             : 'MMMM y'
 

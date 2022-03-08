@@ -12,7 +12,7 @@ export function dragTask({ task, drag, options, containerRef }) {
 
   const scrollDelta = containerRef.current.scrollLeft - drag.initialScroll
   const rawDeltaX = drag.x - drag.initialX + scrollDelta
-  const snapOffset = rawDeltaX % options.columnWidth
+  const snapOffset = rawDeltaX % (options.columnWidth * 7)
   const deltaX = rawDeltaX - snapOffset
 
   switch (drag.mode) {

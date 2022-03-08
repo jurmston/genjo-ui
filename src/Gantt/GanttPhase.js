@@ -5,8 +5,8 @@ import { lighten, darken } from '@mui/material/styles'
 
 import checkIcon from './icons/check.svg'
 
-import { GanttDependencyHandle } from './GanttDependencyHandle'
 import { GanttResizeHandle } from './GanttResizeHandle'
+import { colors } from '../ThemeProvider'
 
 
 function GanttPhaseInner({
@@ -38,6 +38,8 @@ function GanttPhaseInner({
     textHeight,
   } = options
 
+  const isProject = task.type === 'PROJECT'
+
   const { width, x, y, progressWidth } = task.dimensions
   // const progressPolygonPoints = React.useMemo(() => [
   //     x + progress - 5,
@@ -59,11 +61,15 @@ function GanttPhaseInner({
   const hideProgressHandle = isMissingDates || (Boolean(drag?.mode || depDrag) && drag?.mode !== 'progress')
   const hideDepHandle = Boolean(drag?.mode || depDrag)
 
-  const lightColor = lighten(task.color, 0.5)
-  const darkColor = darken(task.color, 0.25)
+  const color = isProject ? colors.emerald[600] : colors.emerald[400]
+  const lightColor = lighten(color, 0.5)
+  const darkColor = darken(color, 0.25)
   const iconSize = 12
 
   const dragIntervalRef = React.useRef(null)
+
+  const isFaded = (selectedId && (![task.project, task.id].includes(selectedId)))
+  || (drag && (![task.project, task.id].includes(drag?.draggableId)))
 
   const handleHandleMouseDown = handle => event => {
     event.preventDefault()
@@ -116,19 +122,23 @@ function GanttPhaseInner({
     handleTaskClick(event, task.id)
   }
 
+  const hDelta = isProject ? 4 : 8
+  const height = barHeight - 2 * hDelta
+
   return (
     <g
       className="GenjoGantt__bar-wrapper"
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
+      style={{ opacity: isFaded ? 0.5 : 1 }}
     >
       <g className="GenjoGantt__bar-group">
         {/* Underbar used to pickup the hover event in the gap between bar and handles */}
         <rect
           x={x - 10}
-          y={y - 1}
+          y={y + hDelta - 1}
           width={width + 20 + 38}
-          height={barHeight + 2}
+          height={height + 2}
           style={{
             opacity: 0,
           }}
@@ -136,14 +146,14 @@ function GanttPhaseInner({
 
         <rect
           x={x}
-          y={y + 4}
+          y={y + hDelta}
           width={width}
-          height={barHeight - 8}
-          rx={(barHeight - 8) / 2}
-          ry={(barHeight - 8) / 2}
+          height={height}
+          rx={height / 2}
+          ry={height / 2}
           className="GenjoGantt__bar"
           style={{
-            fill: isDone ? task.color : lightColor,
+            fill: isDone ? color : lightColor,
             stroke: darkColor,
             strokeWidth: isSelected ? 2 : 0,
           }}
@@ -157,11 +167,11 @@ function GanttPhaseInner({
 
             <rect
               x={x}
-              y={y}
+              y={y + hDelta}
               width={width}
-              height={barHeight}
-              rx={4}
-              ry={4}
+              height={height}
+              rx={height / 2}
+              ry={height / 2}
               className="GenjoGantt__bar"
               style={{
                 fill: `url(#${task.id}-no-dates-stripes)`,
@@ -176,49 +186,23 @@ function GanttPhaseInner({
             <clipPath id={`clip-task-progress-${task.id}`}>
               <rect
                 x={x + (isSelected ? 1 : 0)}
-                y={y + 4 + (isSelected ? 1 : 0)}
+                y={y + hDelta + (isSelected ? 1 : 0)}
                 width={width - (isSelected ? 2 : 0)}
-                height={barHeight - 8 - (isSelected ? 2 : 0)}
-                rx={(barHeight - 8) / 2}
-                ry={(barHeight - 8)/ 2}
+                height={height - (isSelected ? 2 : 0)}
+                rx={height / 2}
+                ry={height/ 2}
               />
             </clipPath>
 
             <rect
               clipPath={`url(#clip-task-progress-${task.id})`}
               x={x}
-              y={y}
+              y={y + hDelta}
               width={progressWidth}
-              height={barHeight}
+              height={height}
               className="GenjoGantt__progress"
               style={{
-                fill: task.color,
-              }}
-            />
-          </>
-        )}
-
-        {isDone && (
-          <>
-            <circle
-              r={8}
-              cx={x + width}
-              cy={y}
-              style={{
-                fill: '#fff',
-                stroke: darkColor,
-                strokeWidth: 2,
-              }}
-            />
-
-            <image
-              href={checkIcon}
-              x={x + width - iconSize / 2}
-              y={y - iconSize / 2}
-              height={iconSize}
-              width={iconSize}
-              style={{
-                filter: 'invert(57%) sepia(93%) saturate(397%) hue-rotate(90deg) brightness(91%) contrast(89%)',
+                fill: color,
               }}
             />
           </>
@@ -226,7 +210,7 @@ function GanttPhaseInner({
 
         <text
           x={x + width + 10}
-          y={y + barHeight / 2}
+          y={y + hDelta + height / 2}
           className={clsx(
             'GenjoGantt__label',
           )}
@@ -245,6 +229,7 @@ function GanttPhaseInner({
             <GanttResizeHandle
               task={task}
               position="start"
+              color={darkColor}
             />
           )}
 
@@ -252,38 +237,24 @@ function GanttPhaseInner({
             <GanttResizeHandle
               task={task}
               position="end"
+              color={darkColor}
             />
           )}
 
-          {!hideProgressHandle && (
+          {!hideProgressHandle && !isProject && (
             <circle
               onMouseDown={handleHandleMouseDown('progress')}
               r={5}
               cx={x + progressWidth}
-              cy={y + barHeight}
+              cy={y + hDelta + height}
               className={clsx(
                 'GenjoGantt__progressHandle',
                 Boolean(drag?.taskId === task.id) && 'GenjoGantt__handle_dragging',
               )}
               style={{
-                fill: task.color,
+                fill: darkColor,
               }}
             />
-          )}
-
-          {!hideDepHandle && (
-            <g
-              onMouseDown={event => startDepDrag(event, task.id, x + width, y + barHeight / 2)}
-              className={clsx(
-                'GenjoGantt__depHandle',
-                Boolean(false) && 'GenjoGantt__handle_dragging',
-              )}
-            >
-              <GanttDependencyHandle
-                x={x + width + 22}
-                y={y + barHeight / 2}
-              />
-            </g>
           )}
 
         </g>

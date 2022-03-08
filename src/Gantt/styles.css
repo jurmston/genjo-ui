@@ -36,12 +36,12 @@
 .GenjoGantt__grid__row {
   fill: #fff;
   padding: 0px 16px;
-  border-bottom: 1px solid rgb(238, 240, 242);
+  /* border-bottom: 1px solid rgb(238, 240, 242); */
   box-sizing: border-box;
 }
 
-.GenjoGantt__grid__row:nth-child(even) {
-  fill: #eee;
+.GenjoGantt__grid__row:hover {
+  fill: rgb(0 0 0 / 0.05);
 }
 
 .GenjoGantt__grid__line {
@@ -160,6 +160,16 @@
 .GenjoGantt__bar-wrapper:hover .GenjoGantt__handle_end, .GenjoGantt__handle_end.GenjoGantt__handle_dragging {
   transform: translateX(10px);
   opacity: 1;
+}
+
+
+.GenjoGantt__label_group {
+  transform: translateX(-28px);
+  transition: transform 400ms ease-in-out;
+}
+
+.GenjoGantt__bar-wrapper:hover .GenjoGantt__label_group {
+  transform: translateX(0px);
 }
 
 .GenjoGantt__label {

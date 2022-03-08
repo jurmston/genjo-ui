@@ -4,11 +4,10 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
 import linkIcon from './icons/link.svg'
-
 const ICON_SIZE = 14
 
 
-export function GanttDependencyHandle({ x, y }) {
+export function GanttDependencyHandle({ x, y, color }) {
 
   return (
     <>
@@ -17,7 +16,7 @@ export function GanttDependencyHandle({ x, y }) {
         cx={x}
         cy={y}
         style={{
-          fill: '#6366f1',
+          fill: color,
           filter: 'drop-shadow(1px 1px 1px rgb(0 0 0 / 0.25))',
         }}
       />

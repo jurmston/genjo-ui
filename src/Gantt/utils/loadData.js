@@ -13,23 +13,33 @@ import { createMilestone } from './createMilestone'
  * @param {*} param0
  * @returns
  */
- export function loadData({ data, start, end, options }) {
+ export function loadData({ rowData, milestoneData, start, end, options }) {
   const tasksResult = {}
   const depsResult = []
   const milestonesResult = {}
 
-  data.forEach((taskDatum, index) => {
-    const task = createTask({ index, start, end, options, data: taskDatum })
+  rowData.forEach((row, index) => {
+    const task = createTask({ index, start, end, options, row })
     tasksResult[task.id] = task
 
     // First pass, initialize the dependencies
-    taskDatum.dependencies.forEach(depTaskId => {
+    row?.dependencies?.forEach(depTaskId => {
       depsResult.push({ drawKey: 0, to: task.id, from: depTaskId })
     })
+  })
 
-    taskDatum?.milestones?.forEach((milestone, milestoneIndex) => {
-      milestonesResult[milestone.id] = createMilestone({ milestone, index: milestoneIndex, task, start, options })
-    })
+  milestoneData.forEach((milestone, milestoneIndex) => {
+    const milestoneTask = tasksResult[milestone.project]
+
+    if (milestoneTask) {
+      milestonesResult[milestone.id] = createMilestone({
+        milestone,
+        index: milestoneIndex,
+        start,
+        options,
+        task: milestoneTask,
+      })
+    }
   })
 
   // Dependency second pass, calculate mix/max and attach before/after ids

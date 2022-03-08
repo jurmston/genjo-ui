@@ -41,7 +41,7 @@ export class TarjanGraph {
         graph[task.id] = this.createNode(task.id)
       }
 
-      task.dependencies.forEach(depId => {
+      task?.dependencies?.forEach(depId => {
         if (!graph[depId]) {
           graph[depId] = this.createNode(depId)
         }
