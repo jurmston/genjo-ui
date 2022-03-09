@@ -13,8 +13,7 @@ export const Main = ({ ...args }) => {
   return (
     <div style={{ width: 300 }}>
       <CurrencyField {...args} label="Controlled" value={value} onChange={(event, newValue) => setValue(newValue)} />
-      {value}
-      {formatCurrency(value, { shouldOverrideDecimalPlaces: true, decimalPlacesOverride: 3 })}
+      {formatCurrency(value, {})}
     </div>
   )
 }

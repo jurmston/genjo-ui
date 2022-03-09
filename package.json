@@ -1,6 +1,6 @@
 {
   "name": "genjo-ui",
-  "version": "6.4.2",
+  "version": "6.4.3",
   "description": "A component library built on top of Material-UI",
   "main": "./core/index.js",
   "module": "./core/index.js",

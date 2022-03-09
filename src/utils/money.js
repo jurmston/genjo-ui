@@ -77,7 +77,7 @@ export function formatCurrency(value, options) {
 
   const currency = (options?.currency || 'USD').toUpperCase()
 
-  const decimalPlaces = options.shouldOverrideDecimalPlaces
+  const decimalPlaces = options?.shouldOverrideDecimalPlaces
     ? (options?.decimalPlacesOverride ?? 2)
     : getCurrencyDecimalPlaces(currency)
   const factor = 10 ** decimalPlaces
@@ -89,7 +89,7 @@ export function formatCurrency(value, options) {
         minimumFractionDigits: decimalPlaces,
         maximumFractionDigits: decimalPlaces,
       })
-      : options.shouldOverrideDecimalPlaces
+      : options?.shouldOverrideDecimalPlaces
       ? new Intl.NumberFormat(locale, {
         style: 'currency',
         currency,
