@@ -21,4 +21,6 @@ Main.args = {
   currency: 'USD',
   locale: 'en-US',
   disableNegativeNumbers: false,
+  shouldOverrideDecimalPlaces: false,
+  decimalPlacesOverride: 0,
 }

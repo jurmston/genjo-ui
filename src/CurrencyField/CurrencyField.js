@@ -26,11 +26,15 @@ export const CurrencyField = ({
   value: valueFromProps,
   textAlign = 'left',
   disableNegativeNumbers = false,
+  shouldOverrideDecimalPlaces = false,
+  decimalPlacesOverride = 0,
   ...textFieldProps
 }) => {
   const decimalPlaces = React.useMemo(
-    () => getCurrencyDecimalPlaces(currency),
-    [currency],
+    () => shouldOverrideDecimalPlaces
+      ? decimalPlacesOverride
+      : getCurrencyDecimalPlaces(currency),
+    [currency, shouldOverrideDecimalPlaces, decimalPlacesOverride],
   )
 
   const decimalSeparator = React.useMemo(
@@ -81,8 +85,14 @@ export const CurrencyField = ({
   )
 
   const displayValue = React.useMemo(
-    () => `${(!parsedValue && isNegative) ? '-' : ''}${formatCurrency(parsedValue, { locale, currency, hideSymbol: true })}`,
-    [parsedValue, locale, currency, isNegative],
+    () => `${(!parsedValue && isNegative) ? '-' : ''}${formatCurrency(parsedValue, {
+      locale,
+      currency,
+      hideSymbol: true,
+      shouldOverrideDecimalPlaces,
+      decimalPlacesOverride,
+    })}`,
+    [parsedValue, locale, currency, isNegative, shouldOverrideDecimalPlaces, decimalPlacesOverride],
   )
 
   /**
@@ -222,7 +232,13 @@ export const CurrencyField = ({
 
     const newValue = (newInteger + newDecimal) * (newValueIsNegative ? -1 : 1)
 
-    const newDisplayValue = formatCurrency(newValue, { locale, currency, hideSymbol: true })
+    const newDisplayValue = formatCurrency(newValue, {
+      locale,
+      currency,
+      hideSymbol: true,
+      shouldOverrideDecimalPlaces,
+      decimalPlacesOverride,
+    })
 
     // React doesn't like formatting inputs with possibly new lengths (e.g. from
     // inserting commas and decimals) so it just moves the caret to the end if
@@ -312,6 +328,10 @@ CurrencyField.propTypes = {
   textAlign: PropTypes.oneOf(['left', 'right', 'center', 'justify']),
   /** If `true`, negative numbers will not be allowed. */
   disableNegativeNumbers: PropTypes.bool,
+  /** If `true`, the decimal places of the currency will be manually set. */
+  shouldOverrideDecimalPlaces: PropTypes.bool,
+  /** The value of the manually set decimal places. */
+  decimalPlacesOverride: PropTypes.number,
 }
 
 export default CurrencyField

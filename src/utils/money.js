@@ -61,8 +61,11 @@ export function getCurrencySymbol(locale, currency) {
  *   `window.navigator` will used if avaialble. Otherwise the default is
  *   `us-EN`.
  * @param {string} options.currency The ISO 4217 currency code for the desired
- * @param {bool} options.hideSymbol The ISO 4217 currency code for the desired
  *   currency. The default is `USD`.
+ * @param {bool} options.hideSymbol If `true` the currency symbol will be hidden.
+ * @param {bool} options.shouldOverrideDecimalPlaces If `true` the decimal
+ *   places will be set manually.
+ * @param {number} options.decimalPlacesOverride The overridden value.
  * @returns A function to convert zero-decimal intergers into a locale
  * formatted currency string.
  */
@@ -74,7 +77,9 @@ export function formatCurrency(value, options) {
 
   const currency = (options?.currency || 'USD').toUpperCase()
 
-  const decimalPlaces = getCurrencyDecimalPlaces(currency)
+  const decimalPlaces = options.shouldOverrideDecimalPlaces
+    ? (options?.decimalPlacesOverride ?? 2)
+    : getCurrencyDecimalPlaces(currency)
   const factor = 10 ** decimalPlaces
 
   try {
