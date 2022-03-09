@@ -89,6 +89,13 @@ export function formatCurrency(value, options) {
         minimumFractionDigits: decimalPlaces,
         maximumFractionDigits: decimalPlaces,
       })
+      : options.shouldOverrideDecimalPlaces
+      ? new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency,
+        minimumFractionDigits: decimalPlaces,
+        maximumFractionDigits: decimalPlaces,
+      })
       : new Intl.NumberFormat(locale, { style: 'currency', currency })
     ).format(value / factor)
   } catch (err) {

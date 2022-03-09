@@ -1,5 +1,6 @@
 import React from 'react'
 import { CurrencyField } from './CurrencyField'
+import { formatCurrency } from '../utils/money'
 
 export default {
   title: 'Components/CurrencyField',
@@ -13,6 +14,7 @@ export const Main = ({ ...args }) => {
     <div style={{ width: 300 }}>
       <CurrencyField {...args} label="Controlled" value={value} onChange={(event, newValue) => setValue(newValue)} />
       {value}
+      {formatCurrency(value, { shouldOverrideDecimalPlaces: true, decimalPlacesOverride: 3 })}
     </div>
   )
 }
